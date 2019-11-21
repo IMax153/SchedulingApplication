@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-import dao.UserDao;
+import dao.*;
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -29,15 +29,15 @@ public class SchedulingApplication extends Application {
     /**
      * The main entry point for the application.
      *
-     * @param args the command line arguments
+     * @param args - The command line arguments.
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
         Database.createConnection();
 
-        UserDao dao = new UserDao();
+        CityDao dao = new CityDao();
 
-        dao.findById(1).ifPresent(u -> System.out.println(u.toString()));
+        dao.findById(1).ifPresent(e -> System.out.println(e.toString()));
 
         launch(args);
         Database.closeConnection();
@@ -46,7 +46,7 @@ public class SchedulingApplication extends Application {
     /**
      * The main entry point for the GUI of the application.
      *
-     * @param primaryStage The primary stage of the application.
+     * @param primaryStage - The primary stage of the application.
      * @throws Exception
      */
     @Override
@@ -67,7 +67,7 @@ public class SchedulingApplication extends Application {
     /**
      * Navigates the user to the screen at the specified path.
      *
-     * @param pathToScreen - The path to the
+     * @param pathToScreen - The path to the screen to display.
      */
     private FXMLLoader navigate(String pathToScreen) throws IOException {
         try {

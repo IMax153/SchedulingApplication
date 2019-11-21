@@ -8,16 +8,11 @@ package models;
 import java.time.Instant;
 
 /**
- * Class representing a user of the application.
+ * Class representing a user within the application.
  *
  * @author mab90
  */
-public class User {
-
-    /**
-     * The unique identifier for the user.
-     */
-    private int id;
+public class User extends Entity {
 
     /**
      * The userName of the user.
@@ -34,26 +29,6 @@ public class User {
      */
     private boolean isActive;
 
-    /**
-     * The userName of the user who created this user.
-     */
-    private String createdBy;
-
-    /**
-     * The userName of the user who last updated this user.
-     */
-    private String updatedBy;
-
-    /**
-     * The instant this user was created.
-     */
-    private Instant createdAt;
-
-    /**
-     * The instant this user was last updated.
-     */
-    private Instant updatedAt;
-
     public User(
             int id,
             String userName,
@@ -64,160 +39,74 @@ public class User {
             Instant createdAt,
             Instant updatedAt
     ) {
+        super(id, createdBy, updatedBy, createdAt, updatedAt);
         this.id = id;
         this.userName = userName;
         this.password = password;
         this.isActive = isActive;
-        this.createdBy = createdBy;
-        this.updatedBy = updatedBy;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
     }
 
-    /**
-     * Gets the user's unique identifier.
-     *
-     * @return id
-     */
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * Sets the user's unique identifier.
-     *
-     * @param id
-     */
-    public void setId(int id) {
-        this.id = id;
-    }
-
+    // Getters
     /**
      * Gets the user's userName.
      *
-     * @return userName
+     * @return String
      */
     public String getUserName() {
         return userName;
     }
 
     /**
-     * Sets the user's userName.
-     *
-     * @param userName
-     */
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    /**
      * Gets the user's password.
      *
-     * @return password
+     * @return String
      */
     public String getPassword() {
         return password;
     }
 
     /**
-     * Sets the user's password.
+     * Gets whether or not the user is currently active in the database.
      *
-     * @param password
+     * @return Boolean
+     */
+    public boolean getIsActive() {
+        return isActive;
+    }
+
+    // Setters
+    /**
+     * Sets the userName for the user.
+     *
+     * @param userName - The userName for the user.
+     */
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    /**
+     * Sets the password for the user.
+     *
+     * @param password - The password for the user.
      */
     public void setPassword(String password) {
         this.password = password;
     }
 
     /**
-     * Gets whether or not the user is currently active in the database.
-     *
-     * @return isActive
-     */
-    public boolean getIsActive() {
-        return isActive;
-    }
-
-    /**
      * Sets whether or not the user is currently active in the database.
      *
-     * @param isActive
+     * @param isActive - A flag indicating whether or not the user is active.
      */
     public void setIsActive(boolean isActive) {
         this.isActive = isActive;
     }
 
     /**
-     * Gets the userName of the user who created this user.
+     * Print a pretty string of the user.
      *
-     * @return createdBy
+     * @return String
      */
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    /**
-     * Sets the userName of the user who created this user.
-     *
-     * @param createdBy
-     */
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    /**
-     * Gets the userName of the user who last updated this user.
-     *
-     * @return updatedBy
-     */
-    public String getUpdatedBy() {
-        return updatedBy;
-    }
-
-    /**
-     * Sets the userName of the user who last updated this user.
-     *
-     * @param updatedBy
-     */
-    public void setUpdatedBy(String updatedBy) {
-        this.updatedBy = updatedBy;
-    }
-
-    /**
-     * Gets the instant this user was created.
-     *
-     * @return
-     */
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
-
-    /**
-     * Sets the instant this user was created.
-     *
-     * @param createdAt
-     */
-    public void setCreatedAt(Instant createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    /**
-     * Gets the instant this user was last updated.
-     *
-     * @return updatedAt
-     */
-    public Instant getUpdatedAt() {
-        return updatedAt;
-    }
-
-    /**
-     * Sets the instant this user was last updated.
-     *
-     * @param updatedAt
-     */
-    public void setUpdatedAt(Instant updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("User ");
@@ -225,35 +114,35 @@ public class User {
         sb.append("{");
         sb.append(System.getProperty("line.separator"));
 
-        sb.append("  id: ");
+        sb.append("\tid: ");
         sb.append(id);
         sb.append(System.getProperty("line.separator"));
 
-        sb.append("  userName: ");
+        sb.append("\tuserName: ");
         sb.append(userName);
         sb.append(System.getProperty("line.separator"));
 
-        sb.append("  password: ");
+        sb.append("\tpassword: ");
         sb.append(password);
         sb.append(System.getProperty("line.separator"));
 
-        sb.append("  isActive: ");
+        sb.append("\tisActive: ");
         sb.append(isActive);
         sb.append(System.getProperty("line.separator"));
 
-        sb.append("  createdBy: ");
+        sb.append("\tcreatedBy: ");
         sb.append(createdBy);
         sb.append(System.getProperty("line.separator"));
 
-        sb.append("  updatedBy: ");
+        sb.append("\tupdatedBy: ");
         sb.append(updatedBy);
         sb.append(System.getProperty("line.separator"));
 
-        sb.append("  createdAt: ");
+        sb.append("\tcreatedAt: ");
         sb.append(createdAt);
         sb.append(System.getProperty("line.separator"));
 
-        sb.append("  updatedAt: ");
+        sb.append("\tupdatedAt: ");
         sb.append(updatedAt);
         sb.append(System.getProperty("line.separator"));
 

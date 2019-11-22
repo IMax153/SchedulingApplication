@@ -35,9 +35,10 @@ public class SchedulingApplication extends Application {
     public static void main(String[] args) throws Exception {
         Database.createConnection();
 
-        CityDao dao = new CityDao();
+        AddressDao dao = new AddressDao();
 
-        dao.findById(1).ifPresent(e -> System.out.println(e.toString()));
+//        dao.findById(1).ifPresent(e -> System.out.println(e.toString()));
+        dao.findAll().forEach(oe -> oe.ifPresent(e -> System.out.println(e.toString())));
 
         launch(args);
         Database.closeConnection();

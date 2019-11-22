@@ -190,7 +190,7 @@ public class UserDao extends Dao<User> {
      * Creates a User object from the specified result set.
      *
      * @param rs The result set to extract the user from.
-     * @return A new user object.
+     * @return A new User object.
      * @throws SQLException
      */
     private User getUserFromResultSet(ResultSet rs) throws SQLException {

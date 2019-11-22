@@ -7,7 +7,6 @@ package dao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +62,9 @@ public class CityDao extends Dao<City> {
 
         try {
             PreparedStatement pst = connection.prepareStatement(
-                    "SELECT * FROM city, country"
+                    "SELECT * FROM city "
+                    + "INNER JOIN country "
+                    + "ON city.countryId = country.countryId"
             );
 
             ResultSet rs = pst.executeQuery();
@@ -161,7 +162,7 @@ public class CityDao extends Dao<City> {
      * Creates a City object from the specified result set.
      *
      * @param rs The result set to extract the city from.
-     * @return A new city object.
+     * @return A new City object.
      * @throws SQLException
      */
     private City getCityFromResultSet(ResultSet rs) throws SQLException {
@@ -177,11 +178,11 @@ public class CityDao extends Dao<City> {
         return new City(
                 rs.getInt("city.cityId"),
                 rs.getString("city.city"),
+                country,
                 rs.getString("city.createdBy"),
                 rs.getString("city.lastUpdateBy"),
                 rs.getTimestamp("city.createDate").toInstant(),
-                rs.getTimestamp("city.lastUpdate").toInstant(),
-                country
+                rs.getTimestamp("city.lastUpdate").toInstant()
         );
     }
 

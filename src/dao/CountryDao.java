@@ -157,7 +157,7 @@ public class CountryDao extends Dao<Country> {
      * Creates a Country object from the specified result set.
      *
      * @param rs The result set to extract the country from.
-     * @return A new country object.
+     * @return A new Country object.
      * @throws SQLException
      */
     private Country getCountryFromResultSet(ResultSet rs) throws SQLException {

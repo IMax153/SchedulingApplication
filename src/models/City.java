@@ -24,7 +24,15 @@ public class City extends Entity {
      */
     private Country country;
 
-    public City(int id, String name, String createdBy, String updatedBy, Instant createdAt, Instant updatedAt, Country country) {
+    public City(
+            int id,
+            String name,
+            Country country,
+            String createdBy,
+            String updatedBy,
+            Instant createdAt,
+            Instant updatedAt
+    ) {
         super(id, createdBy, updatedBy, createdAt, updatedAt);
         this.name = name;
         this.country = country;

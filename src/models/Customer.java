@@ -60,7 +60,7 @@ public class Customer extends Entity {
      *
      * @return True if the user is active, otherwise false.
      */
-    public boolean isIsActive() {
+    public boolean getIsActive() {
         return isActive;
     }
 

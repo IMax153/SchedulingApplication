@@ -14,23 +14,25 @@ import java.util.Optional;
 import models.*;
 
 /**
- * Handles create, read, update, and delete operations for the address entity.
+ * Handles create, read, update, and delete operations for the customer entity.
  *
  * @author mab90
  */
-public class AddressDao extends Dao<Address> {
+public class CustomerDao extends Dao<Customer> {
 
     /**
-     * Gets an address specified by a unique identifier.
+     * Gets a customer specified by a unique identifier.
      *
-     * @param id The unique identifier of the address to find.
-     * @return An optional address.
+     * @param id The unique identifier of the customer to find.
+     * @return An optional customer.
      */
     @Override
-    public Optional<Address> findById(int id) {
+    public Optional<Customer> findById(int id) {
         try {
             PreparedStatement pst = connection.prepareStatement(
-                    "SELECT * FROM address AS a "
+                    "SELECT * FROM customer AS cu "
+                    + "INNER JOIN address AS a "
+                    + "ON cu.addressId = a.addressId "
                     + "INNER JOIN city AS ci "
                     + "ON a.cityId = ci.cityId "
                     + "INNER JOIN country AS co "
@@ -43,8 +45,8 @@ public class AddressDao extends Dao<Address> {
             ResultSet rs = pst.executeQuery();
 
             if (rs.next()) {
-                Address address = getAddressFromResultSet(rs);
-                return Optional.of(address);
+                Customer customer = getCustomerFromResultSet(rs);
+                return Optional.of(customer);
             }
         } catch (SQLException sqle) {
             System.out.println(sqle.getMessage());
@@ -54,17 +56,19 @@ public class AddressDao extends Dao<Address> {
     }
 
     /**
-     * Gets all addresses from the database.
+     * Gets all customers from the database.
      *
-     * @return A list of optional addresses.
+     * @return A list of optional customers.
      */
     @Override
-    public List<Optional<Address>> findAll() {
-        List<Optional<Address>> addresses = new ArrayList<>();
+    public List<Optional<Customer>> findAll() {
+        List<Optional<Customer>> customers = new ArrayList<>();
 
         try {
             PreparedStatement pst = connection.prepareStatement(
-                    "SELECT * FROM address AS a "
+                    "SELECT * FROM customer AS cu "
+                    + "INNER JOIN address AS a "
+                    + "ON cu.addressId = a.addressId "
                     + "INNER JOIN city AS ci "
                     + "ON a.cityId = ci.cityId "
                     + "INNER JOIN country AS co "
@@ -74,37 +78,35 @@ public class AddressDao extends Dao<Address> {
             ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                Address address = getAddressFromResultSet(rs);
-                addresses.add(Optional.of(address));
+                Customer customer = getCustomerFromResultSet(rs);
+                customers.add(Optional.of(customer));
             }
         } catch (SQLException sqle) {
             System.out.println(sqle.getMessage());
         }
 
-        return addresses;
+        return customers;
     }
 
     /**
-     * Adds an address to the database.
+     * Adds a customer to the database.
      *
-     * @param address The address to add.
-     * @return True if the address was added successfully, otherwise false.
+     * @param customer The customer to add.
+     * @return True if the customer was added successfully, otherwise false.
      */
     @Override
-    public boolean add(Address address) {
+    public boolean add(Customer customer) {
         try {
             PreparedStatement pst = connection.prepareStatement(
-                    "INSERT INTO address (address, address2, cityId, postalCode, phone, createDate, createdBy, lastUpdate, lastUpdateBy) "
-                    + "VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP, ?"
+                    "INSERT INTO customer (customerName, addressId, active, createDate, createdBy, lastUpdate, lastUpdateBy) "
+                    + "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP, ?"
             );
 
-            pst.setString(1, address.getStreet());
-            pst.setString(2, address.getAdditionalInformation());
-            pst.setInt(3, address.getCity().getId());
-            pst.setString(4, address.getPostalCode());
-            pst.setString(5, address.getPhone());
-            pst.setString(6, address.getCreatedBy());
-            pst.setString(7, address.getUpdatedBy());
+            pst.setString(1, customer.getName());
+            pst.setInt(2, customer.getAddress().getId());
+            pst.setInt(3, customer.getIsActive() ? 1 : 0);
+            pst.setString(4, customer.getCreatedBy());
+            pst.setString(5, customer.getUpdatedBy());
 
             return pst.executeUpdate() == 1;
         } catch (SQLException sqle) {
@@ -115,27 +117,25 @@ public class AddressDao extends Dao<Address> {
     }
 
     /**
-     * Updates an address in the database.
+     * Updates a customer in the database.
      *
-     * @param address The address to update.
-     * @return True if the address was updated successfully, otherwise false.
+     * @param customer The customer to update.
+     * @return True if the customer was updated successfully, otherwise false.
      */
     @Override
-    public boolean update(Address address) {
+    public boolean update(Customer customer) {
         try {
             PreparedStatement pst = connection.prepareStatement(
-                    "UPDATE address AS a "
-                    + "SET address = ?, address2 = ?, cityId = ?, postalCode = ?, phone = ?, lastUpdate = CURRENT_TIMESTAMP, lastUpdateBy = ?) "
-                    + "WHERE a.addressId = ?"
+                    "UPDATE customer AS c "
+                    + "SET customerName = ?, addressId = ?, active = ?, lastUpdate = CURRENT_TIMESTAMP, lastUpdateBy = ?) "
+                    + "WHERE c.customerId = ?"
             );
 
-            pst.setString(1, address.getStreet());
-            pst.setString(2, address.getAdditionalInformation());
-            pst.setInt(3, address.getCity().getId());
-            pst.setString(4, address.getPostalCode());
-            pst.setString(5, address.getPhone());
-            pst.setString(6, address.getUpdatedBy());
-            pst.setInt(7, address.getId());
+            pst.setString(1, customer.getName());
+            pst.setInt(2, customer.getAddress().getId());
+            pst.setInt(3, customer.getIsActive() ? 1 : 0);
+            pst.setString(4, customer.getUpdatedBy());
+            pst.setInt(5, customer.getId());
 
             return pst.executeUpdate() == 1;
         } catch (SQLException sqle) {
@@ -146,16 +146,16 @@ public class AddressDao extends Dao<Address> {
     }
 
     /**
-     * Deletes an address from the database.
+     * Deletes a customer from the database.
      *
-     * @param id The unique identifier of the address to delete.
-     * @return True if the address was deleted successfully, otherwise false.
+     * @param id The unique identifier of the customer to delete.
+     * @return True if the customer was deleted successfully, otherwise false.
      */
     @Override
     public boolean delete(int id) {
         try {
             PreparedStatement pst = connection.prepareStatement(
-                    "DELETE FROM address AS a WHERE a.addressId = ?"
+                    "DELETE FROM customer AS c WHERE c.customerId = ?"
             );
 
             pst.setInt(1, id);
@@ -169,13 +169,13 @@ public class AddressDao extends Dao<Address> {
     }
 
     /**
-     * Creates an Address object from the specified result set.
+     * Creates a Customer object from the specified result set.
      *
-     * @param rs The result set to extract the address from.
-     * @return A new Address object.
+     * @param rs The result set to extract the customer from.
+     * @return A new Customer object.
      * @throws SQLException
      */
-    private Address getAddressFromResultSet(ResultSet rs) throws SQLException {
+    private Customer getCustomerFromResultSet(ResultSet rs) throws SQLException {
         Country country = new Country(
                 rs.getInt("co.countryId"),
                 rs.getString("co.country"),
@@ -195,7 +195,7 @@ public class AddressDao extends Dao<Address> {
                 rs.getTimestamp("ci.lastUpdate").toInstant()
         );
 
-        return new Address(
+        Address address = new Address(
                 rs.getInt("a.addressId"),
                 rs.getString("a.address"),
                 rs.getString("a.address2"),
@@ -206,6 +206,17 @@ public class AddressDao extends Dao<Address> {
                 rs.getString("a.lastUpdateBy"),
                 rs.getTimestamp("a.createDate").toInstant(),
                 rs.getTimestamp("a.lastUpdate").toInstant()
+        );
+
+        return new Customer(
+                rs.getInt("cu.customerId"),
+                rs.getString("cu.customerName"),
+                rs.getInt("cu.active") == 1,
+                address,
+                rs.getString("cu.createdBy"),
+                rs.getString("cu.lastUpdateBy"),
+                rs.getTimestamp("cu.createDate").toInstant(),
+                rs.getTimestamp("cu.lastUpdate").toInstant()
         );
     }
 

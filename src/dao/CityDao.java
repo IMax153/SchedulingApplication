@@ -81,7 +81,22 @@ public class CityDao extends Dao<City> {
      */
     @Override
     public boolean add(City city) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            PreparedStatement pst = connection.prepareStatement(
+                    "INSERT INTO city (city, countryId, createDate, createdBy, lastUpdate, lastUpdateBy) "
+                    + "VALUES (?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP, ?"
+            );
+
+            pst.setString(1, city.getName());
+            pst.setInt(2, city.getCountry().getId());
+            pst.setString(3, city.getCreatedBy());
+            pst.setString(4, city.getUpdatedBy());
+
+            return pst.executeUpdate() == 1;
+        } catch (SQLException sqle) {
+        }
+
+        return false;
     }
 
     /**
@@ -92,7 +107,23 @@ public class CityDao extends Dao<City> {
      */
     @Override
     public boolean update(City city) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            PreparedStatement pst = connection.prepareStatement(
+                    "UPDATE city AS c "
+                    + "SET city = ?, countryId = ?, createdBy = ?, lastUpdate = CURRENT_TIMESTAMP, lastUpdateBy = ?) "
+                    + "WHERE c.cityId = ?"
+            );
+
+            pst.setString(1, city.getName());
+            pst.setInt(2, city.getCountry().getId());
+            pst.setString(3, city.getCreatedBy());
+            pst.setString(4, city.getUpdatedBy());
+
+            return pst.executeUpdate() == 1;
+        } catch (SQLException sqle) {
+        }
+
+        return false;
     }
 
     /**
@@ -103,9 +134,27 @@ public class CityDao extends Dao<City> {
      */
     @Override
     public boolean delete(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            PreparedStatement pst = connection.prepareStatement(
+                    "DELETE FROM city AS c WHERE c.cityId = ?"
+            );
+
+            pst.setInt(1, id);
+
+            return pst.executeUpdate() == 1;
+        } catch (SQLException sqle) {
+        }
+
+        return false;
     }
 
+    /**
+     * Creates a City object from the specified result set.
+     *
+     * @param rs The result set to extract the city from.
+     * @return A new city object.
+     * @throws SQLException
+     */
     private City getCityFromResultSet(ResultSet rs) throws SQLException {
         Country country = new Country(
                 rs.getInt("country.countryId"),

@@ -55,9 +55,9 @@ public abstract class Entity {
 
     // Getters
     /**
-     * Gets the unique identifier for the entity.
+     * Gets the unique identifier of the entity.
      *
-     * @return Integer
+     * @return The unique identifier of the entity.
      */
     public int getId() {
         return id;
@@ -66,7 +66,7 @@ public abstract class Entity {
     /**
      * Gets the userName of the user who created this entity.
      *
-     * @return String
+     * @return The userName of the user who created this entity.
      */
     public String getCreatedBy() {
         return createdBy;
@@ -75,7 +75,7 @@ public abstract class Entity {
     /**
      * Gets the userName of the user who last updated this entity.
      *
-     * @return String
+     * @return The userName of the user who last updated this entity.
      */
     public String getUpdatedBy() {
         return updatedBy;
@@ -84,7 +84,7 @@ public abstract class Entity {
     /**
      * Gets the instant this entity was created.
      *
-     * @return Instant
+     * @return The instant this entity was created.
      */
     public Instant getCreatedAt() {
         return createdAt;
@@ -93,7 +93,7 @@ public abstract class Entity {
     /**
      * Gets the instant this entity was last updated.
      *
-     * @return Instant
+     * @return The instant this entity was last updated.
      */
     public Instant getUpdatedAt() {
         return updatedAt;
@@ -103,7 +103,7 @@ public abstract class Entity {
     /**
      * Sets the unique identifier for the entity.
      *
-     * @param id - The unique identifier for the entity.
+     * @param id The unique identifier for the entity.
      */
     public void setId(int id) {
         this.id = id;
@@ -112,7 +112,7 @@ public abstract class Entity {
     /**
      * Sets the userName of the user who created this entity.
      *
-     * @param createdBy - The userName of the creating user.
+     * @param createdBy The userName of the creating user.
      */
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
@@ -121,7 +121,7 @@ public abstract class Entity {
     /**
      * Sets the userName of the user who last updated this entity.
      *
-     * @param updatedBy - The userName of the updating user.
+     * @param updatedBy The userName of the updating user.
      */
     public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
@@ -130,7 +130,7 @@ public abstract class Entity {
     /**
      * Sets the instant this entity was created.
      *
-     * @param createdAt - The instant this entity was created.
+     * @param createdAt The instant this entity was created.
      */
     public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
@@ -139,7 +139,7 @@ public abstract class Entity {
     /**
      * Sets the instant this entity was last updated.
      *
-     * @param updatedAt - The instant this entity was updated.
+     * @param updatedAt The instant this entity was updated.
      */
     public void setUpdatedAt(Instant updatedAt) {
         this.updatedAt = updatedAt;

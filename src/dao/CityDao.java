@@ -8,6 +8,7 @@ package dao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import models.*;
@@ -19,6 +20,12 @@ import models.*;
  */
 public class CityDao extends Dao<City> {
 
+    /**
+     * Gets a city specified by a unique identifier.
+     *
+     * @param id The unique identifier of the city to find.
+     * @return An optional city.
+     */
     @Override
     public Optional<City> findById(int id) {
         try {
@@ -40,21 +47,60 @@ public class CityDao extends Dao<City> {
         return Optional.empty();
     }
 
+    /**
+     * Gets all cities from the database.
+     *
+     * @return A list of optional cities.
+     */
     @Override
     public List<Optional<City>> findAll() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Optional<City>> cities = new ArrayList<>();
+
+        try {
+            PreparedStatement pst = connection.prepareStatement(
+                    "SELECT * FROM city, country"
+            );
+
+            ResultSet rs = pst.executeQuery();
+
+            while (rs.next()) {
+                City city = getCityFromResultSet(rs);
+                cities.add(Optional.of(city));
+            }
+        } catch (SQLException sqle) {
+        }
+
+        return cities;
     }
 
+    /**
+     * Adds a city to the database.
+     *
+     * @param city The city to add.
+     * @return True if the city was added successfully, otherwise false.
+     */
     @Override
-    public boolean add(City entity) {
+    public boolean add(City city) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * Updates a city in the database.
+     *
+     * @param city The city to update.
+     * @return True if the city was added successfully, otherwise false.
+     */
     @Override
-    public boolean update(City entity) {
+    public boolean update(City city) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * Deletes a city from the database.
+     *
+     * @param id The unique identifier of the city to delete.
+     * @return True if the city was added successfully, otherwise false.
+     */
     @Override
     public boolean delete(int id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

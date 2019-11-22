@@ -48,18 +48,18 @@ public class User extends Entity {
 
     // Getters
     /**
-     * Gets the user's userName.
+     * Gets the userName of the user.
      *
-     * @return String
+     * @return The userName of the user.
      */
     public String getUserName() {
         return userName;
     }
 
     /**
-     * Gets the user's password.
+     * Gets the password of the user.
      *
-     * @return String
+     * @return The password of the user.
      */
     public String getPassword() {
         return password;
@@ -68,7 +68,7 @@ public class User extends Entity {
     /**
      * Gets whether or not the user is currently active in the database.
      *
-     * @return Boolean
+     * @return True if the user is active, otherwise false.
      */
     public boolean getIsActive() {
         return isActive;
@@ -76,18 +76,18 @@ public class User extends Entity {
 
     // Setters
     /**
-     * Sets the userName for the user.
+     * Sets the userName of the user.
      *
-     * @param userName - The userName for the user.
+     * @param userName The userName of the user.
      */
     public void setUserName(String userName) {
         this.userName = userName;
     }
 
     /**
-     * Sets the password for the user.
+     * Sets the password of the user.
      *
-     * @param password - The password for the user.
+     * @param password The password of the user.
      */
     public void setPassword(String password) {
         this.password = password;
@@ -96,7 +96,7 @@ public class User extends Entity {
     /**
      * Sets whether or not the user is currently active in the database.
      *
-     * @param isActive - A flag indicating whether or not the user is active.
+     * @param isActive True if the user is active, otherwise false.
      */
     public void setIsActive(boolean isActive) {
         this.isActive = isActive;
@@ -105,7 +105,7 @@ public class User extends Entity {
     /**
      * Print a pretty string of the user.
      *
-     * @return String
+     * @return A string representation of the user.
      */
     @Override
     public String toString() {

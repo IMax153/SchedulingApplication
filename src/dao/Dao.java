@@ -15,6 +15,8 @@ import utilities.Database;
  * should derive.
  *
  * @author mab90
+ * @param <Entity> The entity on whom crud operations will be performed by the
+ * data access object.
  */
 public abstract class Dao<Entity> {
 

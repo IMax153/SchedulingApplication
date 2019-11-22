@@ -28,7 +28,7 @@ public class Country extends Entity {
     /**
      * Gets the name of the country.
      *
-     * @return String
+     * @return The name of the country.
      */
     public String getName() {
         return name;
@@ -38,7 +38,7 @@ public class Country extends Entity {
     /**
      * Sets the name of the country.
      *
-     * @param name - The name of the country.
+     * @param name The name of the country.
      */
     public void setName(String name) {
         this.name = name;
@@ -47,7 +47,7 @@ public class Country extends Entity {
     /**
      * Print a pretty string representing the country.
      *
-     * @return String
+     * @return A string representation of the country.
      */
     @Override
     public String toString() {

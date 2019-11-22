@@ -49,6 +49,9 @@ public class Database {
 
     /**
      * Connects to the UCertify MySQL database.
+     *
+     * @throws ClassNotFoundException
+     * @throws Exception
      */
     public static void createConnection() throws ClassNotFoundException, Exception {
         try {
@@ -76,6 +79,8 @@ public class Database {
 
     /**
      * Disconnects from the UCertify MySQL database.
+     *
+     * @throws SQLException
      */
     public static void closeConnection() throws SQLException {
         try {
@@ -97,7 +102,7 @@ public class Database {
     /**
      * Gets the connection to the UCertify MySQL database.
      *
-     * @return
+     * @return The connection to the UCertify MySQL database.
      */
     public static Connection getConnection() {
         return connection;

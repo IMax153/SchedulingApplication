@@ -23,8 +23,8 @@ public class UserDao extends Dao<User> {
     /**
      * Gets a user specified by a unique identifier.
      *
-     * @param id - The unique identifier of the user to find.
-     * @return Optional<User>
+     * @param id The unique identifier of the user to find.
+     * @return An optional user.
      */
     @Override
     public Optional<User> findById(int id) {
@@ -50,7 +50,7 @@ public class UserDao extends Dao<User> {
     /**
      * Gets all users from the database.
      *
-     * @return List<Optional<User>>
+     * @return A list of optional users.
      */
     @Override
     public List<Optional<User>> findAll() {
@@ -74,10 +74,10 @@ public class UserDao extends Dao<User> {
     }
 
     /**
-     * Adds a user to the database
+     * Adds a user to the database.
      *
-     * @param user - The user to add.
-     * @return Boolean
+     * @param user The user to add.
+     * @return True if the user was added successfully, otherwise false.
      */
     @Override
     public boolean add(User user) {
@@ -103,8 +103,8 @@ public class UserDao extends Dao<User> {
     /**
      * Updates a user in the database.
      *
-     * @param user - The user to update.
-     * @return Boolean
+     * @param user The user to update.
+     * @return True if the user was updated successfully, otherwise false.
      */
     @Override
     public boolean update(User user) {
@@ -130,10 +130,10 @@ public class UserDao extends Dao<User> {
     }
 
     /**
-     * Deletes a user specified by a unique identifier.
+     * Deletes a user from the database.
      *
-     * @param id - The unique identifier of the user to delete.
-     * @return Boolean
+     * @param id The unique identifier of the user to delete.
+     * @return True if the user was deleted successfully, otherwise false.
      */
     @Override
     public boolean delete(int id) {
@@ -152,11 +152,11 @@ public class UserDao extends Dao<User> {
     }
 
     /**
-     * Authenticates a user with the scheduling application.
+     * Authenticates a user of the scheduling application.
      *
-     * @param userName - The userName of the user.
-     * @param password - The password of the user
-     * @return Optional<User>
+     * @param userName The userName of the user.
+     * @param password The password of the user
+     * @return An optional user.
      */
     public Optional<User> authenticateUser(String userName, String password) {
         try {
@@ -183,8 +183,8 @@ public class UserDao extends Dao<User> {
     /**
      * Creates a User object from the specified result set.
      *
-     * @param rs - The result set to extract the user from.
-     * @return User
+     * @param rs The result set to extract the user from.
+     * @return A new user object.
      * @throws SQLException
      */
     private User getUserFromResultSet(ResultSet rs) throws SQLException {

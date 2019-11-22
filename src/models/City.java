@@ -34,7 +34,7 @@ public class City extends Entity {
     /**
      * Gets the name of the city.
      *
-     * @return String
+     * @return The name of the city.
      */
     public String getName() {
         return name;
@@ -43,7 +43,7 @@ public class City extends Entity {
     /**
      * Gets the country in which this city is located.
      *
-     * @return Country
+     * @return The country in which the city is located.
      */
     public Country getCountry() {
         return country;
@@ -53,7 +53,7 @@ public class City extends Entity {
     /**
      * Sets the name of the city.
      *
-     * @param name - The name of the city.
+     * @param name The name of the city.
      */
     public void setName(String name) {
         this.name = name;
@@ -62,12 +62,17 @@ public class City extends Entity {
     /**
      * Sets the country for this city.
      *
-     * @param country - The country in which this city is located.
+     * @param country The country in which this city is located.
      */
     public void setCountry(Country country) {
         this.country = country;
     }
 
+    /**
+     * Print a pretty string of the city.
+     *
+     * @return A string representation of the city.
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("City ");

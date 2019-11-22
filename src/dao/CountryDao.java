@@ -24,8 +24,8 @@ public class CountryDao extends Dao<Country> {
     /**
      * Gets a country specified by a unique identifier.
      *
-     * @param id - The unique identifier of the country to find.
-     * @return Optional<Country>
+     * @param id The unique identifier of the country to find.
+     * @return An optional country.
      */
     @Override
     public Optional<Country> findById(int id) {
@@ -51,7 +51,7 @@ public class CountryDao extends Dao<Country> {
     /**
      * Gets all countries from the database.
      *
-     * @return List<Optional<Country>>
+     * @return A list of optional countries.
      */
     @Override
     public List<Optional<Country>> findAll() {
@@ -75,10 +75,10 @@ public class CountryDao extends Dao<Country> {
     }
 
     /**
-     * Adds a country to the database
+     * Adds a country to the database.
      *
-     * @param country - The country to add.
-     * @return Boolean
+     * @param country The country to add.
+     * @return True if the country was added successfully, otherwise false.
      */
     @Override
     public boolean add(Country country) {
@@ -102,8 +102,8 @@ public class CountryDao extends Dao<Country> {
     /**
      * Updates a country in the database.
      *
-     * @param country - The country to update.
-     * @return Boolean
+     * @param country The country to update.
+     * @return True if the country was updated successfully, otherwise false.
      */
     @Override
     public boolean update(Country country) {
@@ -127,10 +127,10 @@ public class CountryDao extends Dao<Country> {
     }
 
     /**
-     * Deletes a country specified by a unique identifier.
+     * Deletes a country from the database.
      *
-     * @param id - The unique identifier of the country to delete.
-     * @return Boolean
+     * @param id The unique identifier of the country to delete.
+     * @return True if the country was deleted successfully, otherwise false.
      */
     @Override
     public boolean delete(int id) {
@@ -151,8 +151,8 @@ public class CountryDao extends Dao<Country> {
     /**
      * Creates a Country object from the specified result set.
      *
-     * @param rs - The result set to extract the country from.
-     * @return Country
+     * @param rs The result set to extract the country from.
+     * @return A new country object.
      * @throws SQLException
      */
     private Country getCountryFromResultSet(ResultSet rs) throws SQLException {

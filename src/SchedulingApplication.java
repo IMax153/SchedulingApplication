@@ -35,7 +35,7 @@ public class SchedulingApplication extends Application {
     public static void main(String[] args) throws Exception {
         Database.createConnection();
 
-        AddressDao dao = new AddressDao();
+        AppointmentDao dao = new AppointmentDao();
 
 //        dao.findById(1).ifPresent(e -> System.out.println(e.toString()));
         dao.findAll().forEach(oe -> oe.ifPresent(e -> System.out.println(e.toString())));

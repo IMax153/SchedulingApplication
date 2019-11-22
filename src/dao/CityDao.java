@@ -7,6 +7,7 @@ package dao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,10 @@ public class CityDao extends Dao<City> {
     public Optional<City> findById(int id) {
         try {
             PreparedStatement pst = connection.prepareStatement(
-                    "SELECT * FROM city, country WHERE city.cityId = ?"
+                    "SELECT * FROM city "
+                    + "INNER JOIN country "
+                    + "ON city.countryId = country.countryId "
+                    + "WHERE city.cityId = ?"
             );
 
             pst.setInt(1, id);
@@ -42,6 +46,7 @@ public class CityDao extends Dao<City> {
                 return Optional.of(city);
             }
         } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
         }
 
         return Optional.empty();
@@ -68,6 +73,7 @@ public class CityDao extends Dao<City> {
                 cities.add(Optional.of(city));
             }
         } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
         }
 
         return cities;
@@ -94,6 +100,7 @@ public class CityDao extends Dao<City> {
 
             return pst.executeUpdate() == 1;
         } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
         }
 
         return false;
@@ -121,6 +128,7 @@ public class CityDao extends Dao<City> {
 
             return pst.executeUpdate() == 1;
         } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
         }
 
         return false;
@@ -143,6 +151,7 @@ public class CityDao extends Dao<City> {
 
             return pst.executeUpdate() == 1;
         } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
         }
 
         return false;

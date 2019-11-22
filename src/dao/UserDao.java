@@ -42,6 +42,7 @@ public class UserDao extends Dao<User> {
                 return Optional.of(user);
             }
         } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
         }
 
         return Optional.empty();
@@ -68,6 +69,7 @@ public class UserDao extends Dao<User> {
                 users.add(Optional.of(user));
             }
         } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
         }
 
         return users;
@@ -95,6 +97,7 @@ public class UserDao extends Dao<User> {
 
             return pst.executeUpdate() == 1;
         } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
         }
 
         return false;
@@ -124,6 +127,7 @@ public class UserDao extends Dao<User> {
 
             return pst.executeUpdate() == 1;
         } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
         }
 
         return false;
@@ -146,6 +150,7 @@ public class UserDao extends Dao<User> {
 
             return pst.executeUpdate() == 1;
         } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
         }
 
         return false;
@@ -175,6 +180,7 @@ public class UserDao extends Dao<User> {
                 return Optional.of(user);
             }
         } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
         }
 
         return Optional.empty();

@@ -48,7 +48,7 @@ public abstract class Entity {
      * A StringBuilder used when overriding an entity's `toString()` method to
      * pretty print the entity.
      */
-    protected StringBuilder sb;
+    protected StringBuilder sb = new StringBuilder();
 
     // Constructor
     public Entity(int id, String createdBy, String updatedBy, Instant createdAt, Instant updatedAt) {

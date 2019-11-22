@@ -43,6 +43,7 @@ public class CountryDao extends Dao<Country> {
                 return Optional.of(country);
             }
         } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
         }
 
         return Optional.empty();
@@ -69,6 +70,7 @@ public class CountryDao extends Dao<Country> {
                 countries.add(Optional.of(country));
             }
         } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
         }
 
         return countries;
@@ -94,6 +96,7 @@ public class CountryDao extends Dao<Country> {
 
             return pst.executeUpdate() == 1;
         } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
         }
 
         return false;
@@ -121,6 +124,7 @@ public class CountryDao extends Dao<Country> {
 
             return pst.executeUpdate() == 1;
         } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
         }
 
         return false;
@@ -143,6 +147,7 @@ public class CountryDao extends Dao<Country> {
 
             return pst.executeUpdate() == 1;
         } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
         }
 
         return false;

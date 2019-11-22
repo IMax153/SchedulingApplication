@@ -75,7 +75,8 @@ public class City extends Entity {
      */
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("City ");
+        sb.setLength(0);
+        sb.append("City ");
 
         sb.append("{");
         sb.append(System.getProperty("line.separator"));
@@ -109,7 +110,6 @@ public class City extends Entity {
         sb.append(System.getProperty("line.separator"));
 
         sb.append("}");
-        sb.append(System.getProperty("line.separator"));
 
         return sb.toString();
     }

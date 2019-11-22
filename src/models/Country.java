@@ -51,7 +51,8 @@ public class Country extends Entity {
      */
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("Country ");
+        sb.setLength(0);
+        sb.append("Country ");
 
         sb.append("{");
         sb.append(System.getProperty("line.separator"));
@@ -81,7 +82,6 @@ public class Country extends Entity {
         sb.append(System.getProperty("line.separator"));
 
         sb.append("}");
-        sb.append(System.getProperty("line.separator"));
 
         return sb.toString();
     }

@@ -109,7 +109,8 @@ public class User extends Entity {
      */
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("User ");
+        sb.setLength(0);
+        sb.append("User ");
 
         sb.append("{");
         sb.append(System.getProperty("line.separator"));
@@ -147,7 +148,6 @@ public class User extends Entity {
         sb.append(System.getProperty("line.separator"));
 
         sb.append("}");
-        sb.append(System.getProperty("line.separator"));
 
         return sb.toString();
     }

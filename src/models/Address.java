@@ -181,10 +181,6 @@ public class Address extends Entity {
         sb.append(phone);
         sb.append(System.getProperty("line.separator"));
 
-        sb.append("\tcity: ");
-        sb.append(city.toString());
-        sb.append(System.getProperty("line.separator"));
-
         sb.append("\tcreatedBy: ");
         sb.append(createdBy);
         sb.append(System.getProperty("line.separator"));
@@ -199,6 +195,10 @@ public class Address extends Entity {
 
         sb.append("\tupdatedAt: ");
         sb.append(updatedAt);
+        sb.append(System.getProperty("line.separator"));
+
+        sb.append("\tcity: ");
+        sb.append(city.toString());
         sb.append(System.getProperty("line.separator"));
 
         sb.append("}");

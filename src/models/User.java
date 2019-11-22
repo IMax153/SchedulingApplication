@@ -25,7 +25,7 @@ public class User extends Entity {
     private String password;
 
     /**
-     * Determines if the user is currently active in the database.
+     * Whether or not the user is currently active.
      */
     private boolean isActive;
 
@@ -66,7 +66,7 @@ public class User extends Entity {
     }
 
     /**
-     * Gets whether or not the user is currently active in the database.
+     * Gets whether or not the user is currently active.
      *
      * @return True if the user is active, otherwise false.
      */
@@ -94,7 +94,7 @@ public class User extends Entity {
     }
 
     /**
-     * Sets whether or not the user is currently active in the database.
+     * Sets whether or not the user is currently active.
      *
      * @param isActive True if the user is active, otherwise false.
      */

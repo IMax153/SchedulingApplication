@@ -6,17 +6,12 @@
 
 import dao.*;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.Month;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import utilities.Database;
-import models.Interval;
 
 /**
  * Class which handles initialization and closure of the main scheduling
@@ -40,9 +35,9 @@ public class SchedulingApplication extends Application {
     public static void main(String[] args) throws Exception {
         Database.createConnection();
 
-//        AppointmentDao dao = new AppointmentDao();
-//        dao.findById(1).ifPresent(e -> System.out.println(e.toString()));
-//        dao.findAll().forEach(oe -> oe.ifPresent(e -> System.out.println(e.toString())));
+        AppointmentDao dao = new AppointmentDao();
+        dao.findById(1).ifPresent(e -> System.out.println(e.toString()));
+        dao.findAll().forEach(oe -> oe.ifPresent(e -> System.out.println(e.toString())));
         launch(args);
         Database.closeConnection();
     }

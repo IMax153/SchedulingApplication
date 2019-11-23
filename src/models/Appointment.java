@@ -17,52 +17,47 @@ public class Appointment extends Entity {
     /**
      * The title of the appointment.
      */
-    private String title;
+    private final String title;
 
     /**
      * The description of the appointment.
      */
-    private String description;
+    private final String description;
 
     /**
      * The location of the appointment.
      */
-    private String location;
+    private final String location;
 
     /**
      * The contact for the appointment.
      */
-    private String contact;
+    private final String contact;
 
     /**
      * The type of the appointment.
      */
-    private String type;
+    private final String type;
 
     /**
      * The URL for the appointment.
      */
-    private String url;
+    private final String url;
 
     /**
-     * The instant that the appointment starts.
+     * The interval for the appointment.
      */
-    private Instant start;
-
-    /**
-     * The instant that the appointment ends.
-     */
-    private Instant end;
+    private final Interval interval;
 
     /**
      * The customer who is a part of the appointment.
      */
-    private Customer customer;
+    private final Customer customer;
 
     /**
      * The user who is a part of the appointment.
      */
-    private User user;
+    private final User user;
 
     public Appointment(
             int id,
@@ -72,8 +67,7 @@ public class Appointment extends Entity {
             String contact,
             String type,
             String url,
-            Instant start,
-            Instant end,
+            Interval interval,
             Customer customer,
             User user,
             String createdBy,
@@ -82,20 +76,17 @@ public class Appointment extends Entity {
             Instant updatedAt
     ) {
         super(id, createdBy, updatedBy, createdAt, updatedAt);
-        this.id = id;
         this.title = title;
         this.description = description;
         this.location = location;
         this.contact = contact;
         this.type = type;
         this.url = url;
-        this.start = start;
-        this.end = end;
+        this.interval = interval;
         this.customer = customer;
         this.user = user;
     }
 
-    // Getters
     /**
      * Gets the title of the appointment.
      *
@@ -151,21 +142,12 @@ public class Appointment extends Entity {
     }
 
     /**
-     * Gets the instant that the appointment starts.
+     * Gets the interval for the appointment.
      *
-     * @return The instant that the appointment starts.
+     * @return The interval for the appointment.
      */
-    public Instant getStart() {
-        return start;
-    }
-
-    /**
-     * Gets the instant that the appointment ends.
-     *
-     * @return The instant that the appointment ends.
-     */
-    public Instant getEnd() {
-        return end;
+    public Interval getInterval() {
+        return interval;
     }
 
     /**
@@ -186,97 +168,6 @@ public class Appointment extends Entity {
         return user;
     }
 
-    // Setters
-    /**
-     * Sets the title of the appointment.
-     *
-     * @param title The title of the appointment.
-     */
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    /**
-     * Sets the description of the appointment.
-     *
-     * @param description The description of the appointment.
-     */
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    /**
-     * Sets the location of the appointment.
-     *
-     * @param location The location of the appointment.
-     */
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    /**
-     * Sets the contact for the appointment.
-     *
-     * @param contact The contact for the appointment.
-     */
-    public void setContact(String contact) {
-        this.contact = contact;
-    }
-
-    /**
-     * Sets the type of the appointment.
-     *
-     * @param type The type of the appointment.
-     */
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    /**
-     * Sets the URL for the appointment.
-     *
-     * @param url The URL for the appointment.
-     */
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    /**
-     * Sets the instant that the appointment starts.
-     *
-     * @param start The instant that the appointment starts.
-     */
-    public void setStart(Instant start) {
-        this.start = start;
-    }
-
-    /**
-     * Sets the instant that the appointment ends.
-     *
-     * @param end The instant that the appointment ends.
-     */
-    public void setEnd(Instant end) {
-        this.end = end;
-    }
-
-    /**
-     * Sets the customer who is a part of the appointment.
-     *
-     * @param customer The customer who is a part of the appointment.
-     */
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    /**
-     * Sets the user who is a part of the appointment.
-     *
-     * @param user The user who is a part of the appointment.
-     */
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     /**
      * Print a pretty string of the appointment.
      *
@@ -285,68 +176,56 @@ public class Appointment extends Entity {
     @Override
     public String toString() {
         sb.setLength(0);
-        sb.append("Appointment ");
+        sb.append("Appointment[");
 
-        sb.append("{");
-        sb.append(System.getProperty("line.separator"));
-
-        sb.append("\tid: ");
-        sb.append(id);
-        sb.append(System.getProperty("line.separator"));
-
-        sb.append("\tdescription: ");
+        sb.append("description: ");
         sb.append(description);
-        sb.append(System.getProperty("line.separator"));
+        sb.append(", ");
 
-        sb.append("\tlocation: ");
+        sb.append("location: ");
         sb.append(location);
-        sb.append(System.getProperty("line.separator"));
+        sb.append(", ");
 
-        sb.append("\tcontact: ");
+        sb.append("contact: ");
         sb.append(contact);
-        sb.append(System.getProperty("line.separator"));
+        sb.append(", ");
 
-        sb.append("\ttype: ");
+        sb.append("type: ");
         sb.append(type);
-        sb.append(System.getProperty("line.separator"));
+        sb.append(", ");
 
-        sb.append("\turl: ");
+        sb.append("url: ");
         sb.append(url);
-        sb.append(System.getProperty("line.separator"));
+        sb.append(", ");
 
-        sb.append("\tstart: ");
-        sb.append(start);
-        sb.append(System.getProperty("line.separator"));
+        sb.append("interval: ");
+        sb.append(interval.toString());
+        sb.append(", ");
 
-        sb.append("\tend: ");
-        sb.append(end);
-        sb.append(System.getProperty("line.separator"));
-
-        sb.append("\tcreatedBy: ");
+        sb.append("createdBy: ");
         sb.append(createdBy);
-        sb.append(System.getProperty("line.separator"));
+        sb.append(", ");
 
-        sb.append("\tupdatedBy: ");
+        sb.append("updatedBy: ");
         sb.append(updatedBy);
-        sb.append(System.getProperty("line.separator"));
+        sb.append(", ");
 
-        sb.append("\tcreatedAt: ");
+        sb.append("createdAt: ");
         sb.append(createdAt);
-        sb.append(System.getProperty("line.separator"));
+        sb.append(", ");
 
-        sb.append("\tupdatedAt: ");
+        sb.append("updatedAt: ");
         sb.append(updatedAt);
-        sb.append(System.getProperty("line.separator"));
+        sb.append(", ");
 
-        sb.append("\tcustomer: ");
+        sb.append("customer: ");
         sb.append(customer.toString());
-        sb.append(System.getProperty("line.separator"));
+        sb.append(", ");
 
-        sb.append("\tuser: ");
+        sb.append("user: ");
         sb.append(user.toString());
-        sb.append(System.getProperty("line.separator"));
 
-        sb.append("}");
+        sb.append("]");
 
         return sb.toString();
     }

@@ -17,28 +17,28 @@ public class Address extends Entity {
     /**
      * The part of the address containing the street name.
      */
-    private String street;
+    private final String street;
 
     /**
      * The part of the address containing additional information. For example,
      * an apartment number.
      */
-    private String additionalInformation;
+    private final String additionalInformation;
 
     /**
      * The part of the address containing the postal code.
      */
-    private String postalCode;
+    private final String postalCode;
 
     /**
      * The phone number for the address.
      */
-    private String phone;
+    private final String phone;
 
     /**
      * The city of the address.
      */
-    private City city;
+    private final City city;
 
     public Address(
             int id,
@@ -60,7 +60,6 @@ public class Address extends Entity {
         this.city = city;
     }
 
-    // Getters
     /**
      * Gets the street name and number of the address.
      *
@@ -106,52 +105,6 @@ public class Address extends Entity {
         return city;
     }
 
-    // Setters
-    /**
-     * Sets the street name and number of the address.
-     *
-     * @param street The street name and number.
-     */
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    /**
-     * Sets any additional information for the address.
-     *
-     * @param additionalInformation Any additional information for the address.
-     */
-    public void setAdditionalInformation(String additionalInformation) {
-        this.additionalInformation = additionalInformation;
-    }
-
-    /**
-     * Sets the postal code of the address.
-     *
-     * @param postalCode The postal code of the address.
-     */
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
-    }
-
-    /**
-     * Sets the phone number of the address.
-     *
-     * @param phone The phone number of the address.
-     */
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    /**
-     * Sets the city of the address.
-     *
-     * @param city The city of the address.
-     */
-    public void setCity(City city) {
-        this.city = city;
-    }
-
     /**
      * Print a pretty string of the address.
      *
@@ -160,48 +113,31 @@ public class Address extends Entity {
     @Override
     public String toString() {
         sb.setLength(0);
-        sb.append("Address ");
+        sb.append("Address[");
 
-        sb.append("{");
-        sb.append(System.getProperty("line.separator"));
-
-        sb.append("\tstreet: ");
+        sb.append("street: ");
         sb.append(street);
-        sb.append(System.getProperty("line.separator"));
+        sb.append(", ");
 
-        sb.append("\tadditionalInformation: ");
+        sb.append("additionalInformation: ");
         sb.append(additionalInformation);
-        sb.append(System.getProperty("line.separator"));
+        sb.append(", ");
 
-        sb.append("\tpostalCode: ");
+        sb.append("postalCode: ");
         sb.append(postalCode);
-        sb.append(System.getProperty("line.separator"));
+        sb.append(", ");
 
-        sb.append("\tphone: ");
+        sb.append("phone: ");
         sb.append(phone);
-        sb.append(System.getProperty("line.separator"));
+        sb.append(", ");
 
-        sb.append("\tcreatedBy: ");
-        sb.append(createdBy);
-        sb.append(System.getProperty("line.separator"));
-
-        sb.append("\tupdatedBy: ");
-        sb.append(updatedBy);
-        sb.append(System.getProperty("line.separator"));
-
-        sb.append("\tcreatedAt: ");
-        sb.append(createdAt);
-        sb.append(System.getProperty("line.separator"));
-
-        sb.append("\tupdatedAt: ");
-        sb.append(updatedAt);
-        sb.append(System.getProperty("line.separator"));
-
-        sb.append("\tcity: ");
+        sb.append("city: ");
         sb.append(city.toString());
-        sb.append(System.getProperty("line.separator"));
+        sb.append(", ");
 
-        sb.append("}");
+        sb.append(super.toString());
+
+        sb.append("]");
 
         return sb.toString();
     }

@@ -104,7 +104,7 @@ public class CustomerDao extends Dao<Customer> {
 
             pst.setString(1, customer.getName());
             pst.setInt(2, customer.getAddress().getId());
-            pst.setInt(3, customer.getIsActive() ? 1 : 0);
+            pst.setInt(3, customer.isActive() ? 1 : 0);
             pst.setString(4, customer.getCreatedBy());
             pst.setString(5, customer.getUpdatedBy());
 
@@ -133,7 +133,7 @@ public class CustomerDao extends Dao<Customer> {
 
             pst.setString(1, customer.getName());
             pst.setInt(2, customer.getAddress().getId());
-            pst.setInt(3, customer.getIsActive() ? 1 : 0);
+            pst.setInt(3, customer.isActive() ? 1 : 0);
             pst.setString(4, customer.getUpdatedBy());
             pst.setInt(5, customer.getId());
 

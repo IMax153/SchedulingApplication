@@ -91,7 +91,7 @@ public class UserDao extends Dao<User> {
 
             pst.setString(1, user.getUserName());
             pst.setString(2, user.getPassword());
-            pst.setInt(3, user.getIsActive() ? 1 : 0);
+            pst.setInt(3, user.isActive() ? 1 : 0);
             pst.setString(4, user.getCreatedBy());
             pst.setString(5, user.getUpdatedBy());
 
@@ -120,7 +120,7 @@ public class UserDao extends Dao<User> {
 
             pst.setString(1, user.getUserName());
             pst.setString(2, user.getPassword());
-            pst.setInt(3, user.getIsActive() ? 1 : 0);
+            pst.setInt(3, user.isActive() ? 1 : 0);
             pst.setString(4, user.getCreatedBy());
             pst.setString(5, user.getUpdatedBy());
             pst.setInt(6, user.getId());

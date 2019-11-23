@@ -119,8 +119,8 @@ public class AppointmentDao extends Dao<Appointment> {
             pst.setString(6, appointment.getContact());
             pst.setString(7, appointment.getType());
             pst.setString(8, appointment.getUrl());
-            pst.setTimestamp(9, Timestamp.from(appointment.getStart()));
-            pst.setTimestamp(10, Timestamp.from(appointment.getEnd()));
+            pst.setTimestamp(9, Timestamp.from(appointment.getInterval().getZonedStartDateTime().toInstant()));
+            pst.setTimestamp(10, Timestamp.from(appointment.getInterval().getZonedEndDateTime().toInstant()));
             pst.setString(11, appointment.getCreatedBy());
             pst.setString(12, appointment.getUpdatedBy());
 
@@ -156,8 +156,8 @@ public class AppointmentDao extends Dao<Appointment> {
             pst.setString(6, appointment.getContact());
             pst.setString(7, appointment.getType());
             pst.setString(8, appointment.getUrl());
-            pst.setTimestamp(9, Timestamp.from(appointment.getStart()));
-            pst.setTimestamp(10, Timestamp.from(appointment.getEnd()));
+            pst.setTimestamp(9, Timestamp.from(appointment.getInterval().getZonedStartDateTime().toInstant()));
+            pst.setTimestamp(10, Timestamp.from(appointment.getInterval().getZonedEndDateTime().toInstant()));
             pst.setString(11, appointment.getUpdatedBy());
 
             return pst.executeUpdate() == 1;
@@ -254,6 +254,11 @@ public class AppointmentDao extends Dao<Appointment> {
                 rs.getTimestamp("cu.lastUpdate").toInstant()
         );
 
+        Interval interval = new Interval(
+                rs.getTimestamp("ap.start").toLocalDateTime(),
+                rs.getTimestamp("ap.end").toLocalDateTime()
+        );
+
         return new Appointment(
                 rs.getInt("ap.appointmentId"),
                 rs.getString("ap.title"),
@@ -262,8 +267,7 @@ public class AppointmentDao extends Dao<Appointment> {
                 rs.getString("ap.contact"),
                 rs.getString("ap.type"),
                 rs.getString("ap.url"),
-                rs.getTimestamp("ap.start").toInstant(),
-                rs.getTimestamp("ap.end").toInstant(),
+                interval,
                 customer,
                 user,
                 rs.getString("ap.createdBy"),

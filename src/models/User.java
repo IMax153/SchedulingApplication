@@ -17,36 +17,34 @@ public class User extends Entity {
     /**
      * The userName of the user.
      */
-    private String userName;
+    private final String userName;
 
     /**
      * The password of the user.
      */
-    private String password;
+    private final String password;
 
     /**
      * Whether or not the user is currently active.
      */
-    private boolean isActive;
+    private final boolean active;
 
     public User(
             int id,
             String userName,
             String password,
-            boolean isActive,
+            boolean active,
             String createdBy,
             String updatedBy,
             Instant createdAt,
             Instant updatedAt
     ) {
         super(id, createdBy, updatedBy, createdAt, updatedAt);
-        this.id = id;
         this.userName = userName;
         this.password = password;
-        this.isActive = isActive;
+        this.active = active;
     }
 
-    // Getters
     /**
      * Gets the userName of the user.
      *
@@ -70,36 +68,8 @@ public class User extends Entity {
      *
      * @return True if the user is active, otherwise false.
      */
-    public boolean getIsActive() {
-        return isActive;
-    }
-
-    // Setters
-    /**
-     * Sets the userName of the user.
-     *
-     * @param userName The userName of the user.
-     */
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    /**
-     * Sets the password of the user.
-     *
-     * @param password The password of the user.
-     */
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    /**
-     * Sets whether or not the user is currently active.
-     *
-     * @param isActive True if the user is active, otherwise false.
-     */
-    public void setIsActive(boolean isActive) {
-        this.isActive = isActive;
+    public boolean isActive() {
+        return active;
     }
 
     /**
@@ -110,44 +80,27 @@ public class User extends Entity {
     @Override
     public String toString() {
         sb.setLength(0);
-        sb.append("User ");
+        sb.append("User[");
 
-        sb.append("{");
-        sb.append(System.getProperty("line.separator"));
-
-        sb.append("\tid: ");
+        sb.append("id: ");
         sb.append(id);
-        sb.append(System.getProperty("line.separator"));
+        sb.append(", ");
 
-        sb.append("\tuserName: ");
+        sb.append("userName: ");
         sb.append(userName);
-        sb.append(System.getProperty("line.separator"));
+        sb.append(", ");
 
-        sb.append("\tpassword: ");
+        sb.append("password: ");
         sb.append(password);
-        sb.append(System.getProperty("line.separator"));
+        sb.append(", ");
 
-        sb.append("\tisActive: ");
-        sb.append(isActive);
-        sb.append(System.getProperty("line.separator"));
+        sb.append("active: ");
+        sb.append(active);
+        sb.append(", ");
 
-        sb.append("\tcreatedBy: ");
-        sb.append(createdBy);
-        sb.append(System.getProperty("line.separator"));
+        sb.append(super.toString());
 
-        sb.append("\tupdatedBy: ");
-        sb.append(updatedBy);
-        sb.append(System.getProperty("line.separator"));
-
-        sb.append("\tcreatedAt: ");
-        sb.append(createdAt);
-        sb.append(System.getProperty("line.separator"));
-
-        sb.append("\tupdatedAt: ");
-        sb.append(updatedAt);
-        sb.append(System.getProperty("line.separator"));
-
-        sb.append("}");
+        sb.append("]");
 
         return sb.toString();
     }

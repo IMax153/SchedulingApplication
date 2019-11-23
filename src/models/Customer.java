@@ -17,22 +17,22 @@ public class Customer extends Entity {
     /**
      * The name of the customer.
      */
-    private String name;
+    private final String name;
 
     /**
      * Whether or not the customer is currently active.
      */
-    private boolean isActive;
+    private final boolean active;
 
     /**
      * The address of the customer.
      */
-    private Address address;
+    private final Address address;
 
     public Customer(
             int id,
             String name,
-            boolean isActive,
+            boolean active,
             Address address,
             String createdBy,
             String updatedBy,
@@ -41,11 +41,10 @@ public class Customer extends Entity {
     ) {
         super(id, createdBy, updatedBy, createdAt, updatedAt);
         this.name = name;
-        this.isActive = isActive;
+        this.active = active;
         this.address = address;
     }
 
-    // Getters
     /**
      * Gets the name of the customer.
      *
@@ -60,8 +59,8 @@ public class Customer extends Entity {
      *
      * @return True if the user is active, otherwise false.
      */
-    public boolean getIsActive() {
-        return isActive;
+    public boolean isActive() {
+        return active;
     }
 
     /**
@@ -73,34 +72,6 @@ public class Customer extends Entity {
         return address;
     }
 
-    // Setters
-    /**
-     * Sets the name of the customer.
-     *
-     * @param name The name of the customer.
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * Sets whether or not the customer is currently active.
-     *
-     * @param isActive True if the customer is active, otherwise false.
-     */
-    public void setIsActive(boolean isActive) {
-        this.isActive = isActive;
-    }
-
-    /**
-     * Sets the address of the customer.
-     *
-     * @param address The address of the customer.
-     */
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
     /**
      * Print a pretty string of the customer.
      *
@@ -109,40 +80,19 @@ public class Customer extends Entity {
     @Override
     public String toString() {
         sb.setLength(0);
-        sb.append("Customer ");
+        sb.append("Customer[");
 
-        sb.append("{");
-        sb.append(System.getProperty("line.separator"));
+        sb.append("active: ");
+        sb.append(active);
+        sb.append(", ");
 
-        sb.append("\tid: ");
-        sb.append(id);
-        sb.append(System.getProperty("line.separator"));
-
-        sb.append("\tisActive: ");
-        sb.append(isActive);
-        sb.append(System.getProperty("line.separator"));
-
-        sb.append("\tcreatedBy: ");
-        sb.append(createdBy);
-        sb.append(System.getProperty("line.separator"));
-
-        sb.append("\tupdatedBy: ");
-        sb.append(updatedBy);
-        sb.append(System.getProperty("line.separator"));
-
-        sb.append("\tcreatedAt: ");
-        sb.append(createdAt);
-        sb.append(System.getProperty("line.separator"));
-
-        sb.append("\tupdatedAt: ");
-        sb.append(updatedAt);
-        sb.append(System.getProperty("line.separator"));
-
-        sb.append("\taddress: ");
+        sb.append("address: ");
         sb.append(address.toString());
-        sb.append(System.getProperty("line.separator"));
+        sb.append(", ");
 
-        sb.append("}");
+        sb.append(super.toString());
+
+        sb.append("]");
 
         return sb.toString();
     }

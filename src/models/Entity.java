@@ -22,27 +22,27 @@ public abstract class Entity {
     /**
      * The unique identifier of the entity.
      */
-    protected int id;
+    protected final int id;
 
     /**
      * The userName of the user who created this entity.
      */
-    protected String createdBy;
+    protected final String createdBy;
 
     /**
      * The userName of the user who last updated this entity.
      */
-    protected String updatedBy;
+    protected final String updatedBy;
 
     /**
      * The instant this entity was created.
      */
-    protected Instant createdAt;
+    protected final Instant createdAt;
 
     /**
      * The instant this entity was last updated.
      */
-    protected Instant updatedAt;
+    protected final Instant updatedAt;
 
     /**
      * A StringBuilder used when overriding an entity's `toString()` method to
@@ -50,7 +50,6 @@ public abstract class Entity {
      */
     protected StringBuilder sb = new StringBuilder();
 
-    // Constructor
     public Entity(int id, String createdBy, String updatedBy, Instant createdAt, Instant updatedAt) {
         this.id = id;
         this.createdBy = createdBy;
@@ -59,7 +58,6 @@ public abstract class Entity {
         this.updatedAt = updatedAt;
     }
 
-    // Getters
     /**
      * Gets the unique identifier of the entity.
      *
@@ -105,50 +103,26 @@ public abstract class Entity {
         return updatedAt;
     }
 
-    // Setters
-    /**
-     * Sets the unique identifier for the entity.
-     *
-     * @param id The unique identifier for the entity.
-     */
-    public void setId(int id) {
-        this.id = id;
-    }
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
 
-    /**
-     * Sets the userName of the user who created this entity.
-     *
-     * @param createdBy The userName of the creating user.
-     */
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
+        sb.append("createdBy: ");
+        sb.append(createdBy);
+        sb.append(", ");
 
-    /**
-     * Sets the userName of the user who last updated this entity.
-     *
-     * @param updatedBy The userName of the updating user.
-     */
-    public void setUpdatedBy(String updatedBy) {
-        this.updatedBy = updatedBy;
-    }
+        sb.append("updatedBy: ");
+        sb.append(updatedBy);
+        sb.append(", ");
 
-    /**
-     * Sets the instant this entity was created.
-     *
-     * @param createdAt The instant this entity was created.
-     */
-    public void setCreatedAt(Instant createdAt) {
-        this.createdAt = createdAt;
-    }
+        sb.append("createdAt: ");
+        sb.append(createdAt);
+        sb.append(", ");
 
-    /**
-     * Sets the instant this entity was last updated.
-     *
-     * @param updatedAt The instant this entity was updated.
-     */
-    public void setUpdatedAt(Instant updatedAt) {
-        this.updatedAt = updatedAt;
+        sb.append("updatedAt: ");
+        sb.append(updatedAt);
+
+        return sb.toString();
     }
 
 }

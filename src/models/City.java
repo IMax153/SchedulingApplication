@@ -17,12 +17,12 @@ public class City extends Entity {
     /**
      * The name of the city.
      */
-    private String name;
+    private final String name;
 
     /**
      * The country in which the city is located.
      */
-    private Country country;
+    private final Country country;
 
     public City(
             int id,
@@ -38,7 +38,6 @@ public class City extends Entity {
         this.country = country;
     }
 
-    // Getters
     /**
      * Gets the name of the city.
      *
@@ -57,25 +56,6 @@ public class City extends Entity {
         return country;
     }
 
-    // Setters
-    /**
-     * Sets the name of the city.
-     *
-     * @param name The name of the city.
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * Sets the country for this city.
-     *
-     * @param country The country in which this city is located.
-     */
-    public void setCountry(Country country) {
-        this.country = country;
-    }
-
     /**
      * Print a pretty string of the city.
      *
@@ -84,40 +64,19 @@ public class City extends Entity {
     @Override
     public String toString() {
         sb.setLength(0);
-        sb.append("City ");
+        sb.append("City[");
 
-        sb.append("{");
-        sb.append(System.getProperty("line.separator"));
-
-        sb.append("\tid: ");
-        sb.append(id);
-        sb.append(System.getProperty("line.separator"));
-
-        sb.append("\tname: ");
+        sb.append("name: ");
         sb.append(name);
-        sb.append(System.getProperty("line.separator"));
+        sb.append(", ");
 
-        sb.append("\tcreatedBy: ");
-        sb.append(createdBy);
-        sb.append(System.getProperty("line.separator"));
-
-        sb.append("\tupdatedBy: ");
-        sb.append(updatedBy);
-        sb.append(System.getProperty("line.separator"));
-
-        sb.append("\tcreatedAt: ");
-        sb.append(createdAt);
-        sb.append(System.getProperty("line.separator"));
-
-        sb.append("\tupdatedAt: ");
-        sb.append(updatedAt);
-        sb.append(System.getProperty("line.separator"));
-
-        sb.append("\tcountry: ");
+        sb.append("country: ");
         sb.append(country.toString());
-        sb.append(System.getProperty("line.separator"));
+        sb.append(", ");
 
-        sb.append("}");
+        sb.append(super.toString());
+
+        sb.append("]");
 
         return sb.toString();
     }

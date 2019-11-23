@@ -253,21 +253,30 @@ public class Interval {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
+        String newline = System.getProperty("line.separator");
 
-        sb.append("Interval[startDate = ");
+        sb.append("Interval[");
+
+        sb.append("startDate: ");
         sb.append(startDate);
+        sb.append(", ");
 
-        sb.append(", startTime = ");
+        sb.append("startTime: ");
         sb.append(startTime);
+        sb.append(", ");
 
-        sb.append(", endDate = ");
+        sb.append("endDate: ");
         sb.append(endDate);
+        sb.append(", ");
 
-        sb.append(", endTime = ");
+        sb.append("endTime: ");
         sb.append(endTime);
+        sb.append(", ");
 
-        sb.append(", zoneId = ");
+        sb.append("zoneId: ");
         sb.append(zoneId);
+
+        sb.append("]");
 
         return sb.toString();
     }

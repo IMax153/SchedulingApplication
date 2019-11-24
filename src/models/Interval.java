@@ -13,6 +13,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 import static java.util.Objects.requireNonNull;
+import utilities.DateUtils;
 
 /**
  * Handles creation and manipulation of time intervals.
@@ -35,11 +36,6 @@ public class Interval {
      * The default end time of the interval.
      */
     private static final LocalTime DEFAULT_END_TIME = LocalTime.of(13, 0);
-
-    /**
-     * The default zone id for the interval.
-     */
-    private static final ZoneId DEFAULT_ZONE_ID = ZoneId.systemDefault();
 
     /**
      * The start of for the interval.
@@ -93,31 +89,35 @@ public class Interval {
     /**
      * The start milliseconds of the interval.
      */
-    private long startMilliseconds = Long.MIN_VALUE;
+    private final long startMilliseconds = Long.MIN_VALUE;
 
     /**
      * The end milliseconds of the interval.
      */
-    private long endMilliseconds = Long.MAX_VALUE;
+    private final long endMilliseconds = Long.MAX_VALUE;
 
     public Interval() {
-        this(DEFAULT_DATE, DEFAULT_START_TIME, DEFAULT_DATE, DEFAULT_END_TIME, DEFAULT_ZONE_ID);
+        this(DEFAULT_DATE, DEFAULT_START_TIME, DEFAULT_DATE, DEFAULT_END_TIME, DateUtils.DEFAULT_ZONE_ID);
     }
 
     public Interval(LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime) {
-        this(startDate, startTime, endDate, endTime, DEFAULT_ZONE_ID);
+        this(startDate, startTime, endDate, endTime, DateUtils.DEFAULT_ZONE_ID);
     }
 
     public Interval(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        this(startDateTime, endDateTime, DEFAULT_ZONE_ID);
+        this(startDateTime, endDateTime, DateUtils.DEFAULT_ZONE_ID);
     }
 
     public Interval(LocalDateTime startDateTime, LocalDateTime endDateTime, ZoneId zoneId) {
         this(startDateTime.toLocalDate(), startDateTime.toLocalTime(), endDateTime.toLocalDate(), endDateTime.toLocalTime(), zoneId);
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
     }
 
     public Interval(ZonedDateTime zonedStartDateTime, ZonedDateTime zonedEndDateTime) {
         this(zonedStartDateTime.toLocalDateTime(), zonedEndDateTime.toLocalDateTime(), zonedStartDateTime.getZone());
+        this.zonedStartDateTime = zonedStartDateTime;
+        this.zonedEndDateTime = zonedEndDateTime;
     }
 
     public Interval(LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime, ZoneId zoneId) {
@@ -208,6 +208,37 @@ public class Interval {
     }
 
     /**
+     * Checks if the specified date falls within the interval.
+     *
+     * @param date The date to check.
+     * @return True if the specified date falls within the interval, otherwise
+     * false.
+     */
+    public boolean contains(LocalDate date) {
+        return contains(date.atStartOfDay(zoneId));
+    }
+
+    /**
+     * Checks if the specified date falls within the interval.
+     *
+     * @param date The date to check.
+     * @return True if the specified date falls within the interval, otherwise
+     * false.
+     */
+    public boolean contains(ZonedDateTime date) {
+        if (zonedStartDateTime == null) {
+            zonedStartDateTime = startDate.atStartOfDay(DateUtils.DEFAULT_ZONE_ID);
+        }
+
+        if (zonedEndDateTime == null) {
+            zonedEndDateTime = startDate.atStartOfDay(DateUtils.DEFAULT_ZONE_ID);
+        }
+
+        return (date.equals(zonedStartDateTime) || date.isAfter(zonedStartDateTime))
+                && (date.equals(zonedEndDateTime) || date.isBefore(zonedEndDateTime));
+    }
+
+    /**
      * Checks whether two intervals overlap one another. See discussion in
      * <a href="https://stackoverflow.com/questions/325933/determine-whether-two-date-ranges-overlap">this</a>
      * post.
@@ -216,8 +247,8 @@ public class Interval {
      * @return True if the intervals overlap one another, otherwise false.
      */
     public boolean overlapsWith(Interval other) {
-        LocalDate maxStart = startDate.isAfter(other.startDate) ? startDate : other.startDate;
-        LocalDate minEnd = endDate.isBefore(other.endDate) ? endDate : other.endDate;
+        ZonedDateTime maxStart = zonedStartDateTime.isAfter(other.zonedStartDateTime) ? zonedStartDateTime : other.zonedStartDateTime;
+        ZonedDateTime minEnd = zonedEndDateTime.isBefore(other.zonedEndDateTime) ? zonedEndDateTime : other.zonedEndDateTime;
         return maxStart.isBefore(minEnd) || maxStart.equals(minEnd);
     }
 

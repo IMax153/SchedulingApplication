@@ -36,8 +36,8 @@ public class SchedulingApplication extends Application {
         Database.createConnection();
 
         AppointmentDao dao = new AppointmentDao();
-        dao.findById(1).ifPresent(e -> System.out.println(e.toString()));
-        dao.findAll().forEach(oe -> oe.ifPresent(e -> System.out.println(e.toString())));
+//        dao.findById(1).ifPresent(e -> System.out.println(e.toString()));
+//        dao.findAll().forEach(oe -> oe.ifPresent(e -> System.out.println(e.toString())));
         launch(args);
         Database.closeConnection();
     }

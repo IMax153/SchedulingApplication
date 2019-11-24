@@ -5,30 +5,27 @@
  */
 package views.calendar;
 
+import dao.AppointmentDao;
 import java.net.URL;
-import java.time.DayOfWeek;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.time.*;
+import java.time.format.TextStyle;
 import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.HPos;
-import javafx.geometry.Insets;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Region;
-import javafx.scene.text.TextAlignment;
+import javafx.geometry.*;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.*;
+import models.*;
+import utilities.DateUtils;
 
 /**
  * FXML Controller class
@@ -37,16 +34,47 @@ import javafx.scene.text.TextAlignment;
  */
 public class CalendarViewController implements Initializable {
 
-    private final LocalTime START_OF_DAY = LocalTime.of(0, 0);
+    /**
+     * The values representing the type of view that the calendar should
+     * display.
+     */
+    private enum CalendarViewType {
+        WEEK,
+        MONTH
+    }
 
-    private final LocalTime END_OF_DAY = LocalTime.of(23, 59);
+    /**
+     * The type of view that the calendar should display.
+     */
+    private CalendarViewType calendarViewType;
 
-    private final Duration TIME_SLOT_DURATION = Duration.ofMinutes(15);
+    /**
+     * The calendar being displayed by the CalendarView.
+     */
+    private Calendar calendar;
 
-    private final List<TimeSlot> timeSlots = new ArrayList<>();
+    /**
+     * The {@link GridPane} used to display the days of the CalendarView.
+     */
+    private GridPane gridPane;
 
+    /**
+     * The pane used to display the CalendarView.
+     */
     @FXML
-    private ScrollPane gridViewScroller;
+    private Pane calendarPane;
+
+    /**
+     * Toggles the CalendarView to display by week.
+     */
+    @FXML
+    private ToggleButton weekToggleButton;
+
+    /**
+     * Toggles the CalendarView to display by month.
+     */
+    @FXML
+    private ToggleButton monthToggleButton;
 
     /**
      * Initializes the controller class.
@@ -56,75 +84,323 @@ public class CalendarViewController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        GridPane calendarGridView = new GridPane();
+        this.calendar = new Calendar("Appointments");
+        this.calendarViewType = CalendarViewType.MONTH;
 
-        LocalDate today = LocalDate.now();
-        LocalDate startOfWeek = today.minusDays(today.getDayOfWeek().getValue() - 1);
-        LocalDate endOfWeek = startOfWeek.plusDays(6);
+        AppointmentDao appointmentDao = new AppointmentDao();
 
-        ObjectProperty<TimeSlot> mouseAnchor = new SimpleObjectProperty<>();
+        List<Optional<Appointment>> optAppts = appointmentDao.findAll();
 
-        for (LocalDate date = startOfWeek; !date.isAfter(endOfWeek); date = date.plusDays(1)) {
-            int timeSlotIndex = 1;
+        optAppts.forEach(optAppt -> {
+            optAppt.ifPresent(a -> calendar.addAppointment(a));
+        });
 
-            for (LocalDateTime startTime = date.atTime(START_OF_DAY);
-                    !startTime.isAfter(date.atTime(END_OF_DAY));
-                    startTime = startTime.plus(TIME_SLOT_DURATION)) {
-                TimeSlot timeSlot = new TimeSlot(startTime, TIME_SLOT_DURATION);
+        ToggleGroup calendarViewToggle = new ToggleGroup();
+        monthToggleButton.setToggleGroup(calendarViewToggle);
+        weekToggleButton.setToggleGroup(calendarViewToggle);
 
-                timeSlots.add(timeSlot);
+        monthToggleButton.setSelected(true);
 
-                calendarGridView.add(timeSlot.getView(), timeSlot.getDayOfWeek().getValue(), timeSlotIndex);
+        monthToggleButton.setOnAction(e -> {
+            this.calendarViewType = CalendarViewType.MONTH;
+            updateView();
+        });
+        weekToggleButton.setOnAction(e -> {
+            this.calendarViewType = CalendarViewType.WEEK;
+            updateView();
+        });
 
-                registerDragHandlers(timeSlot, mouseAnchor);
+        updateView();
+    }
 
-                timeSlotIndex++;
+    /**
+     * Displays the CalendarView by month.
+     */
+    private void updateView() {
+        setGrid();
+        setGridHeader();
+        setGridContent();
+        calendarPane.getChildren().add(gridPane);
+    }
+
+    /**
+     * Sets the CalendarView grid based upon the date stored in the
+     * {@link CalendarViewController#calendar} and the {@link CalendarViewType}
+     * stored in the {@link CalendarViewController#calendarViewType}.
+     */
+    private void setGrid() {
+        // Remove the previous grid pane from the calendar
+        calendarPane.getChildren().remove(gridPane);
+
+        // Construct a new grid pane for the calendar
+        gridPane = new GridPane();
+        gridPane.setPadding(new Insets(10));
+        gridPane.setMinSize(0, 0);
+        gridPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        gridPane.setPrefSize(calendarPane.getPrefWidth(), calendarPane.getPrefHeight());
+        gridPane.setStyle("-fx-background-radius: 10; -fx-border-radius-bottom-left: 10;");
+
+        // The column constraints do not change between month and week views
+        ColumnConstraints columnConstraints = new ColumnConstraints();
+        columnConstraints.setPercentWidth(100d / 7d);
+
+        gridPane.getColumnConstraints().addAll(
+                columnConstraints,
+                columnConstraints,
+                columnConstraints,
+                columnConstraints,
+                columnConstraints,
+                columnConstraints,
+                columnConstraints
+        );
+
+        // The header row also does not change between month and week views
+        RowConstraints calendarHeaderRowConstraints = new RowConstraints();
+        calendarHeaderRowConstraints.setPercentHeight(5);
+
+        RowConstraints weekDayHeaderRowConstraints = new RowConstraints();
+        weekDayHeaderRowConstraints.setPercentHeight(5);
+
+        // Obtain the correct row constraints for the selected view
+        switch (calendarViewType) {
+            case WEEK: {
+                RowConstraints rowConstraints = new RowConstraints();
+                rowConstraints.setPercentHeight(100);
+                rowConstraints.setValignment(VPos.TOP);
+
+                gridPane.getRowConstraints().addAll(
+                        calendarHeaderRowConstraints,
+                        weekDayHeaderRowConstraints,
+                        rowConstraints
+                );
+                break;
+            }
+            case MONTH: {
+                RowConstraints rowConstraints = new RowConstraints();
+                rowConstraints.setPercentHeight(90d / 6d);
+                rowConstraints.setValignment(VPos.TOP);
+
+                gridPane.getRowConstraints().addAll(
+                        calendarHeaderRowConstraints,
+                        weekDayHeaderRowConstraints,
+                        rowConstraints,
+                        rowConstraints,
+                        rowConstraints,
+                        rowConstraints,
+                        rowConstraints,
+                        rowConstraints
+                );
+                break;
             }
         }
-
-        DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("E\nMMM d");
-
-        for (LocalDate date = startOfWeek; !date.isAfter(endOfWeek); date = date.plusDays(1)) {
-            Label label = new Label(date.format(dayFormatter));
-            label.setPadding(new Insets(1));
-            label.setTextAlignment(TextAlignment.CENTER);
-            GridPane.setHalignment(label, HPos.CENTER);
-            calendarGridView.add(label, date.getDayOfWeek().getValue(), 0);
-        }
-
-        int timeSlotIndex = 1;
-
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("H:mm");
-        for (LocalDateTime startTime = today.atTime(START_OF_DAY);
-                !startTime.isAfter(today.atTime(END_OF_DAY));
-                startTime = startTime.plus(TIME_SLOT_DURATION)) {
-            Label label = new Label(startTime.format(timeFormatter));
-            label.setPadding(new Insets(2));
-            GridPane.setHalignment(label, HPos.RIGHT);
-            calendarGridView.add(label, 0, timeSlotIndex);
-            timeSlotIndex++;
-        }
-
-        gridViewScroller.setContent(calendarGridView);
     }
 
-    private void registerDragHandlers(TimeSlot timeSlot, ObjectProperty<TimeSlot> mouseAnchor) {
-        timeSlot.getView().setOnDragDetected(event -> {
-            mouseAnchor.set(timeSlot);
-            timeSlot.getView().startFullDrag();
-            timeSlots.forEach(slot
-                    -> slot.setSelected(slot == timeSlot));
-        });
+    /**
+     * Sets the CalendarView grid based upon the date stored in the
+     * {@link CalendarViewController#calendar}.
+     */
+    private void setGridHeader() {
+        // Create the root header element
+        HBox headerRoot = new HBox();
+        headerRoot.setAlignment(Pos.CENTER);
+        headerRoot.setPadding(new Insets(5));
 
-        timeSlot.getView().setOnMouseDragEntered(event -> {
-            TimeSlot startSlot = mouseAnchor.get();
-            timeSlots.forEach(slot
-                    -> slot.setSelected(isBetween(slot, startSlot, timeSlot)));
-        });
+        // Create the header content containers
+        VBox labels = new VBox();
+        labels.setAlignment(Pos.CENTER);
 
-        timeSlot.getView().setOnMouseReleased(event -> mouseAnchor.set(null));
+        VBox previousButton = new VBox(getPreviousButton());
+        previousButton.setAlignment(Pos.CENTER_LEFT);
+        HBox.setHgrow(previousButton, Priority.ALWAYS);
+
+        VBox nextButton = new VBox(getNextButton());
+        nextButton.setAlignment(Pos.CENTER_RIGHT);
+        HBox.setHgrow(nextButton, Priority.ALWAYS);
+
+        // Get the calendar name
+        Label calendarLabel = new Label(calendar.getCalendarName() + " Calendar");
+        calendarLabel.setStyle("-fx-font-size: 18; -fx-font-weight: bold;");
+
+        // Get the month name
+        Label monthLabel = new Label();
+        monthLabel.textProperty().bind(calendar.monthProperty());
+        monthLabel.setStyle("-fx-font-size: 14;");
+
+        // Add the labels to their container
+        labels.getChildren().addAll(calendarLabel, monthLabel);
+
+        // Add the header elements to the root container
+        headerRoot.getChildren().addAll(previousButton, labels, nextButton);
+
+        // Ensure that the header spans the full row
+        GridPane.setColumnSpan(headerRoot, 7);
+        gridPane.add(headerRoot, 0, 0);
+
+        // Get the first day of the first week of the month
+        LocalDate date = DateUtils.getFirstDayOfWeek(DateUtils.getFirstDayOfMonth(calendar.getDate()));
+
+        // Populate the CalendarView headers to be the days of the week
+        for (int day = 0; day < 7; day++) {
+            Label dayOfMonthLabel = new Label(date.getDayOfWeek().getDisplayName(TextStyle.SHORT_STANDALONE, Locale.getDefault()));
+
+            dayOfMonthLabel.setPadding(new Insets(2));
+
+            GridPane.setHalignment(dayOfMonthLabel, HPos.CENTER);
+            GridPane.setValignment(dayOfMonthLabel, VPos.CENTER);
+
+            gridPane.add(dayOfMonthLabel, day, 1);
+            date = date.plusDays(1);
+        }
     }
 
+    /**
+     * Sets the CalendarView grid content based upon the date stored in the
+     * {@link CalendarViewController#calendar} and the {@link CalendarViewType}
+     * stored in the {@link CalendarViewController#calendarViewType}.
+     */
+    private void setGridContent() {
+        switch (calendarViewType) {
+            case WEEK: {
+                // Get the first day of the current week
+                LocalDate date = DateUtils.getFirstDayOfWeek(calendar.getDate());
+
+                for (int day = 0; day < 7; day++) {
+                    CalendarDayView calendarDayView = new CalendarDayView(date, calendar.getAppointmentsFor(date));
+                    gridPane.add(calendarDayView.getView(), day, 2);
+                    date = date.plusDays(1);
+                }
+
+                break;
+            }
+            case MONTH: {
+                // Get the first day of the first week of the current month
+                LocalDate date = DateUtils.getFirstDayOfWeek(DateUtils.getFirstDayOfMonth(calendar.getDate()));
+
+                for (int week = 0; week < 6; week++) {
+                    for (int day = 0; day < 7; day++) {
+                        CalendarDayView calendarDayView = new CalendarDayView(date, calendar.getAppointmentsFor(date));
+                        gridPane.add(calendarDayView.getView(), day, week + 2);
+                        date = date.plusDays(1);
+                    }
+                }
+
+                break;
+            }
+        }
+    }
+
+    /**
+     * Creates the next button to move the CalendarView foward in time.
+     *
+     * @return The next button.
+     */
+    private Button getNextButton() {
+        Button button = new Button("Next ");
+
+        // Right arrow
+        SVGPath svg = new SVGPath();
+
+        svg.setContent("M26 20.006L40 32 26 44.006");
+        svg.fillProperty().set(Color.TRANSPARENT);
+        svg.strokeProperty().set(Paint.valueOf("#202020"));
+        svg.strokeLineCapProperty().set(StrokeLineCap.ROUND);
+        svg.strokeLineJoinProperty().set(StrokeLineJoin.ROUND);
+        svg.strokeMiterLimitProperty().set(10);
+        svg.strokeWidthProperty().set(2);
+        svg.setScaleX(0.5f);
+        svg.setScaleY(0.5f);
+
+        button.setGraphic(svg);
+        button.setContentDisplay(ContentDisplay.RIGHT);
+
+        button.setOnAction(e -> {
+            getNextCalendarView();
+        });
+
+        return button;
+    }
+
+    /**
+     * Creates the previous button to move the CalendarView backward in time.
+     *
+     * @return The previous button.
+     */
+    private Button getPreviousButton() {
+        Button button = new Button("Previous ");
+
+        // Right arrow
+        SVGPath svg = new SVGPath();
+
+        svg.setContent("M26 20.006L40 32 26 44.006");
+        svg.fillProperty().set(Color.TRANSPARENT);
+        svg.strokeProperty().set(Paint.valueOf("#202020"));
+        svg.strokeLineCapProperty().set(StrokeLineCap.ROUND);
+        svg.strokeLineJoinProperty().set(StrokeLineJoin.ROUND);
+        svg.strokeMiterLimitProperty().set(10);
+        svg.strokeWidthProperty().set(2);
+        svg.setScaleX(-0.5f);
+        svg.setScaleY(0.5f);
+
+        button.setGraphic(svg);
+        button.setContentDisplay(ContentDisplay.LEFT);
+
+        button.setOnAction(e -> {
+            getPreviousCalendarView();
+        });
+
+        return button;
+    }
+
+    /**
+     * Moves the CalendarView grid backward in time based upon the current
+     * {@link CalendarViewType}.
+     */
+    private void getPreviousCalendarView() {
+        switch (calendarViewType) {
+            case WEEK:
+                calendar.setDate(calendar.getDate().minusWeeks(1));
+                updateView();
+                break;
+            case MONTH:
+                calendar.setDate(calendar.getDate().minusMonths(1));
+                updateView();
+                break;
+        }
+    }
+
+    /**
+     * Moves the CalendarView grid forward in time based upon the current
+     * {@link CalendarViewType}.
+     */
+    private void getNextCalendarView() {
+        switch (calendarViewType) {
+            case WEEK:
+                calendar.setDate(calendar.getDate().plusWeeks(1));
+                updateView();
+                break;
+            case MONTH:
+                calendar.setDate(calendar.getDate().plusMonths(1));
+                updateView();
+                break;
+        }
+    }
+
+//    private void registerDragHandlers(TimeSlot timeSlot, ObjectProperty<TimeSlot> mouseAnchor) {
+//        timeSlot.getView().setOnDragDetected(event -> {
+//            mouseAnchor.set(timeSlot);
+//            timeSlot.getView().startFullDrag();
+//            timeSlots.forEach(slot
+//                    -> slot.setSelected(slot == timeSlot));
+//        });
+//
+//        timeSlot.getView().setOnMouseDragEntered(event -> {
+//            TimeSlot startSlot = mouseAnchor.get();
+//            timeSlots.forEach(slot
+//                    -> slot.setSelected(isBetween(slot, startSlot, timeSlot)));
+//        });
+//
+//        timeSlot.getView().setOnMouseReleased(event -> mouseAnchor.set(null));
+//    }
     private boolean isBetween(TimeSlot testSlot, TimeSlot startSlot, TimeSlot endSlot) {
 
         boolean daysBetween = testSlot.getDayOfWeek().compareTo(startSlot.getDayOfWeek())
@@ -141,7 +417,7 @@ public class CalendarViewController implements Initializable {
      *
      * @author mab90
      */
-    public static class TimeSlot {
+    public static final class TimeSlot {
 
         /**
          * The start time of the time slot.

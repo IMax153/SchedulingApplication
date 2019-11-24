@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import models.*;
+import utilities.DateUtils;
 
 /**
  * Handles create, read, update, and delete operations for the user entity.
@@ -255,8 +256,8 @@ public class AppointmentDao extends Dao<Appointment> {
         );
 
         Interval interval = new Interval(
-                rs.getTimestamp("ap.start").toLocalDateTime(),
-                rs.getTimestamp("ap.end").toLocalDateTime()
+                rs.getTimestamp("ap.start").toLocalDateTime().atZone(DateUtils.DEFAULT_ZONE_ID),
+                rs.getTimestamp("ap.end").toLocalDateTime().atZone(DateUtils.DEFAULT_ZONE_ID)
         );
 
         return new Appointment(

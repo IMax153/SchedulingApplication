@@ -5,9 +5,9 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="1000.0" prefWidth="1300.0" style="-fx-background-color: #c0c0c0;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.calendar.CalendarViewController">
+<AnchorPane id="AnchorPane" prefHeight="1000.0" prefWidth="1300.0" style="-fx-background-color: #dddeea;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.calendar.CalendarViewController">
    <children>
-      <Pane fx:id="calendarPane" layoutX="47.0" layoutY="100.0" prefHeight="800.0" prefWidth="800.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10px; -fx-border-color: black; -fx-border-radius: 10px;" />
+      <Pane fx:id="calendarRoot" layoutX="47.0" layoutY="100.0" prefHeight="800.0" prefWidth="800.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10px; -fx-border-color: black; -fx-border-radius: 10px;" />
       <ToggleButton fx:id="weekToggleButton" layoutX="374.0" layoutY="57.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="62.0" text="Week">
          <font>
             <Font size="14.0" />

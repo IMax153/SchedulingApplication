@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Comparator;
 
 import static java.util.Objects.requireNonNull;
 import utilities.DateUtils;
@@ -20,7 +21,7 @@ import utilities.DateUtils;
  *
  * @author mab90
  */
-public class Interval {
+public class Interval implements Comparator<Interval>, Comparable<Interval> {
 
     /**
      * The default date of the interval.
@@ -310,6 +311,29 @@ public class Interval {
         sb.append("]");
 
         return sb.toString();
+    }
+
+    /**
+     * The {@link Comparator} implementation for the {@link Interval} class.
+     *
+     * @param interval1 The first interval.
+     * @param interval2 The second interval.
+     * @return The comparison.
+     */
+    @Override
+    public int compare(Interval interval1, Interval interval2) {
+        return interval1.zonedStartDateTime.compareTo(interval2.zonedStartDateTime);
+    }
+
+    /**
+     * The {@link Comparable} implementation for the {@link Interval} class.
+     *
+     * @param interval The interval to compare.
+     * @return The comparison.
+     */
+    @Override
+    public int compareTo(Interval interval) {
+        return this.zonedStartDateTime.compareTo(interval.zonedStartDateTime);
     }
 
 }

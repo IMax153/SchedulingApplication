@@ -6,6 +6,8 @@
 package models;
 
 import java.time.LocalDate;
+import java.time.Month;
+import java.time.YearMonth;
 import java.time.ZonedDateTime;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
@@ -30,14 +32,19 @@ public class Calendar {
     private final String calendarName;
 
     /**
-     * The current date that the calendar is set to.
+     * The current {@link LocalDate} that the calendar is set to.
      */
     private ObjectProperty<LocalDate> date = new SimpleObjectProperty<>();
 
     /**
-     * The current month that the calendar is set to.
+     * The current {@link YearMonth} that the calendar is set to.
      */
-    private final StringProperty month = new SimpleStringProperty();
+    private final ObjectProperty<YearMonth> yearMonth = new SimpleObjectProperty<>();
+
+    /**
+     * The current name of the month that the calendar is set to.
+     */
+    private final StringProperty yearMonthDisplay = new SimpleStringProperty();
 
     /**
      * The appointments that the calendar contains.
@@ -48,10 +55,12 @@ public class Calendar {
         this.calendarName = calendarName;
         this.appointments = new ArrayList<>();
         this.date.set(DateUtils.getToday());
-        this.month.set(date.get().getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault()));
+        this.yearMonth.set(YearMonth.of(date.get().getYear(), date.get().getMonth()));
+        this.yearMonthDisplay.set(getYearMonthDisplay(this.dateProperty().get()));
 
         this.date.addListener((obs, oldVal, newVal) -> {
-            this.month.set(newVal.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault()));
+            this.yearMonth.set(YearMonth.of(date.get().getYear(), date.get().getMonth()));
+            this.yearMonthDisplay.set(getYearMonthDisplay(this.dateProperty().get()));
         });
     }
 
@@ -65,36 +74,74 @@ public class Calendar {
     }
 
     /**
-     * Gets the month property of the calendar.
+     * Gets the {@link YearMonth} property of the calendar.
      *
-     * @return The month property of the calendar.
+     * @return The {@link YearMonth} property of the calendar.
      */
-    public final StringProperty monthProperty() {
-        return month;
+    public final ObjectProperty<YearMonth> yearMonthProperty() {
+        return yearMonth;
     }
 
     /**
-     * Gets the current month that the calendar is set to.
+     * Gets the current {@link YearMonth} that the calendar is set to.
      *
-     * @return The current month that the calendar is set to.
+     * @return The current {@link YearMonth} that the calendar is set to.
      */
-    public final String getMonth() {
-        return monthProperty().get();
+    public final YearMonth getYearMonth() {
+        return yearMonthProperty().get();
     }
 
     /**
-     * The date property of the calendar.
+     * Gets the current display property for the {@link YearMonth} that the
+     * calendar is set to.
      *
-     * @return The date property of the calendar.
+     * @return The current display property for the {@link YearMonth} that the
+     * calendar is set to.
+     */
+    public final StringProperty yearMonthDisplayProperty() {
+        return yearMonthDisplay;
+    }
+
+    /**
+     * Gets the current {@link Month} that the calendar is set to.
+     *
+     * @return The current {@link Month} that the calendar is set to.
+     */
+    public final Month getMonth() {
+        return yearMonthProperty().get().getMonth();
+    }
+
+    /**
+     * Gets the name of the current month that the calendar is set to.
+     *
+     * @return The name of the current month that the calendar is set to.
+     */
+    public final String getMonthName() {
+        return yearMonthProperty().get().getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault());
+    }
+
+    /**
+     * Gets the current year that the calendar is set to.
+     *
+     * @return The current year that the calendar is set to.
+     */
+    public final int getYear() {
+        return yearMonthProperty().get().getYear();
+    }
+
+    /**
+     * The {@link LocalDate} property of the calendar.
+     *
+     * @return The {@link LocalDate} property of the calendar.
      */
     public final ObjectProperty<LocalDate> dateProperty() {
         return date;
     }
 
     /**
-     * Gets the date that the calendar is currently set to.
+     * Gets the {@link LocalDate} that the calendar is currently set to.
      *
-     * @return The date that the calendar is currently set to.
+     * @return The {@link LocalDate} that the calendar is currently set to.
      */
     public final LocalDate getDate() {
         return dateProperty().get();
@@ -125,20 +172,12 @@ public class Calendar {
      * @return A list of appointments.
      */
     public final List<Appointment> getAppointmentsFor(LocalDate date) {
-        return getAppointmentsFor(date.atStartOfDay(DateUtils.DEFAULT_ZONE_ID));
-    }
-
-    /**
-     * Gets a list of appointments for the specified date.
-     *
-     * @param date The date whose appointments should be returned.
-     * @return A list of appointments.
-     */
-    public final List<Appointment> getAppointmentsFor(ZonedDateTime date) {
         List<Appointment> appts = new ArrayList<>();
 
         this.appointments.stream().filter(a -> {
-            return a.getInterval().contains(date);
+            LocalDate startDate = a.getInterval().getStartDate();
+            LocalDate endDate = a.getInterval().getEndDate();
+            return startDate.equals(date) || endDate.equals(date);
         }).forEachOrdered(a -> {
             appts.add(a);
         });
@@ -162,6 +201,12 @@ public class Calendar {
         });
 
         return appts;
+    }
+
+    private final String getYearMonthDisplay(LocalDate date) {
+        String month = date.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault());
+        int year = date.getYear();
+        return month + ", " + year;
     }
 
 }

@@ -1,0 +1,57 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Nov 24, 2019, 11:45:11 PM
+    Author     : mab90
+*/
+
+* {
+    -white: #ffffff;
+    -blue: #4078c0;
+    -blue-light: #74b9ff;
+    -blue-accent: #0984e3;
+    -green: #6cc644;
+    -red: #bd2c00;
+    -orange: #c9510c;
+    -purple: #6e5494;
+    -black: #333333;
+}
+
+.calendar-grid-content {
+    -fx-border-radius: 4px;
+    -fx-border-color: -black;
+}
+
+.day-grid-content {
+    -fx-background-radius: 4px;  
+    -fx-border-width: 1px; 
+    -fx-border-color: -black; 
+    -fx-border-radius: 4px;
+}
+
+.time-slot {
+    -fx-background-color: -white;
+}
+
+.time-slot:active {
+    -fx-background-color: -blue-light;
+}
+
+.time-slot:selected {
+    -fx-background-color: -blue;
+}
+
+.time-slot:hovered {
+    -fx-background-color: -blue-accent;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}

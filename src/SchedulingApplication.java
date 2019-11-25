@@ -34,10 +34,6 @@ public class SchedulingApplication extends Application {
      */
     public static void main(String[] args) throws Exception {
         Database.createConnection();
-
-        AppointmentDao dao = new AppointmentDao();
-//        dao.findById(1).ifPresent(e -> System.out.println(e.toString()));
-//        dao.findAll().forEach(oe -> oe.ifPresent(e -> System.out.println(e.toString())));
         launch(args);
         Database.closeConnection();
     }
@@ -61,7 +57,7 @@ public class SchedulingApplication extends Application {
      */
     private void showLoginScreen() throws IOException {
 //        navigate("/views/login/LoginScreen.fxml");
-        navigate("/views/calendar/CalendarView.fxml");
+        navigate("/views/CalendarView.fxml");
 
     }
 

@@ -6,6 +6,7 @@
 package utilities;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.YearMonth;
 import java.time.ZoneId;
@@ -26,6 +27,11 @@ public class DateUtils {
      * The default {@link ZoneId} for the {@link System}.
      */
     public static final ZoneId DEFAULT_ZONE_ID = ZoneId.systemDefault();
+
+    /**
+     * The default {@link Locale} for the {@link System}.
+     */
+    public static final Locale DEFAULT_LOCALE = Locale.getDefault();
 
     /**
      * The default {@link Locale} for the {@link System}.
@@ -52,7 +58,17 @@ public class DateUtils {
      * @return The zoned date time.
      */
     public static final ZonedDateTime toZonedDateTime(LocalDate date, LocalTime time) {
-        return toZonedDateTime(date).with(time);
+        return ZonedDateTime.of(date, time, DEFAULT_ZONE_ID);
+    }
+
+    /**
+     * Converts a {@link LocalDateTime} into a {@link ZonedDateTime}.
+     *
+     * @param date The date to convert.
+     * @return The zoned date time.
+     */
+    public static final ZonedDateTime toZonedDateTime(LocalDateTime date) {
+        return ZonedDateTime.of(date, DEFAULT_ZONE_ID);
     }
 
     /**

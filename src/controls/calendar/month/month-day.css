@@ -1,0 +1,64 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Nov 30, 2019, 9:30:19 AM
+    Author     : maxbrown
+*/
+
+* {
+    /* Colors */
+    -black: #3c4043;
+    -blue: #1a73e8;
+    -light-gray: #dadce0;
+    -gray: #70757a;
+    -green: #0b8043;
+    
+    /* Font */
+    -fx-font-family: Arial;
+    -fx-text-fill: -black;
+}
+
+.month-day {
+    -fx-border-width: 0 1 1 1;
+    -fx-border-style: solid;
+    -fx-border-color: -light-gray
+}
+
+.month-day > .header {
+    -fx-padding: 5;
+}
+
+.month-day > .header > .label {
+    -fx-font-size: 12;
+    -fx-text-fill: -black;
+}
+
+.month-day > .header > .label.today {
+    -fx-background-radius: 50;
+    -fx-background-color: -blue;
+    -fx-text-fill: white;
+}
+
+.month-day > .scroll-pane {
+    -fx-background-insets: 0;
+    -fx-border-width: 0;
+}
+
+.month-day > .scroll-pane > .viewport > * > .content > .entry {
+    -fx-background-radius: 5;
+    -fx-background-color: -green;
+    -fx-text-fill: white;
+    -fx-padding: 5;
+    -fx-cursor: hand;
+}
+
+.month-day > .scroll-pane > .viewport > * > .content > .entry:hover {
+    -fx-background-color: derive(-green, 30%);
+}
+
+.month-day > .scroll-pane > .viewport > * > .content > .entry > .label {
+    -fx-text-fill: white;
+}

@@ -5,12 +5,14 @@
  */
 package utilities;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoField;
 import java.time.temporal.WeekFields;
 import java.util.Locale;
 
@@ -72,12 +74,23 @@ public class DateUtils {
     }
 
     /**
-     * Gets the current date.
+     * Returns the current {@link LocalDate} based upon the default
+     * {@link ZoneId} for the {@link System}.
      *
      * @return The current date.
      */
     public static final LocalDate getToday() {
-        return LocalDate.now();
+        return LocalDate.now(DEFAULT_ZONE_ID);
+    }
+
+    /**
+     * Returns the current {@link LocalTime} based upon the default
+     * {@link ZoneId} for the {@link System}.
+     *
+     * @return The current time.
+     */
+    public static final LocalTime getCurrentTime() {
+        return LocalTime.now(DEFAULT_ZONE_ID);
     }
 
     /**
@@ -129,6 +142,24 @@ public class DateUtils {
     public static final LocalDate getLastDayOfMonth(LocalDate date) {
         YearMonth yearMonth = YearMonth.of(date.getYear(), date.getMonth());
         return yearMonth.atEndOfMonth();
+    }
+
+    /**
+     * Gets the first [@link DayOfWeek} for the specified date.
+     *
+     * @param date The date to compare.
+     * @param firstDayOfWeek The day that is considered the first day of the
+     * week.
+     * @return The first day of the week.
+     */
+    public static final LocalDate toFirstDayOfWeek(LocalDate date, DayOfWeek firstDayOfWeek) {
+        LocalDate newDate = date.with(ChronoField.DAY_OF_WEEK, firstDayOfWeek.getValue());
+
+        if (newDate.isAfter(date)) {
+            newDate = newDate.minusWeeks(1);
+        }
+
+        return newDate;
     }
 
 }

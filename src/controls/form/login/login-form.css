@@ -1,0 +1,55 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Nov 29, 2019, 10:19:47 PM
+    Author     : maxbrown
+*/
+
+* {
+    /* Colors */
+    -black: #3c4043;
+    -blue: #1a73e8;
+    -light-gray: #dadce0;
+    -gray: #70757a;
+    -green: #0b8043;
+    -red: #bd2c00;
+    
+    /* Font */
+    -fx-text-fill: -black;
+    -fx-font-family: Arial;
+}
+
+.container {
+    -fx-padding: 20;
+}
+
+.label.title {
+    -fx-padding: 20 20 10 20;
+    -fx-font-size: 22;
+}
+
+.container > .label-container .icon {
+    -fx-fill: -gray;
+}
+
+.container > .label-container .label {
+    -fx-font-size: 14;
+}
+
+.container > .label.error {
+    -fx-text-fill: -red;
+}
+
+.container > .text-field {
+    -fx-background-color: -fx-text-box-border, -fx-background;
+    -fx-background-insets: 0, 0 0 1 0 ;
+    -fx-background-radius: 0 ;
+    -fx-font-size: 14;
+}
+
+.container > .text-field:focused {
+    -fx-background-color: -fx-focus-color, -fx-background ;
+}

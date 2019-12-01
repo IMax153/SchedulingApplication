@@ -195,7 +195,7 @@ public class Calendar {
         List<Appointment> appts = new ArrayList<>();
 
         this.appointments.stream().filter(a -> {
-            return interval.overlapsWith(a.getInterval());
+            return interval.intersects(a.getInterval());
         }).forEachOrdered(a -> {
             appts.add(a);
         });

@@ -16,14 +16,14 @@ import models.*;
 import utilities.DateUtils;
 
 /**
- * Handles create, read, update, and delete operations for the user entity.
+ * Handles create, read, update, and delete operations for {@link Appointment}s.
  *
  * @author mab90
  */
 public class AppointmentDao extends Dao<Appointment> {
 
     /**
-     * Gets an appointment specified by a unique identifier.
+     * Gets an {@link Appointment} specified by a unique identifier.
      *
      * @param id The unique identifier of the appointment to find.
      * @return An optional appointment.
@@ -62,9 +62,9 @@ public class AppointmentDao extends Dao<Appointment> {
     }
 
     /**
-     * Gets all appointments from the database.
+     * Gets all {@link Appointment}s from the database.
      *
-     * @return A list of optional appointments.
+     * @return The list of appointments.
      */
     @Override
     public List<Optional<Appointment>> findAll() {
@@ -99,7 +99,7 @@ public class AppointmentDao extends Dao<Appointment> {
     }
 
     /**
-     * Adds an appointment to the database.
+     * Adds an {@link Appointment} to the database.
      *
      * @param appointment The appointment to add.
      * @return True if the appointment was added successfully, otherwise false.
@@ -108,22 +108,23 @@ public class AppointmentDao extends Dao<Appointment> {
     public boolean add(Appointment appointment) {
         try {
             PreparedStatement pst = connection.prepareStatement(
-                    "INSERT INTO appointment (customerId, userId, title, description, location, contact, type, url, start, end, createDate, createdBy, lastUpdate, lastUpdateBy) "
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP, ?"
+                    "INSERT INTO appointment (appointmentId, customerId, userId, title, description, location, contact, type, url, start, end, createDate, createdBy, lastUpdate, lastUpdateBy) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP, ?)"
             );
 
-            pst.setInt(1, appointment.getCustomer().getId());
-            pst.setInt(2, appointment.getUser().getId());
-            pst.setString(3, appointment.getTitle());
-            pst.setString(4, appointment.getDescription());
-            pst.setString(5, appointment.getLocation());
-            pst.setString(6, appointment.getContact());
-            pst.setString(7, appointment.getType());
-            pst.setString(8, appointment.getUrl());
-            pst.setTimestamp(9, Timestamp.from(appointment.getInterval().getZonedStartDateTime().toInstant()));
-            pst.setTimestamp(10, Timestamp.from(appointment.getInterval().getZonedEndDateTime().toInstant()));
-            pst.setString(11, appointment.getCreatedBy());
-            pst.setString(12, appointment.getUpdatedBy());
+            pst.setInt(1, appointment.getId());
+            pst.setInt(2, appointment.getCustomer().getId());
+            pst.setInt(3, appointment.getUser().getId());
+            pst.setString(4, appointment.getTitle());
+            pst.setString(5, appointment.getDescription());
+            pst.setString(6, appointment.getLocation());
+            pst.setString(7, appointment.getContact());
+            pst.setString(8, appointment.getType());
+            pst.setString(9, appointment.getUrl());
+            pst.setTimestamp(10, Timestamp.from(appointment.getInterval().getZonedStartDateTime().toInstant()));
+            pst.setTimestamp(11, Timestamp.from(appointment.getInterval().getZonedEndDateTime().toInstant()));
+            pst.setString(12, appointment.getCreatedBy());
+            pst.setString(13, appointment.getUpdatedBy());
 
             return pst.executeUpdate() == 1;
         } catch (SQLException sqle) {
@@ -134,7 +135,7 @@ public class AppointmentDao extends Dao<Appointment> {
     }
 
     /**
-     * Updates a appointment in the database.
+     * Updates an {@link Appointment} in the database.
      *
      * @param appointment The appointment to update.
      * @return True if the appointment was updated successfully, otherwise
@@ -144,9 +145,9 @@ public class AppointmentDao extends Dao<Appointment> {
     public boolean update(Appointment appointment) {
         try {
             PreparedStatement pst = connection.prepareStatement(
-                    "UPDATE customer AS c "
-                    + "SET customerId = ?, userId = ?, title = ?, description = ?, location = ?, contact = ?, type = ?, url = ?, start = ?, end = ?, lastUpdate = CURRENT_TIMESTAMP, lastUpdateBy = ?) "
-                    + "WHERE c.customerId = ?"
+                    "UPDATE appointment AS a "
+                    + "SET customerId = ?, userId = ?, title = ?, description = ?, location = ?, contact = ?, type = ?, url = ?, start = ?, end = ?, lastUpdate = CURRENT_TIMESTAMP, lastUpdateBy = ? "
+                    + "WHERE a.appointmentId = ?"
             );
 
             pst.setInt(1, appointment.getCustomer().getId());
@@ -160,6 +161,7 @@ public class AppointmentDao extends Dao<Appointment> {
             pst.setTimestamp(9, Timestamp.from(appointment.getInterval().getZonedStartDateTime().toInstant()));
             pst.setTimestamp(10, Timestamp.from(appointment.getInterval().getZonedEndDateTime().toInstant()));
             pst.setString(11, appointment.getUpdatedBy());
+            pst.setInt(12, appointment.getId());
 
             return pst.executeUpdate() == 1;
         } catch (SQLException sqle) {
@@ -170,9 +172,9 @@ public class AppointmentDao extends Dao<Appointment> {
     }
 
     /**
-     * Deletes an appointment from the database.
+     * Deletes an {@link Appointment} from the database.
      *
-     * @param id The unique identifier of the appointment to delete.
+     * @param id The unique identifier..
      * @return True if the appointment was deleted successfully, otherwise
      * false.
      */
@@ -180,7 +182,7 @@ public class AppointmentDao extends Dao<Appointment> {
     public boolean delete(int id) {
         try {
             PreparedStatement pst = connection.prepareStatement(
-                    "DELETE FROM appointment AS a WHERE a.appointmentId = ?"
+                    "DELETE FROM appointment WHERE appointmentId = ?"
             );
 
             pst.setInt(1, id);
@@ -194,10 +196,33 @@ public class AppointmentDao extends Dao<Appointment> {
     }
 
     /**
-     * Creates an Appointment object from the specified result set.
+     * Returns the next valid primary key for an {@link Appointment}.
      *
-     * @param rs The result set to extract the appointment from.
-     * @return A new Appointment object.
+     * @return The next primary key.
+     */
+    public Optional<Integer> getNextId() {
+        try {
+            PreparedStatement pst = connection.prepareStatement(
+                    "SELECT MAX(appointmentId) FROM appointment"
+            );
+
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                return Optional.of(rs.getInt(1) + 1);
+            }
+        } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
+        }
+
+        return Optional.empty();
+    }
+
+    /**
+     * Creates an {@link Appointment} from the specified result set.
+     *
+     * @param rs The result set.
+     * @return The appointment.
      * @throws SQLException
      */
     private Appointment getAppointmentFromResultSet(ResultSet rs) throws SQLException {

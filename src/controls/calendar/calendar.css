@@ -1,0 +1,141 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Nov 25, 2019, 11:18:58 PM
+    Author     : maxbrown
+*/
+
+* {
+    /* Colors */
+    -black: #3c4043;
+    -blue: #1a73e8;
+    -light-gray: #dadce0;
+    -gray: #70757a;
+    -green: #0b8043;
+    
+    /* Font */
+    -fx-font-family: Arial;
+    -fx-text-fill: -black;
+}
+
+/* Calendar Styles */
+
+.calendar {
+    -fx-padding: 10;
+}
+
+.calendar > .header {
+    -fx-padding: 5;
+}
+
+.calendar > .header > .navigation {
+    -fx-padding: 5;
+}
+
+.calendar > .header > .date-label {
+    -fx-padding: 5;
+    -fx-font-size: 24; 
+    -fx-font-weight: bold;
+}
+/*
+ General Page Styles 
+
+.page > .header {
+    -fx-padding: 5;
+}
+
+.page > .container > .header > .navigation {
+    -fx-padding: 5;
+}
+
+.page > .container > .header > .title {
+    -fx-padding: 5;
+    -fx-font-size: 24; 
+    -fx-font-weight: bold;
+}
+
+.page > .container > .content > .grid > .scroll-pane {
+    -fx-background-insets: 0;
+}
+
+
+ Week Page Styles 
+
+.week-page > .grid > .header > .day {
+    -fx-font-size: 12;
+    -fx-text-fill: -gray;
+}
+
+.week-page > .grid > .header > .month-day {
+    -fx-padding: 10;
+    -fx-margin: 10; 
+    -fx-font-size: 24;
+}
+
+.week-page > .grid > .header > .month-day.today {
+    -fx-background-radius: 50;
+    -fx-background-color: -blue;
+    -fx-text-fill: white;
+}
+
+ Week Day Styles 
+
+.week-days > .week-day > .time-slot {
+    -fx-border-width: 0 1 1 1;
+    -fx-border-style: solid;
+    -fx-border-color: -light-gray
+}
+
+ Month Page Styles 
+
+.month-page > .grid > .week-day {
+    -fx-font-size: 12;
+    -fx-text-fill: -gray;
+}
+
+.month-page > .grid > .date {
+    -fx-border-width: 0 1 1 1;
+    -fx-border-style: solid;
+    -fx-border-color: -light-gray
+}
+
+.month-page > .grid > .date > .date-header {
+    -fx-padding: 10;
+}
+
+
+.month-page > .grid > .date > .date-header > .label {
+    -fx-font-size: 12;
+    -fx-text-fill: -black;
+}
+
+
+.month-page > .grid > .date > .date-header > .label.today {
+    -fx-background-radius: 50;
+    -fx-background-color: -blue;
+    -fx-text-fill: white;
+}
+
+.month-page > .grid > .date > .scroll-pane {
+    -fx-background-insets: 0;
+    -fx-border-width: 0;
+}
+
+.month-page > .grid > .date > .scroll-pane > .viewport > * > .content > .entry {
+    -fx-background-radius: 5;
+    -fx-background-color: -green;
+    -fx-text-fill: white;
+    -fx-padding: 5;
+    -fx-cursor: hand;
+}
+
+.month-page > .grid > .date > .scroll-pane > .viewport > * > .content > .entry:hover {
+    -fx-background-color: derive(-green, 30%);
+}
+
+.month-page > .grid > .date > .scroll-pane > .viewport > * > .content > .entry > Label {
+    -fx-text-fill: white;
+}*/

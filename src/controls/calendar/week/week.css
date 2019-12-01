@@ -1,0 +1,44 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Nov 30, 2019, 4:03:39 PM
+    Author     : maxbrown
+*/
+
+* {
+    /* Colors */
+    -black: #3c4043;
+    -blue: #1a73e8;
+    -light-gray: #dadce0;
+    -gray: #70757a;
+    -green: #0b8043;
+    
+    /* Font */
+    -fx-font-family: Arial;
+    -fx-text-fill: -black;
+}
+
+.week > .label-container > .day-label {
+    -fx-font-size: 12;
+    -fx-text-fill: -gray;
+}
+
+.week > .label-container > .date-label {
+    -fx-padding: 10;
+    -fx-margin: 10; 
+    -fx-font-size: 24;
+}
+
+.week > .label-container > .date-label.today {
+    -fx-background-radius: 50;
+    -fx-background-color: -blue;
+    -fx-text-fill: white;
+}
+
+.week > .scroll-pane {
+    -fx-background-insets: 0;
+    -fx-border-width: 0;
+}

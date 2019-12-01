@@ -128,6 +128,14 @@ public class Interval implements Comparator<Interval>, Comparable<Interval> {
         this.endTime = requireNonNull(endTime);
         this.zoneId = requireNonNull(zoneId);
 
+        if (zonedStartDateTime == null) {
+            zonedStartDateTime = startDate.atStartOfDay(DateUtils.DEFAULT_ZONE_ID);
+        }
+
+        if (zonedEndDateTime == null) {
+            zonedEndDateTime = startDate.atStartOfDay(DateUtils.DEFAULT_ZONE_ID);
+        }
+
         // Check to make sure that the start date is before the end date
         if (startDate.isAfter(endDate)) {
             throw new IllegalArgumentException(
@@ -169,7 +177,7 @@ public class Interval implements Comparator<Interval>, Comparable<Interval> {
      * @return The zoned start datetime of the interval.
      */
     public ZonedDateTime getZonedStartDateTime() {
-        return zonedStartDateTime == null ? ZonedDateTime.of(startDate, startTime, zoneId) : zonedStartDateTime;
+        return zonedStartDateTime;
     }
 
     /**
@@ -196,7 +204,7 @@ public class Interval implements Comparator<Interval>, Comparable<Interval> {
      * @return The zoned end datetime of the interval.
      */
     public ZonedDateTime getZonedEndDateTime() {
-        return zonedEndDateTime == null ? ZonedDateTime.of(endDate, endTime, zoneId) : zonedEndDateTime;
+        return zonedEndDateTime;
     }
 
     /**
@@ -209,45 +217,42 @@ public class Interval implements Comparator<Interval>, Comparable<Interval> {
     }
 
     /**
-     * Checks if the specified date falls within the interval.
+     * Checks if the specified {@link LocalDate} is fully contained within this
+     * {@link Interval}.
      *
      * @param date The date to check.
-     * @return True if the specified date falls within the interval, otherwise
-     * false.
+     * @return True if the specified date is contained within the interval,
+     * otherwise false.
      */
     public boolean contains(LocalDate date) {
         return contains(date.atStartOfDay(zoneId));
     }
 
     /**
-     * Checks if the specified date falls within the interval.
+     * Checks if the specified {@link ZonedDateTime} is fully contained within
+     * this {@link Interval}.
      *
      * @param date The date to check.
-     * @return True if the specified date falls within the interval, otherwise
-     * false.
+     * @return True if the specified date is contained within the interval,
+     * otherwise false.
      */
     public boolean contains(ZonedDateTime date) {
-        if (zonedStartDateTime == null) {
-            zonedStartDateTime = startDate.atStartOfDay(DateUtils.DEFAULT_ZONE_ID);
-        }
-
-        if (zonedEndDateTime == null) {
-            zonedEndDateTime = startDate.atStartOfDay(DateUtils.DEFAULT_ZONE_ID);
-        }
-
         return (date.equals(zonedStartDateTime) || date.isAfter(zonedStartDateTime))
                 && (date.equals(zonedEndDateTime) || date.isBefore(zonedEndDateTime));
     }
 
     /**
-     * Checks whether two intervals overlap one another. See discussion in
-     * <a href="https://stackoverflow.com/questions/325933/determine-whether-two-date-ranges-overlap">this</a>
+     * Checks whether two {@link Interval}s intersect one another. See
+     * discussion in
+     * <a href="https://stackoverflow.com/questions/325933/determine-whether-two-date-ranges-overlap">
+     * this
+     * </a>
      * post.
      *
      * @param other The other interval to check.
      * @return True if the intervals overlap one another, otherwise false.
      */
-    public boolean overlapsWith(Interval other) {
+    public boolean intersects(Interval other) {
         ZonedDateTime maxStart = zonedStartDateTime.isAfter(other.zonedStartDateTime) ? zonedStartDateTime : other.zonedStartDateTime;
         ZonedDateTime minEnd = zonedEndDateTime.isBefore(other.zonedEndDateTime) ? zonedEndDateTime : other.zonedEndDateTime;
         return maxStart.isBefore(minEnd) || maxStart.equals(minEnd);

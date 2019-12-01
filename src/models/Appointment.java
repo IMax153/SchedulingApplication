@@ -15,50 +15,23 @@ import java.util.Comparator;
  */
 public class Appointment extends Entity implements Comparator<Appointment>, Comparable<Interval> {
 
-    /**
-     * The title of the appointment.
-     */
-    private final String title;
+    private String title;
 
-    /**
-     * The description of the appointment.
-     */
-    private final String description;
+    private String description;
 
-    /**
-     * The location of the appointment.
-     */
-    private final String location;
+    private String location;
 
-    /**
-     * The contact for the appointment.
-     */
-    private final String contact;
+    private String contact;
 
-    /**
-     * The type of the appointment.
-     */
-    private final String type;
+    private String type;
 
-    /**
-     * The URL for the appointment.
-     */
-    private final String url;
+    private String url;
 
-    /**
-     * The interval for the appointment.
-     */
-    private final Interval interval;
+    private Interval interval;
 
-    /**
-     * The customer who is a part of the appointment.
-     */
-    private final Customer customer;
+    private Customer customer;
 
-    /**
-     * The user who is a part of the appointment.
-     */
-    private final User user;
+    private User user;
 
     public Appointment(
             int id,
@@ -89,84 +62,165 @@ public class Appointment extends Entity implements Comparator<Appointment>, Comp
     }
 
     /**
-     * Gets the title of the appointment.
+     * Returns the value of {@link Appointment#title}.
      *
-     * @return The title of the appointment.
+     * @return The title.
      */
     public String getTitle() {
         return title;
     }
 
     /**
-     * Gets the description of the appointment.
+     * Sets the value of {@link Appointment#title}.
      *
-     * @return The description of the appointment.
+     * @param title The title to set.
+     */
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    /**
+     * Returns the value of {@link Appointment#description}.
+     *
+     * @return The description.
      */
     public String getDescription() {
         return description;
     }
 
     /**
-     * Gets the location of the appointment.
+     * Sets the value of {@link Appointment#description}.
      *
-     * @return The location of the appointment.
+     * @param description The description to set.
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * Returns the value of {@link Appointment#location}.
+     *
+     * @return The location.
      */
     public String getLocation() {
         return location;
     }
 
     /**
-     * Gets the contact for the appointment.
+     * Sets the value of {@link Appointment#location}.
      *
-     * @return The contact for the appointment.
+     * @param location The location to set.
+     */
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    /**
+     * Returns the value of {@link Appointment#contact}.
+     *
+     * @return The contact.
      */
     public String getContact() {
         return contact;
     }
 
     /**
-     * Gets the type of the appointment.
+     * Sets the value of {@link Appointment#contact}.
      *
-     * @return The type of the appointment.
+     * @param contact The contact to set.
+     */
+    public void setContact(String contact) {
+        this.contact = contact;
+    }
+
+    /**
+     * Returns the value of {@link Appointment#type}.
+     *
+     * @return The type.
      */
     public String getType() {
         return type;
     }
 
     /**
-     * Gets the URL for the appointment.
+     * Sets the value of {@link Appointment#type}.
      *
-     * @return The URL for the appointment.
+     * @param type The type to set.
+     */
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    /**
+     * Returns the value of {@link Appointment#url}.
+     *
+     * @return The URL.
      */
     public String getUrl() {
         return url;
     }
 
     /**
-     * Gets the interval for the appointment.
+     * Sets the value of {@link Appointment#url}.
      *
-     * @return The interval for the appointment.
+     * @param url The url to set.
+     */
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    /**
+     * Returns the value of {@link Appointment#interval}.
+     *
+     * @return The interval.
      */
     public Interval getInterval() {
         return interval;
     }
 
     /**
-     * Gets the customer who is a part of the appointment.
+     * Sets the value of {@link Appointment#interval}.
      *
-     * @return The customer who is a part of the appointment.
+     * @param interval The interval to set.
+     */
+    public void setInterval(Interval interval) {
+        this.interval = interval;
+    }
+
+    /**
+     * Returns the value of {@link Appointment#customer}.
+     *
+     * @return The customer.
      */
     public Customer getCustomer() {
         return customer;
     }
 
     /**
-     * Gets the user who is a part of the appointment.
+     * Sets the value of {@link Appointment#customer}.
      *
-     * @return The user who is a part of the appointment.
+     * @param customer The customer to set.
+     */
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    /**
+     * Returns the value of {@link Appointment#user}.
+     *
+     * @return The user.
      */
     public User getUser() {
         return user;
+    }
+
+    /**
+     * Sets the value of {@link Appointment#user}.
+     *
+     * @param user The user to set.
+     */
+    public void setUser(User user) {
+        this.user = user;
     }
 
     /**
@@ -178,6 +232,10 @@ public class Appointment extends Entity implements Comparator<Appointment>, Comp
     public String toString() {
         sb.setLength(0);
         sb.append("Appointment[");
+
+        sb.append("title: ");
+        sb.append(title);
+        sb.append(", ");
 
         sb.append("description: ");
         sb.append(description);

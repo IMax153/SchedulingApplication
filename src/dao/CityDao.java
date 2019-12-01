@@ -14,17 +14,17 @@ import java.util.Optional;
 import models.*;
 
 /**
- * Handles create, read, update, and delete operations for the city entity.
+ * Handles create, read, update, and delete operations for {@link City}s.
  *
  * @author mab90
  */
 public class CityDao extends Dao<City> {
 
     /**
-     * Gets a city specified by a unique identifier.
+     * Gets a {@link City} by id.
      *
-     * @param id The unique identifier of the city to find.
-     * @return An optional city.
+     * @param id The id of the city.
+     * @return The city.
      */
     @Override
     public Optional<City> findById(int id) {
@@ -52,9 +52,39 @@ public class CityDao extends Dao<City> {
     }
 
     /**
-     * Gets all cities from the database.
+     * Gets a {@link City} by name.
      *
-     * @return A list of optional cities.
+     * @param name The name of the city.
+     * @return The city.
+     */
+    public Optional<City> findByName(String name) {
+        try {
+            PreparedStatement pst = connection.prepareStatement(
+                    "SELECT * FROM city "
+                    + "INNER JOIN country "
+                    + "ON city.countryId = country.countryId "
+                    + "WHERE city.city = ?"
+            );
+
+            pst.setString(1, name);
+
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                City city = getCityFromResultSet(rs);
+                return Optional.of(city);
+            }
+        } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
+        }
+
+        return Optional.empty();
+    }
+
+    /**
+     * Gets all {@link City}s.
+     *
+     * @return The list of cities.
      */
     @Override
     public List<Optional<City>> findAll() {
@@ -81,7 +111,7 @@ public class CityDao extends Dao<City> {
     }
 
     /**
-     * Adds a city to the database.
+     * Adds a {@link City}.
      *
      * @param city The city to add.
      * @return True if the city was added successfully, otherwise false.
@@ -91,7 +121,7 @@ public class CityDao extends Dao<City> {
         try {
             PreparedStatement pst = connection.prepareStatement(
                     "INSERT INTO city (city, countryId, createDate, createdBy, lastUpdate, lastUpdateBy) "
-                    + "VALUES (?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP, ?"
+                    + "VALUES (?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP, ?)"
             );
 
             pst.setString(1, city.getName());
@@ -108,7 +138,7 @@ public class CityDao extends Dao<City> {
     }
 
     /**
-     * Updates a city in the database.
+     * Updates a {@link City}.
      *
      * @param city The city to update.
      * @return True if the city was added successfully, otherwise false.
@@ -117,9 +147,9 @@ public class CityDao extends Dao<City> {
     public boolean update(City city) {
         try {
             PreparedStatement pst = connection.prepareStatement(
-                    "UPDATE city AS c "
-                    + "SET city = ?, countryId = ?, createdBy = ?, lastUpdate = CURRENT_TIMESTAMP, lastUpdateBy = ?) "
-                    + "WHERE c.cityId = ?"
+                    "UPDATE city "
+                    + "SET city = ?, countryId = ?, createdBy = ?, lastUpdate = CURRENT_TIMESTAMP, lastUpdateBy = ? "
+                    + "WHERE cityId = ?"
             );
 
             pst.setString(1, city.getName());
@@ -136,16 +166,16 @@ public class CityDao extends Dao<City> {
     }
 
     /**
-     * Deletes a city from the database.
+     * Deletes a {@link City}.
      *
-     * @param id The unique identifier of the city to delete.
+     * @param id The id of the city to delete.
      * @return True if the city was added successfully, otherwise false.
      */
     @Override
     public boolean delete(int id) {
         try {
             PreparedStatement pst = connection.prepareStatement(
-                    "DELETE FROM city AS c WHERE c.cityId = ?"
+                    "DELETE FROM city WHERE cityId = ?"
             );
 
             pst.setInt(1, id);
@@ -159,10 +189,36 @@ public class CityDao extends Dao<City> {
     }
 
     /**
-     * Creates a City object from the specified result set.
+     * Checks if a {@link City} with the specified name exists in the database.
      *
-     * @param rs The result set to extract the city from.
-     * @return A new City object.
+     * @param name The name of the city to check.
+     * @return True if the city exists in the database, otherwise false.
+     */
+    public boolean exists(String name) {
+        try {
+            PreparedStatement pst = connection.prepareStatement(
+                    "SELECT COUNT(cityId) FROM city WHERE city = ?;"
+            );
+
+            pst.setString(1, name);
+
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
+        }
+
+        return false;
+    }
+
+    /**
+     * Creates a {@link City} from the specified {@link ResultSet}.
+     *
+     * @param rs The result set.
+     * @return The city.
      * @throws SQLException
      */
     private City getCityFromResultSet(ResultSet rs) throws SQLException {

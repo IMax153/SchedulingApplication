@@ -7,6 +7,8 @@ package models;
 
 import java.time.Instant;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * Class representing a city within the application.
  *
@@ -22,7 +24,19 @@ public class City extends Entity {
     /**
      * The country in which the city is located.
      */
-    private final Country country;
+    private Country country;
+
+    public City(
+            int id,
+            String name,
+            String createdBy,
+            String updatedBy,
+            Instant createdAt,
+            Instant updatedAt
+    ) {
+        super(id, createdBy, updatedBy, createdAt, updatedAt);
+        this.name = name;
+    }
 
     public City(
             int id,
@@ -54,6 +68,15 @@ public class City extends Entity {
      */
     public Country getCountry() {
         return country;
+    }
+
+    /**
+     * Sets the country in which this city is located.
+     *
+     * @param country The country to set.
+     */
+    public void setCountry(Country country) {
+        this.country = requireNonNull(country);
     }
 
     /**

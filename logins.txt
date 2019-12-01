@@ -1,122 +1,60 @@
-Nov 30, 2019 2:32:51 PM utilities.UserLogger log
+Nov 30, 2019 9:49:16 PM utilities.UserLogger log
 INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 2:33:29 PM utilities.UserLogger log
+Nov 30, 2019 9:53:12 PM utilities.UserLogger log
 INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 2:37:33 PM utilities.UserLogger log
+Nov 30, 2019 9:54:25 PM utilities.UserLogger log
 INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 2:40:47 PM utilities.UserLogger log
+Nov 30, 2019 9:55:00 PM utilities.UserLogger log
 INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 2:41:47 PM utilities.UserLogger log
+Nov 30, 2019 10:15:53 PM utilities.UserLogger log
 INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 2:42:23 PM utilities.UserLogger log
+Nov 30, 2019 10:18:16 PM utilities.UserLogger log
 INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 2:47:51 PM utilities.UserLogger log
+Nov 30, 2019 10:18:36 PM utilities.UserLogger log
 INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 2:49:19 PM utilities.UserLogger log
+Nov 30, 2019 10:24:13 PM utilities.UserLogger log
 INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 2:49:57 PM utilities.UserLogger log
+Nov 30, 2019 10:30:48 PM utilities.UserLogger log
 INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 2:51:40 PM utilities.UserLogger log
+Nov 30, 2019 10:31:53 PM utilities.UserLogger log
 INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 3:21:24 PM utilities.UserLogger log
+Nov 30, 2019 10:32:35 PM utilities.UserLogger log
 INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 3:31:36 PM utilities.UserLogger log
+Nov 30, 2019 10:33:04 PM utilities.UserLogger log
 INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 3:37:22 PM utilities.UserLogger log
+Nov 30, 2019 10:36:14 PM utilities.UserLogger log
 INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 3:41:06 PM utilities.UserLogger log
+Nov 30, 2019 10:48:10 PM utilities.UserLogger log
 INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 3:42:15 PM utilities.UserLogger log
+Nov 30, 2019 10:49:05 PM utilities.UserLogger log
 INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 3:42:37 PM utilities.UserLogger log
+Dec 01, 2019 12:01:40 AM utilities.UserLogger log
 INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 3:45:00 PM utilities.UserLogger log
+Dec 01, 2019 9:39:49 AM utilities.UserLogger log
 INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 3:50:26 PM utilities.UserLogger log
+Dec 01, 2019 9:41:09 AM utilities.UserLogger log
 INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 3:52:34 PM utilities.UserLogger log
+Dec 01, 2019 9:47:04 AM utilities.UserLogger log
 INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 3:54:12 PM utilities.UserLogger log
+Dec 01, 2019 10:25:21 AM utilities.UserLogger log
 INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 4:01:03 PM utilities.UserLogger log
+Dec 01, 2019 11:10:22 AM utilities.UserLogger log
 INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 4:14:35 PM utilities.UserLogger log
+Dec 01, 2019 5:25:47 PM utilities.UserLogger log
 INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 5:25:35 PM utilities.UserLogger log
+Dec 01, 2019 5:35:19 PM utilities.UserLogger log
 INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 5:27:52 PM utilities.UserLogger log
+Dec 01, 2019 5:49:49 PM utilities.UserLogger log
 INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 5:29:07 PM utilities.UserLogger log
+Dec 01, 2019 5:50:34 PM utilities.UserLogger log
 INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 5:30:59 PM utilities.UserLogger log
+Dec 01, 2019 5:52:59 PM utilities.UserLogger log
 INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 5:36:45 PM utilities.UserLogger log
+Dec 01, 2019 5:54:00 PM utilities.UserLogger log
 INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 5:41:58 PM utilities.UserLogger log
+Dec 01, 2019 6:00:51 PM utilities.UserLogger log
 INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 5:45:56 PM utilities.UserLogger log
+Dec 01, 2019 6:03:01 PM utilities.UserLogger log
 INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 5:52:01 PM utilities.UserLogger log
-INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 5:53:40 PM utilities.UserLogger log
-INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 5:57:16 PM utilities.UserLogger log
-INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 6:59:12 PM utilities.UserLogger log
-INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 7:00:29 PM utilities.UserLogger log
-INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 7:01:12 PM utilities.UserLogger log
-INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 7:02:22 PM utilities.UserLogger log
-INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 7:03:55 PM utilities.UserLogger log
-INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 7:05:23 PM utilities.UserLogger log
-INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 7:07:53 PM utilities.UserLogger log
-INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 7:08:21 PM utilities.UserLogger log
-INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 7:08:58 PM utilities.UserLogger log
-INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 7:09:29 PM utilities.UserLogger log
-INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 7:29:11 PM utilities.UserLogger log
-INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 7:31:50 PM utilities.UserLogger log
-INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 7:34:01 PM utilities.UserLogger log
-INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 7:34:25 PM utilities.UserLogger log
-INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 7:34:50 PM utilities.UserLogger log
-INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 7:38:06 PM utilities.UserLogger log
-INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 7:38:30 PM utilities.UserLogger log
-INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 7:40:41 PM utilities.UserLogger log
-INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 7:46:47 PM utilities.UserLogger log
-INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 7:48:53 PM utilities.UserLogger log
-INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 7:51:03 PM utilities.UserLogger log
-INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 7:51:33 PM utilities.UserLogger log
-INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 7:53:30 PM utilities.UserLogger log
-INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 7:54:35 PM utilities.UserLogger log
-INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 7:56:29 PM utilities.UserLogger log
-INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 7:57:18 PM utilities.UserLogger log
-INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 7:57:50 PM utilities.UserLogger log
-INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 8:00:27 PM utilities.UserLogger log
-INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]
-Nov 30, 2019 8:01:04 PM utilities.UserLogger log
+Dec 01, 2019 6:05:02 PM utilities.UserLogger log
 INFO: User[id: 1, userName: test, password: test, active: true, createdBy: test, updatedBy: test, createdAt: 2019-01-01T05:00:00Z, updatedAt: 2019-01-01T05:00:00Z]

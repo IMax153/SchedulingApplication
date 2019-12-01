@@ -11,7 +11,6 @@ import dao.CustomerDao;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Optional;
 import javafx.util.Pair;
 import java.time.temporal.ChronoUnit;
 import javafx.beans.property.BooleanProperty;
@@ -486,34 +485,30 @@ public class AppointmentForm extends Control {
         validateForm();
 
         if (isValid()) {
-            User user = SchedulingApplication.user;
+            User user = SchedulingApplication.USER;
             Interval interval = new Interval(DateUtils.toZonedDateTime(getDate(), getStartTime()), DateUtils.toZonedDateTime(getDate(), getEndTime()));
 
             switch (mode) {
                 case NEW:
-                    Optional<Integer> maybeNextId = appointmentDao.getNextId();
-                    if (maybeNextId.isPresent()) {
-                        return new Pair(
-                                mode,
-                                new Appointment(
-                                        maybeNextId.get(),
-                                        getTitle(),
-                                        getDescription(),
-                                        getLocation(),
-                                        getContact(),
-                                        getType(),
-                                        getUrl(),
-                                        interval,
-                                        getCustomer(),
-                                        user,
-                                        user.getUserName(),
-                                        user.getUserName(),
-                                        Instant.now(),
-                                        Instant.now()
-                                )
-                        );
-                    }
-                    break;
+                    return new Pair(
+                            mode,
+                            new Appointment(
+                                    -1,
+                                    getTitle(),
+                                    getDescription(),
+                                    getLocation(),
+                                    getContact(),
+                                    getType(),
+                                    getUrl(),
+                                    interval,
+                                    getCustomer(),
+                                    user,
+                                    user.getUserName(),
+                                    user.getUserName(),
+                                    Instant.now(),
+                                    Instant.now()
+                            )
+                    );
                 case EDIT:
                     return new Pair(
                             mode,

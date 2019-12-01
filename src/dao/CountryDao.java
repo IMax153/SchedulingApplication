@@ -15,23 +15,23 @@ import java.util.Optional;
 import models.Country;
 
 /**
- * Handles create, read, update, and delete operations for the country entity.
+ * Handles create, read, update, and delete operations for {@link Country}s.
  *
  * @author mab90
  */
 public class CountryDao extends Dao<Country> {
 
     /**
-     * Gets a country specified by a unique identifier.
+     * Gets a {@link Country} specified by a unique identifier.
      *
-     * @param id The unique identifier of the country to find.
-     * @return An optional country.
+     * @param id The id of the country.
+     * @return The country.
      */
     @Override
     public Optional<Country> findById(int id) {
         try {
             PreparedStatement pst = connection.prepareStatement(
-                    "SELECT * FROM country AS c WHERE c.countryId = ?"
+                    "SELECT * FROM country WHERE countryId = ?"
             );
 
             pst.setInt(1, id);
@@ -50,9 +50,36 @@ public class CountryDao extends Dao<Country> {
     }
 
     /**
-     * Gets all countries from the database.
+     * Gets a {@link Country} by name.
      *
-     * @return A list of optional countries.
+     * @param name The name of the country.
+     * @return The country.
+     */
+    public Optional<Country> findByName(String name) {
+        try {
+            PreparedStatement pst = connection.prepareStatement(
+                    "SELECT * FROM country WHERE country = ?"
+            );
+
+            pst.setString(1, name);
+
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                Country country = getCountryFromResultSet(rs);
+                return Optional.of(country);
+            }
+        } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
+        }
+
+        return Optional.empty();
+    }
+
+    /**
+     * Gets all {@link Country}s.
+     *
+     * @return The list of countries.
      */
     @Override
     public List<Optional<Country>> findAll() {
@@ -77,7 +104,7 @@ public class CountryDao extends Dao<Country> {
     }
 
     /**
-     * Adds a country to the database.
+     * Adds a {@link Country}.
      *
      * @param country The country to add.
      * @return True if the country was added successfully, otherwise false.
@@ -103,7 +130,7 @@ public class CountryDao extends Dao<Country> {
     }
 
     /**
-     * Updates a country in the database.
+     * Updates a {@link Country}.
      *
      * @param country The country to update.
      * @return True if the country was updated successfully, otherwise false.
@@ -112,9 +139,9 @@ public class CountryDao extends Dao<Country> {
     public boolean update(Country country) {
         try {
             PreparedStatement pst = connection.prepareStatement(
-                    "UPDATE country AS c "
-                    + "SET country = ?, createdBy = ?, lastUpdate = CURRENT_TIMESTAMP, lastUpdateBy = ?"
-                    + "WHERE c.countryId = ?"
+                    "UPDATE country "
+                    + "SET country = ?, createdBy = ?, lastUpdate = CURRENT_TIMESTAMP, lastUpdateBy = ? "
+                    + "WHERE countryId = ?"
             );
 
             pst.setString(1, country.getName());
@@ -131,16 +158,16 @@ public class CountryDao extends Dao<Country> {
     }
 
     /**
-     * Deletes a country from the database.
+     * Deletes a {@link Country}.
      *
-     * @param id The unique identifier of the country to delete.
+     * @param id The id of the country to delete.
      * @return True if the country was deleted successfully, otherwise false.
      */
     @Override
     public boolean delete(int id) {
         try {
             PreparedStatement pst = connection.prepareStatement(
-                    "DELETE FROM country AS c WHERE c.countryId = ?"
+                    "DELETE FROM country WHERE countryId = ?"
             );
 
             pst.setInt(1, id);
@@ -154,10 +181,37 @@ public class CountryDao extends Dao<Country> {
     }
 
     /**
-     * Creates a Country object from the specified result set.
+     * Checks if a {@link Country} with the specified name exists in the
+     * database.
      *
-     * @param rs The result set to extract the country from.
-     * @return A new Country object.
+     * @param name The name of the country to check.
+     * @return True if the country exists in the database, otherwise false.
+     */
+    public boolean exists(String name) {
+        try {
+            PreparedStatement pst = connection.prepareStatement(
+                    "SELECT COUNT(countryId) FROM country WHERE country = ?;"
+            );
+
+            pst.setString(1, name);
+
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
+        }
+
+        return false;
+    }
+
+    /**
+     * Creates a {@link Country} from the specified {@link ResultSet}.
+     *
+     * @param rs The result set.
+     * @return The country.
      * @throws SQLException
      */
     private Country getCountryFromResultSet(ResultSet rs) throws SQLException {

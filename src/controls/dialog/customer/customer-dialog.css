@@ -4,10 +4,9 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 */
 /* 
-    Created on : Nov 29, 2019, 9:25:58 AM
+    Created on : Dec 1, 2019, 10:26:27 AM
     Author     : maxbrown
 */
-
 
 * {
     /* Colors */
@@ -21,11 +20,5 @@ and open the template in the editor.
     /* Font */
     -fx-font-family: Arial;
     -fx-text-fill: -black;
-}
-
-
-.dialog-pane {
-    -fx-background-color: white;
-    -fx-padding: 20;
 }
 

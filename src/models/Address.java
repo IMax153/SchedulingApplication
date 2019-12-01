@@ -15,15 +15,15 @@ import java.time.Instant;
 public class Address extends Entity {
 
     /**
-     * The part of the address containing the street name.
+     * The part of the address containing the address name.
      */
-    private final String street;
+    private final String address;
 
     /**
      * The part of the address containing additional information. For example,
      * an apartment number.
      */
-    private final String additionalInformation;
+    private final String address2;
 
     /**
      * The part of the address containing the postal code.
@@ -42,8 +42,8 @@ public class Address extends Entity {
 
     public Address(
             int id,
-            String street,
-            String additionalInformation,
+            String address,
+            String address2,
             String postalCode,
             String phone,
             City city,
@@ -53,20 +53,20 @@ public class Address extends Entity {
             Instant updatedAt
     ) {
         super(id, createdBy, updatedBy, createdAt, updatedAt);
-        this.street = street;
-        this.additionalInformation = additionalInformation;
+        this.address = address;
+        this.address2 = address2;
         this.postalCode = postalCode;
         this.phone = phone;
         this.city = city;
     }
 
     /**
-     * Gets the street name and number of the address.
+     * Gets the address name and number of the address.
      *
-     * @return The street name and number of the address.
+     * @return The address name and number of the address.
      */
-    public String getStreet() {
-        return street;
+    public String getAddress() {
+        return address;
     }
 
     /**
@@ -74,8 +74,8 @@ public class Address extends Entity {
      *
      * @return Any additional information for the address.
      */
-    public String getAdditionalInformation() {
-        return additionalInformation;
+    public String getAddress2() {
+        return address2;
     }
 
     /**
@@ -115,12 +115,12 @@ public class Address extends Entity {
         sb.setLength(0);
         sb.append("Address[");
 
-        sb.append("street: ");
-        sb.append(street);
+        sb.append("address: ");
+        sb.append(address);
         sb.append(", ");
 
-        sb.append("additionalInformation: ");
-        sb.append(additionalInformation);
+        sb.append("address2: ");
+        sb.append(address2);
         sb.append(", ");
 
         sb.append("postalCode: ");

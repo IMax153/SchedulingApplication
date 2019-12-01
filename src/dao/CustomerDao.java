@@ -14,17 +14,17 @@ import java.util.Optional;
 import models.*;
 
 /**
- * Handles create, read, update, and delete operations for the customer entity.
+ * Handles create, read, update, and delete operations for {@link Customer}s.
  *
  * @author mab90
  */
 public class CustomerDao extends Dao<Customer> {
 
     /**
-     * Gets a customer specified by a unique identifier.
+     * Gets a {@link Customer} by id.
      *
-     * @param id The unique identifier of the customer to find.
-     * @return An optional customer.
+     * @param id The id of the customer.
+     * @return The customer.
      */
     @Override
     public Optional<Customer> findById(int id) {
@@ -37,7 +37,7 @@ public class CustomerDao extends Dao<Customer> {
                     + "ON a.cityId = ci.cityId "
                     + "INNER JOIN country AS co "
                     + "ON ci.countryId = co.countryId "
-                    + "WHERE a.addressId = ?"
+                    + "WHERE cu.customerId = ?"
             );
 
             pst.setInt(1, id);
@@ -56,9 +56,43 @@ public class CustomerDao extends Dao<Customer> {
     }
 
     /**
-     * Gets all customers from the database.
+     * Gets a {@link Customer} by name.
      *
-     * @return A list of optional customers.
+     * @param name The name of the customer.
+     * @return The customer.
+     */
+    public Optional<Customer> findByName(String name) {
+        try {
+            PreparedStatement pst = connection.prepareStatement(
+                    "SELECT * FROM customer AS cu "
+                    + "INNER JOIN address AS a "
+                    + "ON cu.addressId = a.addressId "
+                    + "INNER JOIN city AS ci "
+                    + "ON a.cityId = ci.cityId "
+                    + "INNER JOIN country AS co "
+                    + "ON ci.countryId = co.countryId "
+                    + "WHERE cu.customerName = ?"
+            );
+
+            pst.setString(1, name);
+
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                Customer customer = getCustomerFromResultSet(rs);
+                return Optional.of(customer);
+            }
+        } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
+        }
+
+        return Optional.empty();
+    }
+
+    /**
+     * Gets all {@link Customer}s.
+     *
+     * @return The list of customers.
      */
     @Override
     public List<Optional<Customer>> findAll() {
@@ -89,7 +123,7 @@ public class CustomerDao extends Dao<Customer> {
     }
 
     /**
-     * Adds a customer to the database.
+     * Adds a {@link Customer}.
      *
      * @param customer The customer to add.
      * @return True if the customer was added successfully, otherwise false.
@@ -99,7 +133,7 @@ public class CustomerDao extends Dao<Customer> {
         try {
             PreparedStatement pst = connection.prepareStatement(
                     "INSERT INTO customer (customerName, addressId, active, createDate, createdBy, lastUpdate, lastUpdateBy) "
-                    + "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP, ?"
+                    + "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP, ?)"
             );
 
             pst.setString(1, customer.getName());
@@ -117,7 +151,7 @@ public class CustomerDao extends Dao<Customer> {
     }
 
     /**
-     * Updates a customer in the database.
+     * Updates a {@link Customer}.
      *
      * @param customer The customer to update.
      * @return True if the customer was updated successfully, otherwise false.
@@ -126,9 +160,9 @@ public class CustomerDao extends Dao<Customer> {
     public boolean update(Customer customer) {
         try {
             PreparedStatement pst = connection.prepareStatement(
-                    "UPDATE customer AS c "
-                    + "SET customerName = ?, addressId = ?, active = ?, lastUpdate = CURRENT_TIMESTAMP, lastUpdateBy = ?) "
-                    + "WHERE c.customerId = ?"
+                    "UPDATE customer "
+                    + "SET customerName = ?, addressId = ?, active = ?, lastUpdate = CURRENT_TIMESTAMP, lastUpdateBy = ? "
+                    + "WHERE customerId = ?"
             );
 
             pst.setString(1, customer.getName());
@@ -146,16 +180,16 @@ public class CustomerDao extends Dao<Customer> {
     }
 
     /**
-     * Deletes a customer from the database.
+     * Deletes a {@link Customer}.
      *
-     * @param id The unique identifier of the customer to delete.
+     * @param id The id of the customer.
      * @return True if the customer was deleted successfully, otherwise false.
      */
     @Override
     public boolean delete(int id) {
         try {
             PreparedStatement pst = connection.prepareStatement(
-                    "DELETE FROM customer AS c WHERE c.customerId = ?"
+                    "DELETE FROM customer WHERE customerId = ?"
             );
 
             pst.setInt(1, id);
@@ -169,10 +203,10 @@ public class CustomerDao extends Dao<Customer> {
     }
 
     /**
-     * Creates a Customer object from the specified result set.
+     * Creates a {@link Customer} from the specified {@link ResultSet}.
      *
-     * @param rs The result set to extract the customer from.
-     * @return A new Customer object.
+     * @param rs The result set.
+     * @return The customer.
      * @throws SQLException
      */
     private Customer getCustomerFromResultSet(ResultSet rs) throws SQLException {

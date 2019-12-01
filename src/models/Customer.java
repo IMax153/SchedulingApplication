@@ -82,6 +82,10 @@ public class Customer extends Entity {
         sb.setLength(0);
         sb.append("Customer[");
 
+        sb.append("name: ");
+        sb.append(name);
+        sb.append(", ");
+
         sb.append("active: ");
         sb.append(active);
         sb.append(", ");

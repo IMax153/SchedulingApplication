@@ -14,23 +14,23 @@ import java.util.Optional;
 import models.User;
 
 /**
- * Handles create, read, update, and delete operations for the user entity.
+ * Handles create, read, update, and delete operations for {@link User}s.
  *
  * @author mab90
  */
 public class UserDao extends Dao<User> {
 
     /**
-     * Gets a user specified by a unique identifier.
+     * Gets a {@link User} by id.
      *
-     * @param id The unique identifier of the user to find.
-     * @return An optional user.
+     * @param id The id of the user.
+     * @return The user.
      */
     @Override
     public Optional<User> findById(int id) {
         try {
             PreparedStatement pst = connection.prepareStatement(
-                    "SELECT * FROM user AS u WHERE u.userId = ?"
+                    "SELECT * FROM user WHERE userId = ?"
             );
 
             pst.setInt(1, id);
@@ -49,9 +49,9 @@ public class UserDao extends Dao<User> {
     }
 
     /**
-     * Gets all users from the database.
+     * Gets all {@link User}s.
      *
-     * @return A list of optional users.
+     * @return The list of users.
      */
     @Override
     public List<Optional<User>> findAll() {
@@ -76,7 +76,7 @@ public class UserDao extends Dao<User> {
     }
 
     /**
-     * Adds a user to the database.
+     * Adds a {@link User}.
      *
      * @param user The user to add.
      * @return True if the user was added successfully, otherwise false.
@@ -86,7 +86,7 @@ public class UserDao extends Dao<User> {
         try {
             PreparedStatement pst = connection.prepareStatement(
                     "INSERT INTO user (userName, password, isActive, createdBy, createDate, lastUpdateBy, lastUpdate) "
-                    + "VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP"
+                    + "VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP)"
             );
 
             pst.setString(1, user.getUserName());
@@ -104,7 +104,7 @@ public class UserDao extends Dao<User> {
     }
 
     /**
-     * Updates a user in the database.
+     * Updates a {@link User}.
      *
      * @param user The user to update.
      * @return True if the user was updated successfully, otherwise false.
@@ -113,9 +113,9 @@ public class UserDao extends Dao<User> {
     public boolean update(User user) {
         try {
             PreparedStatement pst = connection.prepareStatement(
-                    "UPDATE user AS u "
-                    + "SET userName = ?, password = ?, isActive = ?, createdBy = ?, lastUpdateBy = ?, lastUpdate = CURRENT_TIMESTAMP) "
-                    + "WHERE u.userId = ?"
+                    "UPDATE user "
+                    + "SET userName = ?, password = ?, isActive = ?, createdBy = ?, lastUpdateBy = ?, lastUpdate = CURRENT_TIMESTAMP "
+                    + "WHERE userId = ?"
             );
 
             pst.setString(1, user.getUserName());
@@ -134,16 +134,16 @@ public class UserDao extends Dao<User> {
     }
 
     /**
-     * Deletes a user from the database.
+     * Deletes a {@link User}.
      *
-     * @param id The unique identifier of the user to delete.
+     * @param id The id of the user to delete.
      * @return True if the user was deleted successfully, otherwise false.
      */
     @Override
     public boolean delete(int id) {
         try {
             PreparedStatement pst = connection.prepareStatement(
-                    "DELETE FROM user AS u WHERE u.userId = ?"
+                    "DELETE FROM user WHERE userId = ?"
             );
 
             pst.setInt(1, id);
@@ -157,7 +157,7 @@ public class UserDao extends Dao<User> {
     }
 
     /**
-     * Authenticates a user of the scheduling application.
+     * Authenticates a {@link User}.
      *
      * @param userName The userName of the user.
      * @param password The password of the user
@@ -166,8 +166,8 @@ public class UserDao extends Dao<User> {
     public Optional<User> authenticateUser(String userName, String password) {
         try {
             PreparedStatement pst = connection.prepareStatement(
-                    "SELECT * FROM user AS u "
-                    + "WHERE u.userName = ? AND u.password = ?"
+                    "SELECT * FROM user "
+                    + "WHERE userName = ? AND password = ?"
             );
 
             pst.setString(1, userName);
@@ -187,10 +187,10 @@ public class UserDao extends Dao<User> {
     }
 
     /**
-     * Creates a User object from the specified result set.
+     * Creates an {@link User} from the specified {@link ResultSet}.
      *
-     * @param rs The result set to extract the user from.
-     * @return A new User object.
+     * @param rs The result set.
+     * @return The user.
      * @throws SQLException
      */
     private User getUserFromResultSet(ResultSet rs) throws SQLException {

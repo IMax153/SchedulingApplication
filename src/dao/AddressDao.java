@@ -14,17 +14,17 @@ import java.util.Optional;
 import models.*;
 
 /**
- * Handles create, read, update, and delete operations for the address entity.
+ * Handles create, read, update, and delete operations for the {@link Address}s.
  *
  * @author mab90
  */
 public class AddressDao extends Dao<Address> {
 
     /**
-     * Gets an address specified by a unique identifier.
+     * Gets an {@link Address} by id.
      *
-     * @param id The unique identifier of the address to find.
-     * @return An optional address.
+     * @param id The id of the address.
+     * @return The address.
      */
     @Override
     public Optional<Address> findById(int id) {
@@ -54,9 +54,43 @@ public class AddressDao extends Dao<Address> {
     }
 
     /**
-     * Gets all addresses from the database.
+     * Gets an {@link Address} by {@link Address#address} and {@link City#id}.
      *
-     * @return A list of optional addresses.
+     * @param streetAddress The street address.
+     * @param cityId The id of the city.
+     * @return The address.
+     */
+    public Optional<Address> findByAddressAndCityId(String streetAddress, int cityId) {
+        try {
+            PreparedStatement pst = connection.prepareStatement(
+                    "SELECT * FROM address AS a "
+                    + "INNER JOIN city AS ci "
+                    + "ON a.cityId = ci.cityId "
+                    + "INNER JOIN country AS co "
+                    + "ON ci.countryId = co.countryId "
+                    + "WHERE a.address = ? AND a.cityId = ?"
+            );
+
+            pst.setString(1, streetAddress);
+            pst.setInt(2, cityId);
+
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                Address address = getAddressFromResultSet(rs);
+                return Optional.of(address);
+            }
+        } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
+        }
+
+        return Optional.empty();
+    }
+
+    /**
+     * Gets all {@link Address}s..
+     *
+     * @return The list of addresses.
      */
     @Override
     public List<Optional<Address>> findAll() {
@@ -85,7 +119,7 @@ public class AddressDao extends Dao<Address> {
     }
 
     /**
-     * Adds an address to the database.
+     * Adds an {@link Address}.
      *
      * @param address The address to add.
      * @return True if the address was added successfully, otherwise false.
@@ -95,11 +129,11 @@ public class AddressDao extends Dao<Address> {
         try {
             PreparedStatement pst = connection.prepareStatement(
                     "INSERT INTO address (address, address2, cityId, postalCode, phone, createDate, createdBy, lastUpdate, lastUpdateBy) "
-                    + "VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP, ?"
+                    + "VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP, ?)"
             );
 
-            pst.setString(1, address.getStreet());
-            pst.setString(2, address.getAdditionalInformation());
+            pst.setString(1, address.getAddress());
+            pst.setString(2, address.getAddress2());
             pst.setInt(3, address.getCity().getId());
             pst.setString(4, address.getPostalCode());
             pst.setString(5, address.getPhone());
@@ -115,7 +149,7 @@ public class AddressDao extends Dao<Address> {
     }
 
     /**
-     * Updates an address in the database.
+     * Updates an {@link Address}.
      *
      * @param address The address to update.
      * @return True if the address was updated successfully, otherwise false.
@@ -124,13 +158,13 @@ public class AddressDao extends Dao<Address> {
     public boolean update(Address address) {
         try {
             PreparedStatement pst = connection.prepareStatement(
-                    "UPDATE address AS a "
-                    + "SET address = ?, address2 = ?, cityId = ?, postalCode = ?, phone = ?, lastUpdate = CURRENT_TIMESTAMP, lastUpdateBy = ?) "
-                    + "WHERE a.addressId = ?"
+                    "UPDATE address "
+                    + "SET address = ?, address2 = ?, cityId = ?, postalCode = ?, phone = ?, lastUpdate = CURRENT_TIMESTAMP, lastUpdateBy = ? "
+                    + "WHERE addressId = ?"
             );
 
-            pst.setString(1, address.getStreet());
-            pst.setString(2, address.getAdditionalInformation());
+            pst.setString(1, address.getAddress());
+            pst.setString(2, address.getAddress2());
             pst.setInt(3, address.getCity().getId());
             pst.setString(4, address.getPostalCode());
             pst.setString(5, address.getPhone());
@@ -146,16 +180,16 @@ public class AddressDao extends Dao<Address> {
     }
 
     /**
-     * Deletes an address from the database.
+     * Deletes an {@link Address}.
      *
-     * @param id The unique identifier of the address to delete.
+     * @param id The id of the address to delete.
      * @return True if the address was deleted successfully, otherwise false.
      */
     @Override
     public boolean delete(int id) {
         try {
             PreparedStatement pst = connection.prepareStatement(
-                    "DELETE FROM address AS a WHERE a.addressId = ?"
+                    "DELETE FROM address WHERE addressId = ?"
             );
 
             pst.setInt(1, id);
@@ -169,10 +203,44 @@ public class AddressDao extends Dao<Address> {
     }
 
     /**
-     * Creates an Address object from the specified result set.
+     * Checks if a {@link Address} with the specified name exists in the
+     * database.
      *
-     * @param rs The result set to extract the address from.
-     * @return A new Address object.
+     * @param address The address to check.
+     * @param address2 The address 2 to check.
+     * @param postalCode The postal code to check.
+     * @param phone The phone number to check.
+     * @return True if the address exists in the database, otherwise false.
+     */
+    public boolean exists(String address, String address2, String postalCode, String phone) {
+        try {
+            PreparedStatement pst = connection.prepareStatement(
+                    "SELECT COUNT(addressId) FROM address "
+                    + "WHERE address = ? AND address2 = ? AND postalCode = ? AND phone = ?"
+            );
+
+            pst.setString(1, address);
+            pst.setString(2, address2);
+            pst.setString(3, postalCode);
+            pst.setString(4, phone);
+
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
+        }
+
+        return false;
+    }
+
+    /**
+     * Creates an {@link Address} from the specified {@link ResultSet}.
+     *
+     * @param rs The result set.
+     * @return The address.
      * @throws SQLException
      */
     private Address getAddressFromResultSet(ResultSet rs) throws SQLException {

@@ -23,8 +23,8 @@ import utilities.DateUtils;
 import static java.util.Objects.requireNonNull;
 
 /**
- * The {@link Control} for displaying appointment data as a {@link BarChart} for
- * a specific {@link Year}.
+ * The {@link Control} for displaying {@link Appointment} data as a
+ * {@link BarChart} for a specific {@link Year}.
  *
  * @author maxbrown
  */

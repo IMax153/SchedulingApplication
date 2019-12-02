@@ -1,0 +1,31 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Dec 2, 2019, 4:57:33 PM
+    Author     : maxbrown
+*/
+
+* {
+    /* Colors */
+    -black: #3c4043;
+    -blue: #1a73e8;
+    -light-gray: #dadce0;
+    -gray: #70757a;
+    -green: #0b8043;
+    
+    /* Font */
+    -fx-font-family: Arial;
+    -fx-text-fill: -black;
+}
+
+.container {
+    -fx-padding: 50;
+}
+
+.container > .header > .chart-label {
+    -fx-font-size: 24; 
+    -fx-font-weight: bold;
+}

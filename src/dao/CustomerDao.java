@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import javafx.util.Pair;
 import models.*;
 
 /**
@@ -120,6 +121,34 @@ public class CustomerDao extends Dao<Customer> {
         }
 
         return customers;
+    }
+
+    public List<Optional<Pair<String, Integer>>> findAllByCity() {
+        List<Optional<Pair<String, Integer>>> cities = new ArrayList<>();
+
+        try {
+            PreparedStatement pst = connection.prepareStatement(
+                    "SELECT ci.city, COUNT(*) AS `count` FROM customer AS cu "
+                    + "INNER JOIN address AS a "
+                    + "ON cu.addressId = a.addressId "
+                    + "INNER JOIN city AS ci "
+                    + "ON a.cityId = ci.cityId "
+                    + "GROUP BY ci.city"
+            );
+
+            ResultSet rs = pst.executeQuery();
+
+            while (rs.next()) {
+                String cityName = rs.getString("ci.city");
+                int count = rs.getInt("count");
+
+                cities.add(Optional.of(new Pair(cityName, count)));
+            }
+        } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
+        }
+
+        return cities;
     }
 
     /**

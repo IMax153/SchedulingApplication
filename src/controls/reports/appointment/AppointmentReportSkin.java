@@ -88,7 +88,7 @@ public class AppointmentReportSkin extends SkinBase<AppointmentReport> {
         // Create the bar chart
         BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
         barChart.getStyleClass().add("chart");
-        barChart.setTitle("Appointments Types by Month");
+        barChart.setTitle("Number of Appointments Types by Month");
         barChart.setCategoryGap(100);
         barChart.setAnimated(false);
         barChart.setLegendVisible(false);

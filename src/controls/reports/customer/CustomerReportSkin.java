@@ -43,18 +43,18 @@ public class CustomerReportSkin extends SkinBase<CustomerReport> {
 
         // Create the bar chart X axis
         CategoryAxis xAxis = new CategoryAxis();
-        xAxis.setLabel("Customer Cities");
+        xAxis.setLabel("Cities");
 
         // Create the bar chart Y axis
         NumberAxis yAxis = new NumberAxis();
-        yAxis.setLabel("Number of Customers Per City");
+        yAxis.setLabel("Number of Customers");
         yAxis.setTickUnit(1);
         yAxis.setMinorTickVisible(false);
 
         // Create the bar chart
         BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
         barChart.getStyleClass().add("chart");
-        barChart.setTitle("Customers by City");
+        barChart.setTitle("Number of Customers Per City");
         barChart.setCategoryGap(100);
         barChart.setAnimated(false);
         barChart.setLegendVisible(false);

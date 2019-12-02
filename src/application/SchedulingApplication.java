@@ -3,7 +3,6 @@ package application;
 import controls.calendar.Calendar;
 import controls.form.login.LoginForm;
 import controls.table.CustomerTable;
-import events.NavigationEvent;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -68,9 +67,10 @@ public class SchedulingApplication extends Application {
 
         // Set the user on login
         loginForm.setOnLogin(authenticatedUser -> {
-            loginForm.fireEvent(new NavigationEvent(loginForm, loginForm, authenticatedUser));
+            loginForm.setVisible(false);
+            USER = authenticatedUser;
+            showCalendarScreen();
             UserLogger.log(authenticatedUser);
-
         });
 
         // Set the initial scene view to the login form
@@ -81,13 +81,6 @@ public class SchedulingApplication extends Application {
         primaryStage.centerOnScreen();
         primaryStage.setScene(scene);
         primaryStage.show();
-
-        // Add navigation event handlers
-        scene.addEventFilter(NavigationEvent.LOGIN, e -> {
-            loginForm.setVisible(false);
-            USER = e.getUser();
-            showCalendarScreen();
-        });
     }
 
     private void showCalendarScreen() {

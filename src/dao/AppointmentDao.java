@@ -9,9 +9,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import javafx.util.Pair;
 import models.*;
 import utilities.DateUtils;
 
@@ -136,6 +138,34 @@ public class AppointmentDao extends Dao<Appointment> {
         }
 
         return appointments;
+    }
+
+    public List<Optional<Pair<String, Integer>>> findTypesForUser(User user, YearMonth yearMonth) {
+        List<Optional<Pair<String, Integer>>> types = new ArrayList<>();
+
+        try {
+            PreparedStatement pst = connection.prepareStatement(
+                    "SELECT type, COUNT(*) AS `count` FROM appointment "
+                    + "WHERE userId = ? AND MONTH(createDate) = ? AND YEAR(createDate) = ? "
+                    + "GROUP BY type"
+            );
+
+            pst.setInt(1, user.getId());
+            pst.setInt(2, yearMonth.getMonthValue());
+            pst.setInt(3, yearMonth.getYear());
+
+            ResultSet rs = pst.executeQuery();
+
+            while (rs.next()) {
+                String type = rs.getString("type");
+                int count = rs.getInt("count");
+                types.add(Optional.of(new Pair<>(type, count)));
+            }
+        } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
+        }
+
+        return types;
     }
 
     /**

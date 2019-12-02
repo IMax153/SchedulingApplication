@@ -2,6 +2,7 @@ package application;
 
 import controls.calendar.Calendar;
 import controls.form.login.LoginForm;
+import controls.reports.Reports;
 import controls.table.CustomerTable;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -109,6 +110,19 @@ public class SchedulingApplication extends Application {
         scene.setRoot(pane);
     }
 
+    private void showReportsScreen() {
+        // Create a new reports view
+        Reports reports = new Reports();
+
+        // Set the reports view to the center of the screen
+        pane.setCenter(reports);
+
+        primaryStage.setWidth(1300);
+        primaryStage.setHeight(1000);
+        primaryStage.centerOnScreen();
+        scene.setRoot(pane);
+    }
+
     private MenuBar createNavigationBar() {
         // Create the parent menu bar
         MenuBar menuBar = new MenuBar();
@@ -135,6 +149,7 @@ public class SchedulingApplication extends Application {
         customersMenuItem.setOnAction(e -> showCustomerScreen());
 
         MenuItem reportsMenuItem = new MenuItem("Reports");
+        reportsMenuItem.setOnAction(e -> showReportsScreen());
 
         // Add the navigation menu items to the navigation menu
         navigationMenu.getItems().addAll(calendarMenuItem, customersMenuItem, reportsMenuItem);

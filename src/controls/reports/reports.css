@@ -4,7 +4,7 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 */
 /* 
-    Created on : Nov 25, 2019, 11:18:58 PM
+    Created on : Dec 2, 2019, 1:42:34 PM
     Author     : maxbrown
 */
 
@@ -21,22 +21,3 @@ and open the template in the editor.
     -fx-text-fill: -black;
 }
 
-/* Calendar Styles */
-
-.calendar {
-    -fx-padding: 10;
-}
-
-.calendar > .header {
-    -fx-padding: 5;
-}
-
-.calendar > .header > .navigation {
-    -fx-padding: 5;
-}
-
-.calendar > .header > .date-label {
-    -fx-padding: 5;
-    -fx-font-size: 24; 
-    -fx-font-weight: bold;
-}

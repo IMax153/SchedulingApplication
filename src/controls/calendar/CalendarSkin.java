@@ -9,8 +9,8 @@ import controls.dialog.appointment.AppointmentDialog;
 import events.AppointmentEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import javafx.application.Platform;
-import javafx.beans.InvalidationListener;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -140,7 +140,7 @@ public class CalendarSkin extends SkinBase<Calendar> {
     }
 
     private void updateDateLabel(LocalDate date) {
-        dateLabel.setText(date.format(DateTimeFormatter.ofPattern("MMMM yyyy")));
+        dateLabel.setText(date.format(DateTimeFormatter.ofPattern("MMMM yyyy", Locale.getDefault())));
     }
 
 }

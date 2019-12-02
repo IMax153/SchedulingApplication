@@ -93,22 +93,22 @@ public class MonthSkin extends SkinBase<Month> {
 
             // Increment the day of the week
             dayOfWeek = dayOfWeek.plus(1);
+        }
 
-            // Get a reference to the first day of the first week in the month
-            // Note that this may not always be the first day of the month
-            LocalDate date = view.getCalendar().getDate().with(TemporalAdjusters.firstDayOfMonth());
-            date = DateUtils.toFirstDayOfWeek(date, view.getCalendar().getFirstDayOfWeek());
+        // Get a reference to the first day of the first week in the month
+        // Note that this may not always be the first day of the month
+        LocalDate date = view.getCalendar().getDate().with(TemporalAdjusters.firstDayOfMonth());
+        date = DateUtils.toFirstDayOfWeek(date, view.getCalendar().getFirstDayOfWeek());
 
-            for (int week = 0; week < 6; week++) {
-                for (int day = 0; day < 7; day++) {
-                    MonthDay monthDay = new MonthDay(view, date);
+        for (int week = 0; week < 6; week++) {
+            for (int day = 0; day < 7; day++) {
+                MonthDay monthDay = new MonthDay(view, date);
 
-                    // Add month day to the grid
-                    grid.add(monthDay, day, week + 1);
+                // Add month day to the grid
+                grid.add(monthDay, day, week + 1);
 
-                    // Increment date
-                    date = date.plusDays(1);
-                }
+                // Increment date
+                date = date.plusDays(1);
             }
         }
     }

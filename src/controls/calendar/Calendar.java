@@ -335,7 +335,10 @@ public class Calendar extends Control {
     private void refreshAppointments() {
         // Get all appointments and add them to the calendar
         getAppointments().clear();
-        appointmentDao.findAllForUser(SchedulingApplication.USER).forEach(oa -> oa.ifPresent(a -> getAppointments().add(a)));
+        appointmentDao.findAllForUser(SchedulingApplication.USER).stream()
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .forEach(a -> getAppointments().add(a));
     }
 
     private void newAppointment(Appointment appointment) {

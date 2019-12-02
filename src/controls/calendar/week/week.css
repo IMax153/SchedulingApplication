@@ -28,7 +28,6 @@ and open the template in the editor.
 
 .week > .label-container > .date-label {
     -fx-padding: 10;
-    -fx-margin: 10; 
     -fx-font-size: 24;
 }
 

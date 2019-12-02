@@ -56,11 +56,14 @@ public class AddressDao extends Dao<Address> {
     /**
      * Gets an {@link Address} by {@link Address#address} and {@link City#id}.
      *
-     * @param streetAddress The street address.
+     * @param address The street address.
+     * @param address2 The additional address information.
+     * @param postalCode The address postal code.
+     * @param phone The customer phone number.
      * @param cityId The id of the city.
      * @return The address.
      */
-    public Optional<Address> findByAddressAndCityId(String streetAddress, int cityId) {
+    public Optional<Address> findByProperties(String address, String address2, String postalCode, String phone, int cityId) {
         try {
             PreparedStatement pst = connection.prepareStatement(
                     "SELECT * FROM address AS a "
@@ -68,17 +71,19 @@ public class AddressDao extends Dao<Address> {
                     + "ON a.cityId = ci.cityId "
                     + "INNER JOIN country AS co "
                     + "ON ci.countryId = co.countryId "
-                    + "WHERE a.address = ? AND a.cityId = ?"
+                    + "WHERE a.address = ? AND a.address2 = ? AND a.postalCode = ? AND a.phone = ? AND a.cityId = ?"
             );
 
-            pst.setString(1, streetAddress);
-            pst.setInt(2, cityId);
+            pst.setString(1, address);
+            pst.setString(2, address2);
+            pst.setString(3, postalCode);
+            pst.setString(4, phone);
+            pst.setInt(5, cityId);
 
             ResultSet rs = pst.executeQuery();
 
             if (rs.next()) {
-                Address address = getAddressFromResultSet(rs);
-                return Optional.of(address);
+                return Optional.of(getAddressFromResultSet(rs));
             }
         } catch (SQLException sqle) {
             System.out.println(sqle.getMessage());

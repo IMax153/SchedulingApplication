@@ -59,10 +59,9 @@ public class CustomerDialog extends Dialog<Object> {
         pane.setContent(form);
 
         // Add dialog buttons
-        ButtonType deleteButtonType = new ButtonType("Delete", ButtonBar.ButtonData.LEFT);
         ButtonType saveButtonType = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
         ButtonType cancelButtonType = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-        pane.getButtonTypes().addAll(ButtonType.CLOSE, deleteButtonType, saveButtonType, cancelButtonType);
+        pane.getButtonTypes().addAll(ButtonType.CLOSE, saveButtonType, cancelButtonType);
 
         // Hide the close button
         Button closeButton = (Button) pane.lookupButton(ButtonType.CLOSE);
@@ -70,27 +69,17 @@ public class CustomerDialog extends Dialog<Object> {
         closeButton.setVisible(false);
 
         // Get references to the dialog buttons
-        Button deleteButton = (Button) pane.lookupButton(deleteButtonType);
         Button saveButton = (Button) pane.lookupButton(saveButtonType);
         Button cancelButton = (Button) pane.lookupButton(cancelButtonType);
 
         // Set the dialog button actions
         saveButton.setOnAction(e -> form.submit());
-        deleteButton.setOnAction(e -> form.submit());
 
         // Hide the dialog on cancel
         cancelButton.setOnAction(e -> hide());
 
         // Only hide the dialog on save and delete actions if the form is valid
         saveButton.addEventFilter(ActionEvent.ACTION, event -> {
-            if (!form.isValid()) {
-                event.consume();
-            } else {
-                hide();
-            }
-        });
-
-        deleteButton.addEventFilter(ActionEvent.ACTION, event -> {
             if (!form.isValid()) {
                 event.consume();
             } else {

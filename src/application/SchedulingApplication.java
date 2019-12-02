@@ -1,13 +1,17 @@
 package application;
 
 import controls.calendar.Calendar;
-import controls.dialog.customer.CustomerDialog;
 import controls.form.login.LoginForm;
+import controls.table.CustomerTable;
 import events.NavigationEvent;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.Pane;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import models.User;
 import utilities.Database;
@@ -29,6 +33,8 @@ public class SchedulingApplication extends Application {
     private Stage primaryStage;
 
     private Scene scene;
+
+    private BorderPane pane;
 
     /**
      * The main entry point for the application.
@@ -53,6 +59,10 @@ public class SchedulingApplication extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("C195 - Scheduling Application");
 
+        // Create the root border pane
+        this.pane = new BorderPane();
+        pane.setTop(createNavigationBar());
+
         // Initially display the login form to authenticate users
         LoginForm loginForm = new LoginForm();
 
@@ -75,8 +85,7 @@ public class SchedulingApplication extends Application {
         scene.addEventFilter(NavigationEvent.LOGIN, e -> {
             loginForm.setVisible(false);
             USER = e.getUser();
-//            showCalendarScreen();
-            showCustomerScreen();
+            showCalendarScreen();
         });
     }
 
@@ -84,28 +93,66 @@ public class SchedulingApplication extends Application {
         // Create a new calendar
         Calendar calendar = new Calendar();
 
+        // Set the calendar to the center of the pane
+        pane.setCenter(calendar);
+
         primaryStage.setWidth(1300);
         primaryStage.setHeight(1000);
         primaryStage.centerOnScreen();
-        scene.setRoot(calendar);
+        scene.setRoot(pane);
     }
 
     private void showCustomerScreen() {
-        CustomerDialog customerDialog = new CustomerDialog();
+        // Create a new customer table
+        CustomerTable table = new CustomerTable();
 
-        Button button = new Button("Show Dialog");
+        // Set the customer table to the center of the screen
+        pane.setCenter(table);
 
-        button.setOnAction(e -> customerDialog.show());
-
-        Pane pane = new Pane();
-        pane.getChildren().add(button);
-        customerDialog.setOnFormSubmit(customer -> {
-            System.out.println(customer);
-        });
-        primaryStage.setWidth(600);
-        primaryStage.setHeight(600);
+        primaryStage.setWidth(1300);
+        primaryStage.setHeight(1000);
         primaryStage.centerOnScreen();
         scene.setRoot(pane);
+    }
+
+    private MenuBar createNavigationBar() {
+        // Create the parent menu bar
+        MenuBar menuBar = new MenuBar();
+        menuBar.setPadding(new Insets(5));
+
+        // Create the file menu
+        Menu fileMenu = new Menu("File");
+
+        // Create the file menu items
+        MenuItem quitMenuItem = new MenuItem("Quit");
+        quitMenuItem.setOnAction(e -> quit());
+
+        // Add the file menu items to the file menu
+        fileMenu.getItems().add(quitMenuItem);
+
+        // Create the navigation menu
+        Menu navigationMenu = new Menu("Navigation");
+
+        // Create the navigation menu items
+        MenuItem calendarMenuItem = new MenuItem("Calendar");
+        calendarMenuItem.setOnAction(e -> showCalendarScreen());
+
+        MenuItem customersMenuItem = new MenuItem("Customers");
+        customersMenuItem.setOnAction(e -> showCustomerScreen());
+
+        MenuItem reportsMenuItem = new MenuItem("Reports");
+
+        // Add the navigation menu items to the navigation menu
+        navigationMenu.getItems().addAll(calendarMenuItem, customersMenuItem, reportsMenuItem);
+
+        // Add the menus to the menu bar
+        menuBar.getMenus().addAll(fileMenu, navigationMenu);
+
+        return menuBar;
+    }
+
+    private void quit() {
+        Platform.exit();
     }
 
 }

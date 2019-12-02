@@ -36,6 +36,8 @@ import static java.util.Objects.requireNonNull;
  */
 public class CustomerForm extends Control {
 
+    private Customer customer;
+
     private final AddressDao addressDao = new AddressDao();
 
     private final CountryDao countryDao = new CountryDao();
@@ -435,6 +437,7 @@ public class CustomerForm extends Control {
      * @param customer The customer values to set.
      */
     public final void setInitialValues(Customer customer) {
+        this.customer = customer;
         setName(customer.getName());
         setActive(customer.isActive());
         setAddress(customer.getAddress().getAddress());
@@ -528,7 +531,7 @@ public class CustomerForm extends Control {
             );
         }
 
-        Optional<Address> maybeAddress = addressDao.findByAddressAndCityId(getAddress(), customerCity.getId());
+        Optional<Address> maybeAddress = addressDao.findByProperties(getAddress(), getAddress2(), getPostalCode(), getPhone(), customerCity.getId());
 
         if (maybeAddress.isPresent()) {
             customerAddress = maybeAddress.get();
@@ -538,18 +541,18 @@ public class CustomerForm extends Control {
         }
 
         if (isValid()) {
-            Customer customer = new Customer(
-                    -1,
-                    getName(),
-                    isActive(),
-                    customerAddress,
-                    SchedulingApplication.USER.getUserName(),
-                    SchedulingApplication.USER.getUserName(),
-                    Instant.now(),
-                    Instant.now()
+            getOnSubmit().accept(
+                    new Customer(
+                            customer != null ? customer.getId() : -1,
+                            getName(),
+                            isActive(),
+                            customerAddress,
+                            customer != null ? customer.getCreatedBy() : SchedulingApplication.USER.getUserName(),
+                            SchedulingApplication.USER.getUserName(),
+                            customer != null ? customer.getCreatedAt() : Instant.now(),
+                            Instant.now()
+                    )
             );
-
-            getOnSubmit().accept(customer);
         } else {
             System.out.println(getError());
         }

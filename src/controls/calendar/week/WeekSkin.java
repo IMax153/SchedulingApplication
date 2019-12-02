@@ -27,9 +27,9 @@ import utilities.DateUtils;
  * @author maxbrown
  */
 public class WeekSkin extends SkinBase<Week> {
-
+    
     private final GridPane grid;
-
+    
     public WeekSkin(Week week) {
         super(week);
 
@@ -68,7 +68,7 @@ public class WeekSkin extends SkinBase<Week> {
         // Update the view when the calendar date changes
         week.getCalendar().dateProperty().addListener(e -> updateView());
     }
-
+    
     private void updateView() {
         // Clear the grid
         grid.getChildren().clear();
@@ -105,7 +105,7 @@ public class WeekSkin extends SkinBase<Week> {
         // Get the day of the month for the first day of the week
         LocalDate date = view.getCalendar().getDate();
         LocalDate dayOfMonth = DateUtils.toFirstDayOfWeek(date, dayOfWeek);
-
+        
         for (int i = 0; i < 7; i++) {
             // Create a container for the labels
             VBox labelContainer = new VBox();
@@ -117,14 +117,13 @@ public class WeekSkin extends SkinBase<Week> {
             dayLabel.getStyleClass().add("day-label");
             dayLabel.setText(dayOfWeek.getDisplayName(TextStyle.SHORT_STANDALONE, Locale.getDefault()).toUpperCase());
             dayLabel.setAlignment(Pos.CENTER);
-            GridPane.setHgrow(dayLabel, Priority.ALWAYS);
 
             // Create the date label
             Label dateLabel = new Label();
             dateLabel.getStyleClass().add("date-label");
             dateLabel.setText(Integer.toString(dayOfMonth.getDayOfMonth()));
             dateLabel.setAlignment(Pos.CENTER);
-            GridPane.setHgrow(dateLabel, Priority.ALWAYS);
+            dateLabel.setMinWidth(50);
 
             // Add the labels to the container
             labelContainer.getChildren().addAll(dayLabel, dateLabel);
@@ -150,5 +149,5 @@ public class WeekSkin extends SkinBase<Week> {
         // Add the content to the grid
         grid.add(content, 0, 1, 7, 1);
     }
-
+    
 }

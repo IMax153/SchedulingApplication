@@ -99,6 +99,46 @@ public class AppointmentDao extends Dao<Appointment> {
     }
 
     /**
+     * Gets all {@link Appointment}s for the specified {@link User}.
+     *
+     * @param user The user whose appointments should be fetched.
+     * @return The list of appointments.
+     */
+    public List<Optional<Appointment>> findAllForUser(User user) {
+        List<Optional<Appointment>> appointments = new ArrayList<>();
+
+        try {
+            PreparedStatement pst = connection.prepareStatement(
+                    "SELECT * FROM appointment as ap "
+                    + "INNER JOIN customer AS cu "
+                    + "ON ap.customerId = cu.customerId "
+                    + "INNER JOIN user as u "
+                    + "ON ap.userId = u.userId "
+                    + "INNER JOIN address AS ad "
+                    + "ON cu.addressId = ad.addressId "
+                    + "INNER JOIN city AS ci "
+                    + "ON ad.cityId = ci.cityId "
+                    + "INNER JOIN country AS co "
+                    + "ON ci.countryId = co.countryId "
+                    + "WHERE ap.userId = ?"
+            );
+
+            pst.setInt(1, user.getId());
+
+            ResultSet rs = pst.executeQuery();
+
+            while (rs.next()) {
+                Appointment appointment = getAppointmentFromResultSet(rs);
+                appointments.add(Optional.of(appointment));
+            }
+        } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
+        }
+
+        return appointments;
+    }
+
+    /**
      * Adds an {@link Appointment}.
      *
      * @param appointment The appointment to add.

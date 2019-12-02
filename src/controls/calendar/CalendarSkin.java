@@ -9,7 +9,10 @@ import controls.dialog.appointment.AppointmentDialog;
 import events.AppointmentEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.SkinBase;
@@ -106,6 +109,34 @@ public class CalendarSkin extends SkinBase<Calendar> {
 
         // Listen for changes to the view
         calendar.selectedViewProperty().addListener((obs, oldView, newView) -> root.setCenter(calendar.getSelectedView()));
+
+        // Display an alert to the user if an appointment is within 15 minutes
+        Platform.runLater(()
+                -> calendar.upcomingAppointments().forEach(appointment -> {
+                    StringBuilder sb = new StringBuilder();
+
+                    sb.append("Appointment");
+                    sb.append(System.getProperty("line.separator"));
+
+                    sb.append("Title: ");
+                    sb.append(appointment.getTitle());
+                    sb.append(System.getProperty("line.separator"));
+
+                    sb.append("Type: ");
+                    sb.append(appointment.getType());
+                    sb.append(System.getProperty("line.separator"));
+
+                    sb.append("With: ");
+                    sb.append(appointment.getCustomer().getName());
+
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Upcoming Appointment");
+                    alert.setHeaderText("You have the following appointment occurring within the next 15 minutes:");
+                    alert.setContentText(sb.toString());
+
+                    alert.showAndWait();
+                })
+        );
     }
 
     private void updateDateLabel(LocalDate date) {

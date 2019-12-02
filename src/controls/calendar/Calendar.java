@@ -5,16 +5,20 @@
  */
 package controls.calendar;
 
+import application.SchedulingApplication;
 import controls.calendar.month.Month;
 import controls.calendar.week.Week;
 import dao.AppointmentDao;
 import events.AppointmentEvent;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.temporal.WeekFields;
+import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -24,6 +28,7 @@ import javafx.scene.control.Skin;
 import models.Appointment;
 
 import static java.util.Objects.requireNonNull;
+import java.util.Optional;
 
 /**
  * A control which handles the display and manipulation of calendar data.
@@ -330,7 +335,7 @@ public class Calendar extends Control {
     private void refreshAppointments() {
         // Get all appointments and add them to the calendar
         getAppointments().clear();
-        appointmentDao.findAll().forEach(oa -> oa.ifPresent(a -> getAppointments().add(a)));
+        appointmentDao.findAllForUser(SchedulingApplication.USER).forEach(oa -> oa.ifPresent(a -> getAppointments().add(a)));
     }
 
     private void newAppointment(Appointment appointment) {
@@ -346,6 +351,31 @@ public class Calendar extends Control {
     private void deleteAppointment(Appointment appointment) {
         appointmentDao.delete(appointment.getId());
         refreshAppointments();
+    }
+
+    /**
+     * Returns a list of {@link Appointment}s within 15 minutes.
+     *
+     * @return The list of appointments.
+     */
+    public final List<Appointment> upcomingAppointments() {
+        // Functional programming allows for a more declarative mechanism for 
+        // data manipulation. For this method, there are several consecutive 
+        // manipulations to the list of Optional<Appointment> that must be 
+        // performed. To ensure that the intent of the code remains clear, 
+        // concise, and efficient, the method makes use of several lambda expressions.
+        return appointmentDao.findAllForUser(SchedulingApplication.USER).stream()
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .filter(appointment -> isWithin15Minutes(appointment.getInterval().getStartDateTime()))
+                .collect(Collectors.toList());
+    }
+
+    private boolean isWithin15Minutes(LocalDateTime time) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime in15Minutes = now.plusMinutes(15);
+
+        return time.isAfter(now) && time.isBefore(in15Minutes);
     }
 
 }

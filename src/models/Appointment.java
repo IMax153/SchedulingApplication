@@ -6,14 +6,13 @@
 package models;
 
 import java.time.Instant;
-import java.util.Comparator;
 
 /**
  * Class representing an appointment within the application.
  *
  * @author mab90
  */
-public class Appointment extends Entity implements Comparator<Appointment>, Comparable<Interval> {
+public class Appointment extends Entity {
 
     private String title;
 
@@ -287,30 +286,6 @@ public class Appointment extends Entity implements Comparator<Appointment>, Comp
         sb.append("]");
 
         return sb.toString();
-    }
-
-    /**
-     * The {@link Comparator} implementation for the {@link Appointment} class.
-     * Uses the {@link Appointment#interval} to compare the two objects.
-     *
-     * @param a1 The first appointment.
-     * @param a2 The second appointment.
-     * @return The comparison.
-     */
-    @Override
-    public int compare(Appointment a1, Appointment a2) {
-        return a1.interval.compare(a1.interval, a2.interval);
-    }
-
-    /**
-     * The {@link Comparable} implementation for the {@link Appointment} class.
-     *
-     * @param appointment The appointment to compare.
-     * @return The comparison.
-     */
-    @Override
-    public int compareTo(Interval appointment) {
-        return this.interval.compareTo(interval);
     }
 
 }

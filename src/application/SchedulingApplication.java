@@ -70,6 +70,7 @@ public class SchedulingApplication extends Application {
         loginForm.setOnLogin(authenticatedUser -> {
             loginForm.fireEvent(new NavigationEvent(loginForm, loginForm, authenticatedUser));
             UserLogger.log(authenticatedUser);
+
         });
 
         // Set the initial scene view to the login form

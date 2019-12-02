@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Comparator;
 
 import static java.util.Objects.requireNonNull;
 import utilities.DateUtils;
@@ -21,7 +20,7 @@ import utilities.DateUtils;
  *
  * @author mab90
  */
-public class Interval implements Comparator<Interval>, Comparable<Interval> {
+public class Interval {
 
     /**
      * The default date of the interval.
@@ -128,12 +127,20 @@ public class Interval implements Comparator<Interval>, Comparable<Interval> {
         this.endTime = requireNonNull(endTime);
         this.zoneId = requireNonNull(zoneId);
 
+        if (startDateTime == null) {
+            startDateTime = LocalDateTime.of(startDate, startTime);
+        }
+
+        if (endDateTime == null) {
+            endDateTime = LocalDateTime.of(endDate, endTime);
+        }
+
         if (zonedStartDateTime == null) {
-            zonedStartDateTime = startDate.atStartOfDay(DateUtils.DEFAULT_ZONE_ID);
+            zonedStartDateTime = DateUtils.toZonedDateTime(startDate, startTime);
         }
 
         if (zonedEndDateTime == null) {
-            zonedEndDateTime = startDate.atStartOfDay(DateUtils.DEFAULT_ZONE_ID);
+            zonedEndDateTime = DateUtils.toZonedDateTime(endDate, endTime);
         }
 
         // Check to make sure that the start date is before the end date
@@ -172,6 +179,15 @@ public class Interval implements Comparator<Interval>, Comparable<Interval> {
     }
 
     /**
+     * Gets the start datetime of the interval.
+     *
+     * @return The start datetime of the interval.
+     */
+    public LocalDateTime getStartDateTime() {
+        return startDateTime;
+    }
+
+    /**
      * Gets the zoned start datetime of the interval.
      *
      * @return The zoned start datetime of the interval.
@@ -196,6 +212,15 @@ public class Interval implements Comparator<Interval>, Comparable<Interval> {
      */
     public LocalTime getEndTime() {
         return endTime;
+    }
+
+    /**
+     * Gets the end datetime of the interval.
+     *
+     * @return The end datetime of the interval.
+     */
+    public LocalDateTime getEndDateTime() {
+        return endDateTime;
     }
 
     /**
@@ -259,35 +284,6 @@ public class Interval implements Comparator<Interval>, Comparable<Interval> {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        Interval other = (Interval) o;
-        return startDate.equals(other.startDate)
-                && startTime.equals(other.startTime)
-                && endDate.equals(other.endDate)
-                && endTime.equals(other.endTime)
-                && zoneId.equals(other.zoneId);
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 7919;
-        int result = 1;
-        result = result * prime + startDate.hashCode();
-        result = result * prime + startTime.hashCode();
-        result = result * prime + endDate.hashCode();
-        result = result * prime + startTime.hashCode();
-        result = result * prime + zoneId.hashCode();
-        return result;
-    }
-
-    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         String newline = System.getProperty("line.separator");
@@ -316,29 +312,6 @@ public class Interval implements Comparator<Interval>, Comparable<Interval> {
         sb.append("]");
 
         return sb.toString();
-    }
-
-    /**
-     * The {@link Comparator} implementation for the {@link Interval} class.
-     *
-     * @param interval1 The first interval.
-     * @param interval2 The second interval.
-     * @return The comparison.
-     */
-    @Override
-    public int compare(Interval interval1, Interval interval2) {
-        return interval1.zonedStartDateTime.compareTo(interval2.zonedStartDateTime);
-    }
-
-    /**
-     * The {@link Comparable} implementation for the {@link Interval} class.
-     *
-     * @param interval The interval to compare.
-     * @return The comparison.
-     */
-    @Override
-    public int compareTo(Interval interval) {
-        return this.zonedStartDateTime.compareTo(interval.zonedStartDateTime);
     }
 
 }

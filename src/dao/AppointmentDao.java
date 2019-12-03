@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.YearMonth;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -45,7 +46,7 @@ public class AppointmentDao extends Dao<Appointment> {
                     + "ON ad.cityId = ci.cityId "
                     + "INNER JOIN country AS co "
                     + "ON ci.countryId = co.countryId "
-                    + "WHERE ap.appointmentId = ?"
+                    + "WHERE ap.appointmentId = ? "
             );
 
             pst.setInt(1, id);
@@ -84,7 +85,8 @@ public class AppointmentDao extends Dao<Appointment> {
                     + "INNER JOIN city AS ci "
                     + "ON ad.cityId = ci.cityId "
                     + "INNER JOIN country AS co "
-                    + "ON ci.countryId = co.countryId"
+                    + "ON ci.countryId = co.countryId "
+                    + "ORDER BY ap.start"
             );
 
             ResultSet rs = pst.executeQuery();
@@ -122,7 +124,8 @@ public class AppointmentDao extends Dao<Appointment> {
                     + "ON ad.cityId = ci.cityId "
                     + "INNER JOIN country AS co "
                     + "ON ci.countryId = co.countryId "
-                    + "WHERE ap.userId = ?"
+                    + "WHERE ap.userId = ? "
+                    + "ORDER BY ap.start"
             );
 
             pst.setInt(1, user.getId());
@@ -182,6 +185,9 @@ public class AppointmentDao extends Dao<Appointment> {
                     + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP, ?)"
             );
 
+            Timestamp startTimestamp = zonedDateTimeToTimestamp(appointment.getInterval().getZonedStartDateTime());
+            Timestamp endTimestamp = zonedDateTimeToTimestamp(appointment.getInterval().getZonedEndDateTime());
+
             pst.setInt(1, appointment.getCustomer().getId());
             pst.setInt(2, appointment.getUser().getId());
             pst.setString(3, appointment.getTitle());
@@ -190,8 +196,8 @@ public class AppointmentDao extends Dao<Appointment> {
             pst.setString(6, appointment.getContact());
             pst.setString(7, appointment.getType());
             pst.setString(8, appointment.getUrl());
-            pst.setTimestamp(9, Timestamp.from(appointment.getInterval().getZonedStartDateTime().toInstant()));
-            pst.setTimestamp(10, Timestamp.from(appointment.getInterval().getZonedEndDateTime().toInstant()));
+            pst.setTimestamp(9, startTimestamp);
+            pst.setTimestamp(10, endTimestamp);
             pst.setString(11, appointment.getCreatedBy());
             pst.setString(12, appointment.getUpdatedBy());
 
@@ -219,6 +225,9 @@ public class AppointmentDao extends Dao<Appointment> {
                     + "WHERE appointmentId = ?"
             );
 
+            Timestamp startTimestamp = zonedDateTimeToTimestamp(appointment.getInterval().getZonedStartDateTime());
+            Timestamp endTimestamp = zonedDateTimeToTimestamp(appointment.getInterval().getZonedEndDateTime());
+
             pst.setInt(1, appointment.getCustomer().getId());
             pst.setInt(2, appointment.getUser().getId());
             pst.setString(3, appointment.getTitle());
@@ -227,8 +236,8 @@ public class AppointmentDao extends Dao<Appointment> {
             pst.setString(6, appointment.getContact());
             pst.setString(7, appointment.getType());
             pst.setString(8, appointment.getUrl());
-            pst.setTimestamp(9, Timestamp.from(appointment.getInterval().getZonedStartDateTime().toInstant()));
-            pst.setTimestamp(10, Timestamp.from(appointment.getInterval().getZonedEndDateTime().toInstant()));
+            pst.setTimestamp(9, startTimestamp);
+            pst.setTimestamp(10, endTimestamp);
             pst.setString(11, appointment.getUpdatedBy());
             pst.setInt(12, appointment.getId());
 
@@ -327,8 +336,8 @@ public class AppointmentDao extends Dao<Appointment> {
         );
 
         Interval interval = new Interval(
-                rs.getTimestamp("ap.start").toLocalDateTime().atZone(DateUtils.DEFAULT_ZONE_ID),
-                rs.getTimestamp("ap.end").toLocalDateTime().atZone(DateUtils.DEFAULT_ZONE_ID)
+                rs.getTimestamp("ap.start").toLocalDateTime().atZone(DateUtils.UTC_ZONE_ID).withZoneSameInstant(DateUtils.DEFAULT_ZONE_ID),
+                rs.getTimestamp("ap.end").toLocalDateTime().atZone(DateUtils.UTC_ZONE_ID).withZoneSameInstant(DateUtils.DEFAULT_ZONE_ID)
         );
 
         return new Appointment(
@@ -347,5 +356,9 @@ public class AppointmentDao extends Dao<Appointment> {
                 rs.getTimestamp("ap.createDate").toInstant(),
                 rs.getTimestamp("ap.lastUpdate").toInstant()
         );
+    }
+
+    private Timestamp zonedDateTimeToTimestamp(ZonedDateTime date) {
+        return Timestamp.valueOf(date.withZoneSameInstant(DateUtils.UTC_ZONE_ID).toLocalDateTime());
     }
 }

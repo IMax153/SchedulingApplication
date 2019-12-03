@@ -21,6 +21,10 @@ and open the template in the editor.
     -fx-text-fill: -black;
 }
 
+.week > .time-header {
+    -fx-text-fill: -gray;
+}
+
 .week > .label-container > .day-label {
     -fx-font-size: 12;
     -fx-text-fill: -gray;
@@ -40,4 +44,15 @@ and open the template in the editor.
 .week > .scroll-pane {
     -fx-background-insets: 0;
     -fx-border-width: 0;
+}
+
+.week > .scroll-pane > .viewport > * > .content > .time-labels > .label-container {
+    -fx-border-width: 0 1 1 0;
+    -fx-border-style: solid;
+    -fx-border-color: -light-gray;
+}
+
+.week > .scroll-pane > .viewport > * > .content > .time-labels > .label-container > .time-label {
+    -fx-font-size: 10;
+    -fx-text-fill: -gray;
 }

@@ -11,8 +11,11 @@ import dao.CustomerDao;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZonedDateTime;
 import javafx.util.Pair;
+import java.util.Optional;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -30,6 +33,7 @@ import models.User;
 import utilities.DateUtils;
 
 import static java.util.Objects.requireNonNull;
+import java.util.stream.Collectors;
 
 /**
  * A {@link Control} used for creating and editing {@link Appointment}s.
@@ -48,11 +52,9 @@ public class AppointmentForm extends Control {
 
     private Appointment appointment;
 
-    private final AppointmentDao appointmentDao;
+    private final AppointmentDao appointmentDao = new AppointmentDao();
 
     public AppointmentForm() {
-        this.appointmentDao = new AppointmentDao();
-
         String stylesheet = getClass().getResource("appointment-form.css").toExternalForm();
         getStylesheets().add(stylesheet);
 
@@ -364,6 +366,20 @@ public class AppointmentForm extends Control {
         endTimeProperty().set(endTime);
     }
 
+    /**
+     * Returns a new {@link Interval} constructed from the
+     * {@link AppointmentForm#date},  {@link AppointmentForm#startTime}, and
+     * {@link AppointmentForm#endTime}.
+     *
+     * @return The interval.
+     */
+    public final Interval getInterval() {
+        ZonedDateTime startZonedDateTime = DateUtils.toZonedDateTime(getDate(), getStartTime());
+        ZonedDateTime endZonedDateTime = DateUtils.toZonedDateTime(getDate(), getEndTime());
+
+        return new Interval(startZonedDateTime, endZonedDateTime);
+    }
+
     private final ObjectProperty<Customer> customer = new SimpleObjectProperty<>(this, "customer", null);
 
     /**
@@ -486,7 +502,7 @@ public class AppointmentForm extends Control {
 
         if (isValid()) {
             User user = SchedulingApplication.USER;
-            Interval interval = new Interval(DateUtils.toZonedDateTime(getDate(), getStartTime()), DateUtils.toZonedDateTime(getDate(), getEndTime()));
+            Interval interval = getInterval();
 
             switch (mode) {
                 case NEW:
@@ -566,6 +582,19 @@ public class AppointmentForm extends Control {
         LocalTime workingHoursStart = LocalTime.of(9, 0);
         LocalTime workingHoursEnd = LocalTime.of(17, 0);
 
+        List<Appointment> appointments = appointmentDao.findAllForUser(SchedulingApplication.USER)
+                .stream()
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
+
+        // Filter out the appointment being edited if any
+        if (appointment != null) {
+            appointments = appointments.stream().filter(a -> a.getId() != appointment.getId()).collect(Collectors.toList());
+        }
+
+        boolean isIntersectingOtherAppointment = appointments.stream().anyMatch(a -> a.getInterval().overlaps(getInterval()));
+
         if (getTitle() == null || getTitle().isEmpty()) {
             setError("Please provide a title");
             setValid(false);
@@ -607,6 +636,9 @@ public class AppointmentForm extends Control {
                 || getEndTime().isBefore(workingHoursStart)
                 || getEndTime().isAfter(workingHoursEnd)) {
             setError("Appointments can only be made from 9am to 5pm");
+            setValid(false);
+        } else if (isIntersectingOtherAppointment) {
+            setError("Another appointment is currently scheduled for this time");
             setValid(false);
         } else {
             setValid(true);

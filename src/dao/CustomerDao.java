@@ -217,13 +217,23 @@ public class CustomerDao extends Dao<Customer> {
     @Override
     public boolean delete(int id) {
         try {
-            PreparedStatement pst = connection.prepareStatement(
-                    "DELETE FROM customer WHERE customerId = ?"
+            PreparedStatement pst1 = connection.prepareStatement(
+                    "DELETE FROM appointment "
+                    + "WHERE customerId = ?"
             );
 
-            pst.setInt(1, id);
+            pst1.setInt(1, id);
 
-            return pst.executeUpdate() == 1;
+            PreparedStatement pst2 = connection.prepareStatement(
+                    "DELETE c.*, a.*"
+                    + "FROM customer AS c, address AS a "
+                    + "WHERE c.customerId = ? AND a.addressId = ?"
+            );
+
+            pst2.setInt(1, id);
+            pst2.setInt(2, id);
+
+            return pst1.executeUpdate() > 0 && pst2.executeUpdate() > 0;
         } catch (SQLException sqle) {
             System.out.println(sqle.getMessage());
         }

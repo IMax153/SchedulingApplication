@@ -22,7 +22,7 @@
 	 - [x] Monthly View
  - [x] Exception Control Requirements (Must include two of the following four)
 	 - [x] Scheduling an appointment outside business hours
-	 - [ ] Scheduling overlapping appointments
+	 - [x] Scheduling overlapping appointments
 	 - [x] Entering nonexistent or invalid customer data
 	 - [x] Entering an incorrect username and password
  - [x] Lambda Expression Requirements

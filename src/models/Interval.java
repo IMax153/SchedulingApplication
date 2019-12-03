@@ -283,6 +283,22 @@ public class Interval {
         return maxStart.isBefore(minEnd) || maxStart.equals(minEnd);
     }
 
+    /**
+     * Checks whether two {@link Interval}s overlap one another. If the the ends
+     * of the {@link Interval} are abutting, but not overlapping, the method
+     * returns false.
+     *
+     * @param other The other interval.
+     * @return True if the intervals are overlapping, otherwise false. Also
+     * returns false if the intervals are only abutting one another (but not
+     * overlapping).
+     */
+    public boolean overlaps(Interval other) {
+        return other.equals(this)
+                || (getStartDateTime().compareTo(other.getEndDateTime()) < 0
+                && other.getStartDateTime().compareTo(getEndDateTime()) < 0);
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

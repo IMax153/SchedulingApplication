@@ -16,14 +16,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javafx.beans.InvalidationListener;
 import javafx.scene.control.Label;
 import javafx.scene.control.SkinBase;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import models.Appointment;
 import utilities.DateUtils;
@@ -80,7 +78,7 @@ public class WeekDaySkin extends SkinBase<WeekDay> {
 
             timeSlots.add(timeSlot);
 
-            Region timeSlotView = timeSlot.getView();
+            HBox timeSlotView = timeSlot.getView();
 
             root.getChildren().add(timeSlotView);
         }

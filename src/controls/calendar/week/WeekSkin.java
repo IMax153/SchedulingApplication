@@ -6,16 +6,23 @@
 package controls.calendar.week;
 
 import java.time.DayOfWeek;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.time.format.TextStyle;
 import java.time.temporal.WeekFields;
 import java.util.Locale;
+import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SkinBase;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
@@ -27,9 +34,11 @@ import utilities.DateUtils;
  * @author maxbrown
  */
 public class WeekSkin extends SkinBase<Week> {
-    
+
     private final GridPane grid;
-    
+
+    private final DateTimeFormatter timeDTF = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);
+
     public WeekSkin(Week week) {
         super(week);
 
@@ -40,12 +49,19 @@ public class WeekSkin extends SkinBase<Week> {
         grid.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         grid.setAlignment(Pos.CENTER);
 
+        // Create a column constraint for the time label column
+        ColumnConstraints timeColumnConstraints = new ColumnConstraints();
+        timeColumnConstraints.setPercentWidth(5);
+
+        // Add the time label column constraints to the grid
+        grid.getColumnConstraints().add(timeColumnConstraints);
+
         // Create seven columns to represent each day of the week
-        ColumnConstraints columnConstraints = new ColumnConstraints();
-        columnConstraints.setPercentWidth(100d / 7d);
+        ColumnConstraints weekdayColumnConstraints = new ColumnConstraints();
+        weekdayColumnConstraints.setPercentWidth(95d / 7d);
         for (int i = 0; i < 7; i++) {
-            // Add the column constraints to the grid
-            grid.getColumnConstraints().add(columnConstraints);
+            // Add the weekday column constraints to the grid
+            grid.getColumnConstraints().add(weekdayColumnConstraints);
         }
 
         // Create header row constraints
@@ -68,7 +84,7 @@ public class WeekSkin extends SkinBase<Week> {
         // Update the view when the calendar date changes
         week.getCalendar().dateProperty().addListener(e -> updateView());
     }
-    
+
     private void updateView() {
         // Clear the grid
         grid.getChildren().clear();
@@ -79,23 +95,31 @@ public class WeekSkin extends SkinBase<Week> {
         // Create the content grid view
         GridPane contentGrid = new GridPane();
         contentGrid.getStyleClass().add("content");
+        contentGrid.setMinSize(0, 0);
+        contentGrid.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        contentGrid.setAlignment(Pos.CENTER);
 
         // Create the content scroller
         ScrollPane content = new ScrollPane(contentGrid);
-        content.setFitToHeight(true);
+//        content.setFitToHeight(true);
         content.setFitToWidth(true);
         content.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
         // Create one row to represent the week days
         RowConstraints rowConstraints = new RowConstraints();
-        rowConstraints.setPercentHeight(100);
+        rowConstraints.setVgrow(Priority.ALWAYS);
         contentGrid.getRowConstraints().add(rowConstraints);
 
+        // Create a column to represent the time labels
+        ColumnConstraints timeColumnConstraints = new ColumnConstraints();
+        timeColumnConstraints.setPercentWidth(5);
+        contentGrid.getColumnConstraints().add(timeColumnConstraints);
+
         // Create seven columns to represent each week day 
-        ColumnConstraints columnConstraints = new ColumnConstraints();
-        columnConstraints.setPercentWidth(100d / 7d);
+        ColumnConstraints weekdayColumnConstraints = new ColumnConstraints();
+        weekdayColumnConstraints.setPercentWidth(95d / 7d);
         for (int i = 0; i < 7; i++) {
-            contentGrid.getColumnConstraints().add(columnConstraints);
+            contentGrid.getColumnConstraints().add(weekdayColumnConstraints);
         }
 
         // Get the first day of the week for the view date
@@ -105,7 +129,39 @@ public class WeekSkin extends SkinBase<Week> {
         // Get the day of the month for the first day of the week
         LocalDate date = view.getCalendar().getDate();
         LocalDate dayOfMonth = DateUtils.toFirstDayOfWeek(date, dayOfWeek);
-        
+
+        // Get the start and end times for the time labels
+        LocalTime startTime = LocalTime.of(0, 0);
+        LocalTime endTime = LocalTime.of(23, 59);
+        Duration duration = Duration.ofMinutes(15);
+
+        // Add time header label to the grid
+        Label timeHeaderLabel = new Label("Zone: " + DateUtils.DEFAULT_ZONE_ID.getDisplayName(TextStyle.SHORT, Locale.getDefault()));
+        timeHeaderLabel.getStyleClass().add("time-header");
+        GridPane.setHalignment(timeHeaderLabel, HPos.CENTER);
+        grid.add(timeHeaderLabel, 0, 0);
+
+        // Add time labels to the week grid
+        VBox timeLabels = new VBox();
+        timeLabels.getStyleClass().add("time-labels");
+
+        for (LocalDateTime start = date.atTime(startTime); !start.isAfter(date.atTime(endTime)); start = start.plus(duration)) {
+            HBox labelContainer = new HBox();
+            labelContainer.getStyleClass().add("label-container");
+            labelContainer.setAlignment(Pos.TOP_CENTER);
+            labelContainer.setMinSize(0, 40);
+            labelContainer.setMaxSize(Double.MAX_VALUE, 40);
+            labelContainer.getStyleClass().add("time-label");
+
+            Label timeLabel = new Label(start.format(timeDTF));
+            timeLabel.getStyleClass().add("time-label");
+
+            labelContainer.getChildren().add(timeLabel);
+            timeLabels.getChildren().add(labelContainer);
+        }
+
+        contentGrid.add(timeLabels, 0, 0);
+
         for (int i = 0; i < 7; i++) {
             // Create a container for the labels
             VBox labelContainer = new VBox();
@@ -134,12 +190,12 @@ public class WeekSkin extends SkinBase<Week> {
                 dateLabel.getStyleClass().add("today");
             }
 
-            // Add the header to the grid
-            grid.add(labelContainer, i, 0);
+            // Add the header to the grid, accounting for time labels
+            grid.add(labelContainer, i + 1, 0);
 
-            // Create the week day and add to the grid
+            // Create the week day and add to the grid, accounting for time labels
             WeekDay weekDay = new WeekDay(view, dayOfMonth);
-            contentGrid.add(weekDay, i, 0);
+            contentGrid.add(weekDay, i + 1, 0);
 
             // Increment dates
             dayOfWeek = dayOfWeek.plus(1);
@@ -147,7 +203,7 @@ public class WeekSkin extends SkinBase<Week> {
         }
 
         // Add the content to the grid
-        grid.add(content, 0, 1, 7, 1);
+        grid.add(content, 0, 1, 8, 1);
     }
-    
+
 }

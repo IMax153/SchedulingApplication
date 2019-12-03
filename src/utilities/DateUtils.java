@@ -31,6 +31,11 @@ public class DateUtils {
     public static final ZoneId DEFAULT_ZONE_ID = ZoneId.systemDefault();
 
     /**
+     * The UTC {@link ZoneId}.
+     */
+    public static final ZoneId UTC_ZONE_ID = ZoneId.of("UTC");
+
+    /**
      * The default {@link Locale} for the {@link System}.
      */
     public static final Locale DEFAULT_LOCALE = Locale.getDefault();
@@ -60,7 +65,7 @@ public class DateUtils {
      * @return The zoned date time.
      */
     public static final ZonedDateTime toZonedDateTime(LocalDate date, LocalTime time) {
-        return ZonedDateTime.of(date, time, DEFAULT_ZONE_ID);
+        return toZonedDateTime(LocalDateTime.of(date, time));
     }
 
     /**
@@ -70,7 +75,7 @@ public class DateUtils {
      * @return The zoned date time.
      */
     public static final ZonedDateTime toZonedDateTime(LocalDateTime date) {
-        return ZonedDateTime.of(date, DEFAULT_ZONE_ID);
+        return date.atZone(DEFAULT_ZONE_ID);
     }
 
     /**

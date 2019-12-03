@@ -15,7 +15,6 @@ import controls.icon.TextIcon;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.util.Locale;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.StringProperty;
@@ -266,7 +265,7 @@ public class AppointmentFormSkin extends SkinBase<AppointmentForm> {
         select.setPromptText(placeholder);
 
         // Get a reference to the start and end of business hours
-        LocalTime startTime = LocalTime.of(8, 0);
+        LocalTime startTime = LocalTime.of(9, 0);
         LocalTime endTime = LocalTime.of(17, 0);
 
         // Add all times to the select in 15 minute increments

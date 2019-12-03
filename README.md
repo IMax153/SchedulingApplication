@@ -20,11 +20,12 @@
  - [x] Calendar View 
 	 - [x] Weekly View
 	 - [x] Monthly View
- - [x] Exception Control Requirements (Must include two of the following four)
+ - [x] Exception Control Requirements
 	 - [x] Scheduling an appointment outside business hours
 	 - [x] Scheduling overlapping appointments
 	 - [x] Entering nonexistent or invalid customer data
 	 - [x] Entering an incorrect username and password
+         - [x] Two different types: form data validation, restriction of appointment time scheduling to the hours of 8AM to 5PM (business hours)
  - [x] Lambda Expression Requirements
 	 - [x] First lambda expression justified in detail (see controls.calendar.Calendar#upcomingAppointments)
 	 - [x] Second lambda expression justified in detail (see reports.appointment.AppointmentReport#refreshData)

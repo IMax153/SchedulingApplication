@@ -12,9 +12,9 @@ import controls.icon.GuestsIcon;
 import controls.icon.LinkIcon;
 import controls.icon.LocationIcon;
 import controls.icon.TextIcon;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Locale;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
@@ -34,7 +34,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.util.StringConverter;
 import models.Customer;
-import utilities.DateUtils;
 
 /**
  * The {@link Skin} for the {@link AppoinmentForm}.
@@ -46,6 +45,8 @@ public class AppointmentFormSkin extends SkinBase<AppointmentForm> {
     private final AppointmentForm form;
 
     private final GridPane grid;
+
+    private final DateTimeFormatter timeDTF = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);
 
     public AppointmentFormSkin(AppointmentForm form) {
         super(form);
@@ -264,13 +265,13 @@ public class AppointmentFormSkin extends SkinBase<AppointmentForm> {
         // Add placeholder for the select
         select.setPromptText(placeholder);
 
-        // Get a reference to the start and end times of a day
-        LocalDateTime startOfDay = LocalDateTime.of(DateUtils.getToday(), LocalTime.MIN);
-        LocalDateTime endOfDay = LocalDateTime.of(DateUtils.getToday(), LocalTime.MAX);
+        // Get a reference to the start and end of business hours
+        LocalTime startTime = LocalTime.of(8, 0);
+        LocalTime endTime = LocalTime.of(17, 0);
 
         // Add all times to the select in 15 minute increments
-        for (LocalDateTime dateTime = startOfDay; !dateTime.isAfter(endOfDay); dateTime = dateTime.plusMinutes(15)) {
-            select.getItems().add(dateTime.toLocalTime());
+        for (LocalTime start = startTime; !start.isAfter(endTime); start = start.plusMinutes(15)) {
+            select.getItems().add(start);
         }
 
         // Bind the selected value to the control
@@ -281,13 +282,13 @@ public class AppointmentFormSkin extends SkinBase<AppointmentForm> {
         select.setConverter(new StringConverter<LocalTime>() {
             @Override
             public String toString(LocalTime time) {
-                return time.format(DateTimeFormatter.ofPattern("HH:mm", Locale.getDefault()));
+                return time.format(timeDTF);
             }
 
             @Override
             public LocalTime fromString(String time) {
                 return select.getItems().stream().filter(t -> {
-                    return t.equals(LocalTime.parse(time, DateTimeFormatter.ofPattern("hh:mm a", Locale.getDefault())));
+                    return t.equals(LocalTime.parse(time, timeDTF));
                 }).findFirst().orElse(null);
             }
         });

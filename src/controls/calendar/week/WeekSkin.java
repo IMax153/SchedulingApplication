@@ -101,7 +101,6 @@ public class WeekSkin extends SkinBase<Week> {
 
         // Create the content scroller
         ScrollPane content = new ScrollPane(contentGrid);
-//        content.setFitToHeight(true);
         content.setFitToWidth(true);
         content.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 

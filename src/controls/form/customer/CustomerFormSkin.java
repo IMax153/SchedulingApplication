@@ -13,6 +13,9 @@ import controls.icon.DeskPhoneIcon;
 import controls.icon.GlobeIcon;
 import controls.icon.MailBoxIcon;
 import java.time.Instant;
+import java.util.function.UnaryOperator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.StringProperty;
@@ -24,6 +27,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.SkinBase;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -134,10 +138,10 @@ public class CustomerFormSkin extends SkinBase<CustomerForm> {
         grid.add(createTextField("Enter additional address information", form.address2Property()), column, row++);
 
         // Create the postal code text field
-        grid.add(createTextField("Enter postal code", form.postalCodeProperty()), column, row++);
+        grid.add(createPostalCodeField("Enter postal code", form.postalCodeProperty()), column, row++);
 
         // Create the phone number text field
-        grid.add(createTextField("Enter phone number", form.phoneProperty()), column, row++);
+        grid.add(createPhoneNumberField("Enter phone number", form.phoneProperty()), column, row++);
 
         // Create the city select
         grid.add(createCitySelect(), column, row++);
@@ -174,6 +178,104 @@ public class CustomerFormSkin extends SkinBase<CustomerForm> {
         checkbox.selectedProperty().bindBidirectional(booleanProperty);
 
         return checkbox;
+    }
+
+    private TextField createPostalCodeField(String placeholder, StringProperty postalCodeProperty) {
+        TextField textField = new TextField();
+
+        // Add placeholder for text field
+        textField.setPromptText(placeholder);
+
+        // Bind the text field to the control
+        textField.textProperty().bindBidirectional(postalCodeProperty);
+
+        UnaryOperator<TextFormatter.Change> filter = change -> {
+            if (!change.isContentChange()) {
+                return change;
+            }
+
+            int maxlength = 5;
+
+            if (change.getControlNewText().length() > maxlength || change.getText().matches("\\D+")) {
+                return null;
+            }
+
+            return change;
+        };
+
+        textField.setTextFormatter(new TextFormatter(filter));
+
+        return textField;
+    }
+
+    private TextField createPhoneNumberField(String placeholder, StringProperty phoneProperty) {
+        /**
+         * https://stackoverflow.com/questions/37751922/how-to-format-a-string-in-a-textfield-without-changing-its-value-with-javafx
+         */
+        TextField textField = new TextField();
+
+        // Add placeholder for text field
+        textField.setPromptText(placeholder);
+
+        UnaryOperator<TextFormatter.Change> filter = change -> {
+            if (!change.isContentChange()) {
+                return change;
+            }
+
+            int maxlength = 14;
+            if (change.getControlText().indexOf('(') == -1) {
+                maxlength = 10;
+            }
+
+            if (change.getControlNewText().length() > maxlength || change.getText().matches("\\D+")) {
+                return null;
+            }
+
+            return change;
+        };
+
+        StringConverter<String> converter = new StringConverter<String>() {
+            @Override
+            public String toString(String committedText) {
+                if (committedText == null) {
+                    return textField.getText();
+                }
+
+                if (committedText.matches("(\\d{3}) \\d{3}-\\{4}")) {
+                    return committedText;
+                }
+
+                if (committedText.length() == 10 && !committedText.matches("\\D+")) {
+                    return String.format(
+                            "(%s) %s-%s",
+                            committedText.substring(0, 3),
+                            committedText.substring(3, 6),
+                            committedText.substring(6, 10)
+                    );
+                } else {
+                    throw new IllegalStateException("Unexpected or incomplete phone number value: " + committedText);
+                }
+            }
+
+            @Override
+            public String fromString(String displayedText) {
+                displayedText = displayedText.replaceAll("\\p{Punct}", "");
+                displayedText = displayedText.replaceAll("\\p{Blank}", "");
+
+                if (displayedText.length() != 10) {
+                    return null;
+                }
+
+                return displayedText;
+            }
+        };
+
+        TextFormatter<String> formatter = new TextFormatter<>(converter, "0000000000", filter);
+
+        textField.setTextFormatter(formatter);
+        textField.textProperty().bindBidirectional(phoneProperty);
+
+        return textField;
     }
 
     private ComboBox createCountrySelect() {

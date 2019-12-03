@@ -35,15 +35,15 @@ import static java.util.Objects.requireNonNull;
  * @author maxbrown
  */
 public class CustomerForm extends Control {
-
+    
     private Customer customer;
-
+    
     private final AddressDao addressDao = new AddressDao();
-
+    
     private final CountryDao countryDao = new CountryDao();
-
+    
     private final CityDao cityDao = new CityDao();
-
+    
     public CustomerForm() {
         String stylesheet = getClass().getResource("customer-form.css").toExternalForm();
         getStylesheets().add(stylesheet);
@@ -57,8 +57,10 @@ public class CustomerForm extends Control {
         cityDao.findAll().forEach(
                 maybeCity -> maybeCity.ifPresent(c -> getCities().add(c))
         );
+        
+        phoneProperty().addListener((obs, o, n) -> System.out.println(n));
     }
-
+    
     private final ObservableList<Country> countries = FXCollections.observableArrayList();
 
     /**
@@ -69,7 +71,7 @@ public class CustomerForm extends Control {
     public final ObservableList<Country> getCountries() {
         return countries;
     }
-
+    
     private final ObservableList<City> cities = FXCollections.observableArrayList();
 
     /**
@@ -80,8 +82,8 @@ public class CustomerForm extends Control {
     public final ObservableList<City> getCities() {
         return cities;
     }
-
-    private final StringProperty name = new SimpleStringProperty(this, "name", "");
+    
+    private final StringProperty name = new SimpleStringProperty(this, "name");
 
     /**
      * A property containing the value of the {@link Customer}'s name.
@@ -110,7 +112,7 @@ public class CustomerForm extends Control {
         requireNonNull(name);
         nameProperty().set(name);
     }
-
+    
     private final BooleanProperty active = new SimpleBooleanProperty(this, "active", true);
 
     /**
@@ -141,8 +143,8 @@ public class CustomerForm extends Control {
         requireNonNull(active);
         activeProperty().set(active);
     }
-
-    private final StringProperty address = new SimpleStringProperty(this, "address", "");
+    
+    private final StringProperty address = new SimpleStringProperty(this, "address");
 
     /**
      * A property containing the value of the {@link Customer}'s {@link Address}
@@ -172,8 +174,8 @@ public class CustomerForm extends Control {
         requireNonNull(address);
         addressProperty().set(address);
     }
-
-    private final StringProperty address2 = new SimpleStringProperty(this, "address2", "");
+    
+    private final StringProperty address2 = new SimpleStringProperty(this, "address2");
 
     /**
      * A property containing the value of the {@link Customer}'s {@link Address}
@@ -203,8 +205,8 @@ public class CustomerForm extends Control {
         requireNonNull(address2);
         address2Property().set(address2);
     }
-
-    private final StringProperty postalCode = new SimpleStringProperty(this, "postalCode", "");
+    
+    private final StringProperty postalCode = new SimpleStringProperty(this, "postalCode");
 
     /**
      * A property containing the value of the {@link Customer}'s {@link Address}
@@ -234,8 +236,8 @@ public class CustomerForm extends Control {
         requireNonNull(postalCode);
         postalCodeProperty().set(postalCode);
     }
-
-    private final StringProperty phone = new SimpleStringProperty(this, "phone", "");
+    
+    private final StringProperty phone = new SimpleStringProperty(this, "phone");
 
     /**
      * A property containing the value of the {@link Customer} phone number.
@@ -264,7 +266,7 @@ public class CustomerForm extends Control {
         requireNonNull(phone);
         phoneProperty().set(phone);
     }
-
+    
     private final ObjectProperty<City> city = new SimpleObjectProperty<>(this, "city", null);
 
     /**
@@ -295,7 +297,7 @@ public class CustomerForm extends Control {
         requireNonNull(city);
         cityProperty().set(city);
     }
-
+    
     private final ObjectProperty<Country> country = new SimpleObjectProperty<>(this, "country", null);
 
     /**
@@ -326,8 +328,8 @@ public class CustomerForm extends Control {
         requireNonNull(country);
         countryProperty().set(country);
     }
-
-    private final StringProperty error = new SimpleStringProperty(this, "error", "");
+    
+    private final StringProperty error = new SimpleStringProperty(this, "error");
 
     /**
      * A property containing the value of the {@link CustomerForm} error.
@@ -356,7 +358,7 @@ public class CustomerForm extends Control {
         requireNonNull(error);
         errorProperty().set(error);
     }
-
+    
     private final BooleanProperty valid = new SimpleBooleanProperty(this, "valid", false);
 
     /**
@@ -388,7 +390,7 @@ public class CustomerForm extends Control {
         requireNonNull(valid);
         validProperty().set(valid);
     }
-
+    
     private final ObjectProperty<Consumer<Customer>> onSubmit = new SimpleObjectProperty<>(this, "onSubmit");
 
     /**
@@ -425,7 +427,7 @@ public class CustomerForm extends Control {
      */
     public final void submit() {
         validateForm();
-
+        
         if (isValid()) {
             submitForm();
         }
@@ -465,8 +467,14 @@ public class CustomerForm extends Control {
         } else if (getPostalCode() == null || getPostalCode().isEmpty()) {
             setError("Please enter a postal code");
             setValid(false);
+        } else if (getPostalCode().length() < 5) {
+            setError("Invalid postal code");
+            setValid(false);
         } else if (getPhone() == null || getPhone().isEmpty()) {
             setError("Please enter a phone number");
+            setValid(false);
+        } else if (getPhone().length() < 14) {
+            setError("Invalid phone number");
             setValid(false);
         } else if (getCity() == null) {
             setError("Please select a city");
@@ -478,7 +486,7 @@ public class CustomerForm extends Control {
             setValid(true);
         }
     }
-
+    
     private void submitForm() {
         Address customerAddress = null;
         Country customerCountry = getCountry();
@@ -488,9 +496,9 @@ public class CustomerForm extends Control {
         if (!countryDao.exists(customerCountry.getName())) {
             countryDao.add(customerCountry);
         }
-
+        
         Optional<Country> maybeCountry = countryDao.findByName(customerCountry.getName());
-
+        
         if (maybeCountry.isPresent()) {
             customerCountry = maybeCountry.get();
         } else {
@@ -503,9 +511,9 @@ public class CustomerForm extends Control {
             customerCity.setCountry(customerCountry);
             cityDao.add(customerCity);
         }
-
+        
         Optional<City> maybeCity = cityDao.findByName(customerCity.getName());
-
+        
         if (maybeCity.isPresent()) {
             customerCity = maybeCity.get();
         } else {
@@ -530,16 +538,16 @@ public class CustomerForm extends Control {
                     )
             );
         }
-
+        
         Optional<Address> maybeAddress = addressDao.findByProperties(getAddress(), getAddress2(), getPostalCode(), getPhone(), customerCity.getId());
-
+        
         if (maybeAddress.isPresent()) {
             customerAddress = maybeAddress.get();
         } else {
             setError("Internal server error");
             setValid(false);
         }
-
+        
         if (isValid()) {
             getOnSubmit().accept(
                     new Customer(
@@ -557,10 +565,10 @@ public class CustomerForm extends Control {
             System.out.println(getError());
         }
     }
-
+    
     @Override
     protected Skin<?> createDefaultSkin() {
         return new CustomerFormSkin(this);
     }
-
+    
 }

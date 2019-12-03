@@ -41,23 +41,23 @@ import java.util.stream.Collectors;
  * @author maxbrown
  */
 public class AppointmentForm extends Control {
-
+    
     public enum Mode {
         NEW,
         EDIT,
         DELETE
     }
-
+    
     private Mode mode = Mode.NEW;
-
+    
     private Appointment appointment;
-
+    
     private final AppointmentDao appointmentDao = new AppointmentDao();
-
+    
     public AppointmentForm() {
         String stylesheet = getClass().getResource("appointment-form.css").toExternalForm();
         getStylesheets().add(stylesheet);
-
+        
         CustomerDao customerDao = new CustomerDao();
         customerDao.findAll().forEach(oc -> {
             oc.ifPresent(c -> {
@@ -65,7 +65,7 @@ public class AppointmentForm extends Control {
             });
         });
     }
-
+    
     public AppointmentForm(Appointment appointment) {
         this();
         this.mode = Mode.EDIT;
@@ -81,7 +81,7 @@ public class AppointmentForm extends Control {
     public Mode getMode() {
         return mode;
     }
-
+    
     private final ObservableList<Customer> customers = FXCollections.observableArrayList();
 
     /**
@@ -92,8 +92,8 @@ public class AppointmentForm extends Control {
     public ObservableList<Customer> getCustomers() {
         return customers;
     }
-
-    private final StringProperty title = new SimpleStringProperty(this, "title", "");
+    
+    private final StringProperty title = new SimpleStringProperty(this, "title");
 
     /**
      * A property containing the value of the {@link Appointment#title}.
@@ -122,8 +122,8 @@ public class AppointmentForm extends Control {
         requireNonNull(title);
         titleProperty().set(title);
     }
-
-    private final StringProperty type = new SimpleStringProperty(this, "type", "");
+    
+    private final StringProperty type = new SimpleStringProperty(this, "type");
 
     /**
      * A property containing the value of the {@link Appointment#type}.
@@ -152,8 +152,8 @@ public class AppointmentForm extends Control {
         requireNonNull(type);
         typeProperty().set(type);
     }
-
-    private final StringProperty location = new SimpleStringProperty(this, "location", "");
+    
+    private final StringProperty location = new SimpleStringProperty(this, "location");
 
     /**
      * A property containing the value of the {@link Appointment#location}.
@@ -182,8 +182,8 @@ public class AppointmentForm extends Control {
         requireNonNull(location);
         locationProperty().set(location);
     }
-
-    private final StringProperty description = new SimpleStringProperty(this, "description", "");
+    
+    private final StringProperty description = new SimpleStringProperty(this, "description");
 
     /**
      * A property containing the value of the {@link Appointment#description}.
@@ -212,8 +212,8 @@ public class AppointmentForm extends Control {
         requireNonNull(description);
         descriptionProperty().set(description);
     }
-
-    private final StringProperty contact = new SimpleStringProperty(this, "contact", "");
+    
+    private final StringProperty contact = new SimpleStringProperty(this, "contact");
 
     /**
      * A property containing the value of the {@link Appointment#contact}.
@@ -242,8 +242,8 @@ public class AppointmentForm extends Control {
         requireNonNull(contact);
         contactProperty().set(contact);
     }
-
-    private final StringProperty url = new SimpleStringProperty(this, "url", "");
+    
+    private final StringProperty url = new SimpleStringProperty(this, "url");
 
     /**
      * A property containing the value of the {@link Appointment#url}.
@@ -272,7 +272,7 @@ public class AppointmentForm extends Control {
         requireNonNull(url);
         urlProperty().set(url);
     }
-
+    
     private final ObjectProperty<LocalDate> date = new SimpleObjectProperty<>(this, "startDate", DateUtils.getToday());
 
     /**
@@ -303,8 +303,8 @@ public class AppointmentForm extends Control {
         requireNonNull(date);
         dateProperty().set(date);
     }
-
-    private final ObjectProperty<LocalTime> startTime = new SimpleObjectProperty<>(this, "startTime", DateUtils.getCurrentTime().truncatedTo(ChronoUnit.HOURS).plusHours(1));
+    
+    private final ObjectProperty<LocalTime> startTime = new SimpleObjectProperty<>(this, "startTime", LocalTime.of(8, 0));
 
     /**
      * A property containing the start {@link LocalTime} of the
@@ -334,8 +334,8 @@ public class AppointmentForm extends Control {
         requireNonNull(startTime);
         startTimeProperty().set(startTime);
     }
-
-    private final ObjectProperty<LocalTime> endTime = new SimpleObjectProperty<>(this, "endTime", DateUtils.getCurrentTime().truncatedTo(ChronoUnit.HOURS).plusHours(2));
+    
+    private final ObjectProperty<LocalTime> endTime = new SimpleObjectProperty<>(this, "endTime", LocalTime.of(9, 0));
 
     /**
      * A property containing the end {@link LocalTime} of the
@@ -376,10 +376,10 @@ public class AppointmentForm extends Control {
     public final Interval getInterval() {
         ZonedDateTime startZonedDateTime = DateUtils.toZonedDateTime(getDate(), getStartTime());
         ZonedDateTime endZonedDateTime = DateUtils.toZonedDateTime(getDate(), getEndTime());
-
+        
         return new Interval(startZonedDateTime, endZonedDateTime);
     }
-
+    
     private final ObjectProperty<Customer> customer = new SimpleObjectProperty<>(this, "customer", null);
 
     /**
@@ -409,8 +409,8 @@ public class AppointmentForm extends Control {
         requireNonNull(customer);
         customerProperty().set(customer);
     }
-
-    private final StringProperty error = new SimpleStringProperty(this, "error", "");
+    
+    private final StringProperty error = new SimpleStringProperty(this, "error");
 
     /**
      * A property containing the value of the {@link Appointment#error}.
@@ -439,7 +439,7 @@ public class AppointmentForm extends Control {
         requireNonNull(error);
         errorProperty().set(error);
     }
-
+    
     private final BooleanProperty valid = new SimpleBooleanProperty(this, "valid", false);
 
     /**
@@ -499,11 +499,11 @@ public class AppointmentForm extends Control {
      */
     public Pair<Mode, Appointment> submit() {
         validateForm();
-
+        
         if (isValid()) {
             User user = SchedulingApplication.USER;
             Interval interval = getInterval();
-
+            
             switch (mode) {
                 case NEW:
                     return new Pair(
@@ -569,19 +569,19 @@ public class AppointmentForm extends Control {
                     break;
             }
         }
-
+        
         return null;
     }
-
+    
     public Pair<Mode, Appointment> delete() {
         mode = Mode.DELETE;
         return submit();
     }
-
+    
     private void validateForm() {
         LocalTime workingHoursStart = LocalTime.of(9, 0);
         LocalTime workingHoursEnd = LocalTime.of(17, 0);
-
+        
         List<Appointment> appointments = appointmentDao.findAllForUser(SchedulingApplication.USER)
                 .stream()
                 .filter(Optional::isPresent)
@@ -592,9 +592,9 @@ public class AppointmentForm extends Control {
         if (appointment != null) {
             appointments = appointments.stream().filter(a -> a.getId() != appointment.getId()).collect(Collectors.toList());
         }
-
+        
         boolean isIntersectingOtherAppointment = appointments.stream().anyMatch(a -> a.getInterval().overlaps(getInterval()));
-
+        
         if (getTitle() == null || getTitle().isEmpty()) {
             setError("Please provide a title");
             setValid(false);
@@ -644,10 +644,10 @@ public class AppointmentForm extends Control {
             setValid(true);
         }
     }
-
+    
     @Override
     protected Skin<?> createDefaultSkin() {
         return new AppointmentFormSkin(this);
     }
-
+    
 }

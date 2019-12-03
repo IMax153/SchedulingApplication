@@ -225,15 +225,14 @@ public class CustomerDao extends Dao<Customer> {
             pst1.setInt(1, id);
 
             PreparedStatement pst2 = connection.prepareStatement(
-                    "DELETE c.*, a.*"
-                    + "FROM customer AS c, address AS a "
-                    + "WHERE c.customerId = ? AND a.addressId = ?"
+                    "DELETE c.*, a.* from customer AS c, address AS a "
+                    + "WHERE c.customerId = ? "
+                    + "AND c.addressId = a.addressId"
             );
 
             pst2.setInt(1, id);
-            pst2.setInt(2, id);
 
-            return pst1.executeUpdate() > 0 && pst2.executeUpdate() > 0;
+            return pst2.executeUpdate() > 0;
         } catch (SQLException sqle) {
             System.out.println(sqle.getMessage());
         }
